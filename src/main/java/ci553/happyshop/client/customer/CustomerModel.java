@@ -83,7 +83,12 @@ public class CustomerModel
 			//TODO
 			// 1. Merges items with the same product ID (combining their quantities).
 			// 2. Sorts the products in the trolley by product ID.
+
+			// When a product is added to the trolley, it is grouped with any other products with the same IDs
 			trolley.add(theProduct);
+			trolley = groupProductsById(trolley);
+			System.out.println(String.format("Trolley contents: %s", getTrolley()));
+
 			displayTaTrolley = ProductListFormatter.buildString(trolley); //build a String for trolley so that we can show it
 		} else
 		{
@@ -152,19 +157,32 @@ public class CustomerModel
 	 */
 	private ArrayList<Product> groupProductsById(ArrayList<Product> proList)
 	{
+		// HashMaps can only contain one instance of an object
 		Map<String, Product> grouped = new HashMap<>();
+
+		// Iterates through the list of products
 		for (Product p : proList)
 		{
+			// For each item in the list, check whether the HashMap already contains it.
 			String id = p.getProductId();
 			if (grouped.containsKey(id))
 			{
+				System.out.println(String.format("New product quantity: %s", p.getOrderedQuantity()));
+				// If it does, get the product corresponding to the ID and increment its orderedQuantity by the orderedQuantity of the new item.
 				Product existing = grouped.get(id);
+				System.out.println(String.format("Existing product quantity: %s", existing.getOrderedQuantity()));
 				existing.setOrderedQuantity(existing.getOrderedQuantity() + p.getOrderedQuantity());
+
 			} else
 			{
-				// Make a shallow copy to avoid modifying the original
-				grouped.put(id, new Product(p.getProductId(), p.getProductDescription(), p.getProductImageName(),
-						p.getUnitPrice(), p.getStockQuantity()));
+				// If the product does not exist in the hash map, add it
+				Product newProduct = new Product(p.getProductId(), p.getProductDescription(), p.getProductImageName(),
+						p.getUnitPrice(), p.getStockQuantity());
+				
+				// When creating a new instance of the Product object, the OrderedQuantity is not set in the constructor- this has to be done separately
+				// This means that when another item is added to the trolley, it will carry over the orderedQuantity.
+				newProduct.setOrderedQuantity(p.getOrderedQuantity());
+				grouped.put(id, newProduct);
 			}
 		}
 		return new ArrayList<>(grouped.values());

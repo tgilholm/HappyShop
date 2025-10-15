@@ -69,9 +69,9 @@ public class Product implements Comparable<Product>
 	}
 
 	// Sets the quantity ordered
-	public void setOrderedQuantity(int orderedQuantity)
+	public void setOrderedQuantity(int _orderedQuantity)
 	{
-		this.orderedQuantity = orderedQuantity;
+		this.orderedQuantity = _orderedQuantity;
 	}
 
 	// Compares this product by ID with any other product
