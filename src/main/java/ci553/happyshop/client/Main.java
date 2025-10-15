@@ -155,7 +155,7 @@ public class Main extends Application
 		alertSimulator.warehouseView = view;
 	}
 
-	//starts the EmergencyExit GUI, - used to close the entire application immediately
+	//starts the EmergencyExit GUI, - used to close the entire application immediatelly
 	private void startEmergencyExit()
 	{
 		EmergencyExit.getEmergencyExit();

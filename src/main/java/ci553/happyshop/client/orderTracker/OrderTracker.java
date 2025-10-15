@@ -29,7 +29,7 @@ public class OrderTracker
 	private static final TreeMap<Integer, OrderState> ordersMap = new TreeMap<>();
 	private final TextArea taDisplay; //area to show all orderId and their state on the GUI
 
-	//Constructor initialises the UI, a title Label, and a TextArea for displaying the order details.
+	//Constructor initializes the UI, a title Label, and a TextArea for displaying the order details.
 	public OrderTracker()
 	{
 		Label laTitle = new Label("Order_ID,  State");
