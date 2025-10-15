@@ -20,15 +20,16 @@ package ci553.happyshop.storageAccess;
  * This hides the actual implementation (e.g., DerbyRW) from the rest of the system.
  */
 
-public class DatabaseRWFactory {
+public class DatabaseRWFactory
+{
 
-    public static String dbURL = "jdbc:derby:happyShopDB"; //or other database URL in the future (eg MySQLRW or SQLiteRW)
+	public static String dbURL = "jdbc:derby:happyShopDB"; //or other database URL in the future (eg MySQLRW or SQLiteRW)
 
-    /**
-     * Creates an instance of DatabaseRW (currently returning DerbyRW, but can be modified to return other implementations).
-     */
-    public static DatabaseRW createDatabaseRW() {
-        return new DerbyRW(); // or other database implementations in the future (eg MySQLRW or SQLiteRW)
-    }
+	/**
+	 * Creates an instance of DatabaseRW (currently returning DerbyRW, but can be modified to return other implementations).
+	 */
+	public static DatabaseRW createDatabaseRW()
+	{
+		return new DerbyRW(); // or other database implementations in the future (eg MySQLRW or SQLiteRW)
+	}
 }
-

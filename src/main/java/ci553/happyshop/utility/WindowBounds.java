@@ -23,18 +23,19 @@ package ci553.happyshop.utility;
  * window-related calculations, ensuring the UI elements are well positioned.
  */
 
+public class WindowBounds
+{
+	public double x;
+	public double y;
+	public double width;
+	public double height;
 
-public class WindowBounds {
-    public double x;
-    public double y;
-    public double width;
-    public double height;
-
-    public WindowBounds(double x, double y, double width, double height) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-    }
+	public WindowBounds(double x, double y, double width, double height)
+	{
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+	}
 
 }

@@ -13,43 +13,46 @@ import javafx.stage.Stage;
  * The class EmergencyExit used to immediately shut down the entire application.
  * It is a singleton with static access, instantiation is restricted.
  */
-public class EmergencyExit {
-    private final int WIDTH = UIStyle.EmergencyExitWinWidth;
-    private final int HEIGHT = UIStyle.EmergencyExitWinHeight;
-    private static EmergencyExit emergencyExit;
+public class EmergencyExit
+{
+	private final int WIDTH = UIStyle.EmergencyExitWinWidth;
+	private final int HEIGHT = UIStyle.EmergencyExitWinHeight;
+	private static EmergencyExit emergencyExit;
 
-    //used by Main class to get the single instance
-    public static EmergencyExit getEmergencyExit() {
-        if (emergencyExit == null)
-            emergencyExit = new EmergencyExit();
-        return emergencyExit;
-    }
+	//used by Main class to get the single instance
+	public static EmergencyExit getEmergencyExit()
+	{
+		if (emergencyExit == null)
+			emergencyExit = new EmergencyExit();
+		return emergencyExit;
+	}
 
-    //Private constructor creates a shutdown window.
-    //The window displays a single button with a shutdown image,positioned via `WinPosManager`,
-    private EmergencyExit() {
-        ImageView ivExit = new ImageView("ShutDown.jpg");
-        ivExit.setFitWidth(WIDTH-100);
-        ivExit.setFitHeight(WIDTH-100);
-        ivExit.setPreserveRatio(true);
+	//Private constructor creates a shutdown window.
+	//The window displays a single button with a shutdown image,positioned via `WinPosManager`,
+	private EmergencyExit()
+	{
+		ImageView ivExit = new ImageView("ShutDown.jpg");
+		ivExit.setFitWidth(WIDTH - 100);
+		ivExit.setFitHeight(WIDTH - 100);
+		ivExit.setPreserveRatio(true);
 
-        Button btnExit = new Button();
-        btnExit.setGraphic(ivExit);
-        btnExit.setOnAction(event -> {
-            Platform.exit(); // Gracefully exit JavaFX
-            System.exit(0);//forcefully shut down JVM (in case there are non-JavaFX threads)
-        });
+		Button btnExit = new Button();
+		btnExit.setGraphic(ivExit);
+		btnExit.setOnAction(event -> {
+			Platform.exit(); // Gracefully exit JavaFX
+			System.exit(0);//forcefully shut down JVM (in case there are non-JavaFX threads)
+		});
 
-        BorderPane borderPane = new BorderPane();
-        borderPane.setCenter(btnExit);
+		BorderPane borderPane = new BorderPane();
+		borderPane.setCenter(btnExit);
 
-        borderPane.setStyle(UIStyle.rootStyle);
-        Scene scene = new Scene(borderPane, WIDTH, HEIGHT);
-        Stage window = new Stage();
-        window.setScene(scene);
-        window.setTitle("🛒 EXIT");
-        WinPosManager.registerWindow(window,WIDTH,HEIGHT); //calculate position x and y for this window
-        window.show();
-    }
+		borderPane.setStyle(UIStyle.rootStyle);
+		Scene scene = new Scene(borderPane, WIDTH, HEIGHT);
+		Stage window = new Stage();
+		window.setScene(scene);
+		window.setTitle("🛒 EXIT");
+		WinPosManager.registerWindow(window, WIDTH, HEIGHT); //calculate position x and y for this window
+		window.show();
+	}
 
 }
