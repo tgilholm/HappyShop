@@ -73,20 +73,16 @@ public class CustomerModel
 		updateView();
 	}
 
-	// Called when user adds an item to the trolley
+	// Appends a product to the end of the trolley arrayList
 	void addToTrolley()
 	{
 		if (theProduct != null)
 		{
-			// trolley.add(theProduct) — Product is appended to the end of the trolley.
-			// To keep the trolley organised, add code here or call a method that:
-			//TODO
-			// 1. Merges items with the same product ID (combining their quantities).
-			// 2. Sorts the products in the trolley by product ID.
-
 			// When a product is added to the trolley, it is grouped with any other products with the same IDs
+			// The trolley is then sorted in-place.
 			trolley.add(theProduct);
 			trolley = groupProductsById(trolley);
+			trolley.sort(null);
 			System.out.println(String.format("Trolley contents: %s", getTrolley()));
 
 			displayTaTrolley = ProductListFormatter.buildString(trolley); //build a String for trolley so that we can show it
