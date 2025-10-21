@@ -11,15 +11,18 @@ import javafx.stage.Stage;
  * to receive order status notifications. All logic is handled internally within the OrderTracker.
  */
 
-public class OrderTrackerClient extends Application {
+public class OrderTrackerClient extends Application
+{
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+	public static void main(String[] args)
+	{
+		launch(args);
+	}
 
-    @Override
-    public void start(Stage window) {
-        OrderTracker orderTracker = new OrderTracker();
-        orderTracker.registerWithOrderHub();
-    }
+	@Override
+	public void start(Stage window)
+	{
+		OrderTracker orderTracker = new OrderTracker();
+		orderTracker.registerWithOrderHub();
+	}
 }

@@ -28,60 +28,70 @@ import java.util.concurrent.locks.ReentrantLock;
  * can be managed in one place, avoiding scattered logic across the codebase.
  */
 
-public class SetOrderFileSystem {
-    private static final Lock lock = new ReentrantLock();    // Create a global lock
-    private static Path orderCounterPath = StorageLocation.orderCounterPath;
-    private static Path[] foldersPaths = {
-            StorageLocation.ordersPath,
-            StorageLocation.orderedPath,
-            StorageLocation.progressingPath,
-            StorageLocation.collectedPath
-    };
+public class SetOrderFileSystem
+{
+	private static final Lock lock = new ReentrantLock();    // Create a global lock
+	private static Path orderCounterPath = StorageLocation.orderCounterPath;
+	private static Path[] foldersPaths =
+	{ StorageLocation.ordersPath, StorageLocation.orderedPath, StorageLocation.progressingPath,
+			StorageLocation.collectedPath };
 
-    public static void main(String[] args) throws IOException {
-        deleteFilesInFolder(foldersPaths[0]);
-        createFolders(foldersPaths);
-        createOrderCounterFile(orderCounterPath);
-    }
+	public static void main(String[] args) throws IOException
+	{
+		deleteFilesInFolder(foldersPaths[0]);
+		createFolders(foldersPaths);
+		createOrderCounterFile(orderCounterPath);
+	}
 
-    // Recursively deletes all files in folder
-    public static void deleteFilesInFolder(Path folder) throws IOException {
-        if (Files.exists(folder)) {
-            lock.lock();
-            try {
-                Files.walkFileTree(folder, new SimpleFileVisitor<>() {
-                    @Override
-                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                        Files.delete(file); //delete individual files
-                        return FileVisitResult.CONTINUE;
-                    }
-                });
-                System.out.println("Deleted files in folder: " + folder);
-            } finally {
-                lock.unlock();
-            }
-        }
-        else {
-            System.out.println("Folder " + folder + " does not exist");
-        }
-    }
+	// Recursively deletes all files in folder
+	public static void deleteFilesInFolder(Path folder) throws IOException
+	{
+		if (Files.exists(folder))
+		{
+			lock.lock();
+			try
+			{
+				Files.walkFileTree(folder, new SimpleFileVisitor<>()
+				{
+					@Override
+					public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException
+					{
+						Files.delete(file); //delete individual files
+						return FileVisitResult.CONTINUE;
+					}
+				});
+				System.out.println("Deleted files in folder: " + folder);
+			} finally
+			{
+				lock.unlock();
+			}
+		} else
+		{
+			System.out.println("Folder " + folder + " does not exist");
+		}
+	}
 
-    // Create all necessary folders for storing orderCounter file, order files and images if they do not exist
-    private static void createFolders(Path[] paths) throws IOException {
-        for (Path path : paths) {
-            if (!Files.exists(path)) {
-                Files.createDirectories(path);
-                System.out.println("Created folder: " + path);
-            }
-        }
-    }
+	// Create all necessary folders for storing orderCounter file, order files and images if they do not exist
+	private static void createFolders(Path[] paths) throws IOException
+	{
+		for (Path path : paths)
+		{
+			if (!Files.exists(path))
+			{
+				Files.createDirectories(path);
+				System.out.println("Created folder: " + path);
+			}
+		}
+	}
 
-    //create the single orderCounter file and write "0" if it doesn't exist
-    private static void createOrderCounterFile(Path path) throws IOException {
-        // Create the file and write "0" if it doesn't exist
-        if (Files.notExists(path)) {
-            Files.writeString(path, "0", StandardOpenOption.CREATE_NEW);
-            System.out.println("order Counter created: 0");
-        }
-    }
+	//create the single orderCounter file and write "0" if it doesn't exist
+	private static void createOrderCounterFile(Path path) throws IOException
+	{
+		// Create the file and write "0" if it doesn't exist
+		if (Files.notExists(path))
+		{
+			Files.writeString(path, "0", StandardOpenOption.CREATE_NEW);
+			System.out.println("order Counter created: 0");
+		}
+	}
 }

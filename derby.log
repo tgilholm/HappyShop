@@ -1,8 +1,12 @@
 ----------------------------------------------------------------
+<<<<<<< HEAD
 Mon Oct 20 13:35:42 BST 2025D001 : [0] The Apache Software Foundation - Apache Derby - 10.16.1.1 - (1901046), [1] a816c00e-019a-019e-4a2e-00000d69e680, [2] C:\Users\tom\git\HappyShop\happyShopDB, [3] jdk.internal.loader.ClassLoaders$AppClassLoader@4fca772d, [4] file:/C:/Users/tom/.m2/repository/org/apache/derby/derby/10.16.1.1/derby-10.16.1.1.jar
+=======
+Wed Oct 15 19:02:45 BST 2025D001 : [0] The Apache Software Foundation - Apache Derby - 10.16.1.1 - (1901046), [1] a816c00e-0199-e909-ec84-00001e79b270, [2] C:\Users\tom\git\HappyShop\HappyShop\happyShopDB, [3] jdk.internal.loader.ClassLoaders$AppClassLoader@4fca772d, [4] file:/C:/Users/tom/.m2/repository/org/apache/derby/derby/10.16.1.1/derby-10.16.1.1.jar
+>>>>>>> branch 'master' of https://github.com/tgilholm/HappyShop
 java.vendor=Eclipse Adoptium
 java.runtime.version=21.0.8+9-LTS
-user.dir=C:\Users\tom\git\HappyShop
+user.dir=C:\Users\tom\git\HappyShop\HappyShop
 os.name=Windows 10
 os.arch=amd64
 os.version=10.0

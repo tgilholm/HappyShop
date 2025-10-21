@@ -13,8 +13,7 @@ package ci553.happyshop.orderManagement;
  * and makes state management more explicit and maintainable across the system.
  */
 
-public enum OrderState {
-    Ordered,
-    Progressing,
-    Collected
+public enum OrderState
+{
+	Ordered, Progressing, Collected
 }

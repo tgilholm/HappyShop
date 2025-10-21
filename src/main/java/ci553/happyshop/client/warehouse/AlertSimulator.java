@@ -48,7 +48,11 @@ public class AlertSimulator
 	private static int HEIGHT = UIStyle.AlertSimWinHeight;
 
 	public WarehouseView warehouseView;
+<<<<<<< HEAD
 	private Stage window; // window for AlertSimulator
+=======
+	private Stage window; //window for AlertSimulator
+>>>>>>> branch 'master' of https://github.com/tgilholm/HappyShop
 	private Scene scene; // Scene for AlertSimulator
 	private Label laErrorMsg;// Label to display error messages
 	private TextArea taErrorMsg;// Label to display error messages
@@ -57,7 +61,11 @@ public class AlertSimulator
 	private void createScene()
 	{
 		Label laTitle = new Label("\u26A0 Please fix input errors..."); // for emoji ⚠️
+<<<<<<< HEAD
 		laTitle.setStyle(UIStyle.alertTitleLabelStyle); // red
+=======
+		laTitle.setStyle(UIStyle.alertTitleLabelStyle); //red
+>>>>>>> branch 'master' of https://github.com/tgilholm/HappyShop
 
 		taErrorMsg = new TextArea();
 		taErrorMsg.setEditable(false);
@@ -70,7 +78,11 @@ public class AlertSimulator
 		Button btnOk = new Button("Ok");
 		btnOk.setStyle(UIStyle.alertBtnStyle);
 		HBox hbBtnOk = new HBox(btnOk);
+<<<<<<< HEAD
 		hbBtnOk.setAlignment(Pos.CENTER); // aligned to right
+=======
+		hbBtnOk.setAlignment(Pos.CENTER); //aligned to right
+>>>>>>> branch 'master' of https://github.com/tgilholm/HappyShop
 		btnOk.setOnAction(e -> {
 			window.close();
 		});
@@ -82,21 +94,40 @@ public class AlertSimulator
 	}
 
 	// Create the window if not exists
+<<<<<<< HEAD
 	// also recreate a window if the user closed it with error message in it
 	private void createWindow()
 	{
 		if (scene == null)
 		{
 			createScene(); // create scene if not exists
+=======
+	//also recreate a window if the user closed it with error message in it
+	private void createWindow()
+	{
+		if (scene == null)
+		{
+			createScene();  //create scene if not exists
+>>>>>>> branch 'master' of https://github.com/tgilholm/HappyShop
 		}
 
 		window = new Stage();
+<<<<<<< HEAD
 		window.initModality(Modality.NONE); // Optional: explicitly set as non-blocking, though this is the default
 		window.initStyle(StageStyle.UNDECORATED); // No title bar
 		// window.setTitle("\uD83C\uDFEC input error message"); // for icon 🏬
+=======
+		window.initModality(Modality.NONE); //Optional: explicitly set as non-blocking, though this is the default
+		window.initStyle(StageStyle.UNDECORATED); // No title bar
+		//window.setTitle("\uD83C\uDFEC input error message"); // for icon 🏬
+>>>>>>> branch 'master' of https://github.com/tgilholm/HappyShop
 		window.setScene(scene);
 
+<<<<<<< HEAD
 		// get bounds of warehouse window which trigers the alertSimulator
+=======
+		//get bounds of warehouse window which trigers the alertSimulator
+>>>>>>> branch 'master' of https://github.com/tgilholm/HappyShop
 		// so that we can put the alertSimulator on top of it and at a suitable position
 		WindowBounds bounds = warehouseView.getWindowBounds();
 		window.setX(bounds.x + bounds.width - 10);
@@ -112,7 +143,11 @@ public class AlertSimulator
 			createWindow(); // create window if not exists
 		}
 
+<<<<<<< HEAD
 		// laErrorMsg.setText(errorMsg); // Update the error message
+=======
+		//laErrorMsg.setText(errorMsg); // Update the error message
+>>>>>>> branch 'master' of https://github.com/tgilholm/HappyShop
 		taErrorMsg.setText(errorMsg); // Update the error message
 		window.toFront(); // Bring the window to the front if it's already open
 	}
@@ -120,9 +155,14 @@ public class AlertSimulator
 	/**
 	 * Closes the alert window.
 	 *
+<<<<<<< HEAD
 	 * The purpose of this method is to provide a way to close the alert window from
 	 * outside the AlertSimulator class, when it is no longer needed (e.g., after
 	 * canceling or submitting an action while the alert window is still showing
+=======
+	 * The purpose of this method is to provide a way to close the alert window from outside the AlertSimulator class,
+	 * when it is no longer needed (e.g., after canceling or submitting an action while the alert window is still showing
+>>>>>>> branch 'master' of https://github.com/tgilholm/HappyShop
 	 * from a previous error).
 	 */
 

@@ -30,38 +30,40 @@ import java.nio.channels.FileLock;
  * making file access faster and more flexible than traditional streams.</p>
  */
 
-public class OrderCounter {
+public class OrderCounter
+{
+	public static int generateOrderId() throws IOException
+	{
+		Path path = StorageLocation.orderCounterPath;
 
-    public static int generateOrderId() throws IOException {
-        Path path = StorageLocation.orderCounterPath;
+		// Lock and increment the ID
+		try (FileChannel channel = FileChannel.open(path, StandardOpenOption.READ, StandardOpenOption.WRITE);
+				FileLock lock = channel.lock())
+		{
 
-        // Lock and increment the ID
-        try (FileChannel channel = FileChannel.open(path, StandardOpenOption.READ, StandardOpenOption.WRITE);
-             FileLock lock = channel.lock()) {
+			//creates a ByteBuffer of the same size as the file — so you can read the whole thing.
+			ByteBuffer buffer = ByteBuffer.allocate((int) channel.size());
+			channel.read(buffer); //Reads the file content into the buffer.
+			buffer.flip(); //Prepares the buffer for reading.
+			/** why we must buffer.flip();
+			 * After reading data into the buffer,
+			 * the cursor (position) is at the end of the data that was just read, not before it.
+			 * If you want to read the data you've just written into the buffer,
+			 * you need to move the cursor back to the start of the buffer so that you can read from it
+			 */
 
-            //creates a ByteBuffer of the same size as the file — so you can read the whole thing.
-            ByteBuffer buffer = ByteBuffer.allocate((int) channel.size());
-            channel.read(buffer); //Reads the file content into the buffer.
-            buffer.flip(); //Prepares the buffer for reading.
-            /** why we must buffer.flip();
-             * After reading data into the buffer,
-             * the cursor (position) is at the end of the data that was just read, not before it.
-             * If you want to read the data you've just written into the buffer,
-             * you need to move the cursor back to the start of the buffer so that you can read from it
-             */
+			//Gets the raw byte array from the buffer so you can convert it to a string or number.
+			String content = new String(buffer.array()).trim();
+			int currentId = Integer.parseInt(content);
+			int newId = currentId + 1;
 
-            //Gets the raw byte array from the buffer so you can convert it to a string or number.
-            String content = new String(buffer.array()).trim();
-            int currentId = Integer.parseInt(content);
-            int newId = currentId + 1;
+			channel.position(0); // Move to the start of the file
+			channel.truncate(0); // Clear all content in the file (file size becomes 0)
+			//This wraps an existing byte array into a buffer — so you can write it with channel.write().
+			channel.write(ByteBuffer.wrap(String.valueOf(newId).getBytes()));
 
-            channel.position(0); // Move to the start of the file
-            channel.truncate(0); // Clear all content in the file (file size becomes 0)
-            //This wraps an existing byte array into a buffer — so you can write it with channel.write().
-            channel.write(ByteBuffer.wrap(String.valueOf(newId).getBytes()));
-
-            System.out.println("OrderId was generated for now: " + newId);
-            return newId;
-        }
-    }
+			System.out.println("OrderId was generated for now: " + newId);
+			return newId;
+		}
+	}
 }
