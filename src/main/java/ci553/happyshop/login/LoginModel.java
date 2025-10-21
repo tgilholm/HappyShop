@@ -9,5 +9,17 @@ package ci553.happyshop.login;
  */
 public class LoginModel
 {
-
+	// LoginModel connects to the LoginView, which displays GUI items to the user
+	public LoginView lView;
+	private LoginPopup loginPopup;
+	
+	
+	
+	s
+	public void openLoginWindow(String windowTitle)
+	{
+		// Opens either a customer or warehouse login window
+		loginPopup.showLoginWindow(windowTitle); 
+	}
+	
 }

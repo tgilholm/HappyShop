@@ -10,5 +10,20 @@ package ci553.happyshop.login;
 
 public class LoginController
 {
+	// LoginController connects to the LoginModel, which executes the backend code
+	public LoginModel lModel;
 
+	public void buttonClicked(String btnText)
+	{
+		switch (btnText)
+		{
+		case "Customer Login":
+			
+			// Open the customer login popup
+			
+		case "Warehouse Login":
+			// Open the warehouse login popup
+		}
+	}
+	
 }
