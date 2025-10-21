@@ -119,14 +119,9 @@ public class AlertSimulator
 	/**
 	 * Closes the alert window.
 	 *
-<<<<<<< HEAD
 	 * The purpose of this method is to provide a way to close the alert window from
 	 * outside the AlertSimulator class, when it is no longer needed (e.g., after
 	 * canceling or submitting an action while the alert window is still showing
-=======
-	 * The purpose of this method is to provide a way to close the alert window from outside the AlertSimulator class,
-	 * when it is no longer needed (e.g., after canceling or submitting an action while the alert window is still showing
->>>>>>> branch 'master' of https://github.com/tgilholm/HappyShop
 	 * from a previous error).
 	 */
 
