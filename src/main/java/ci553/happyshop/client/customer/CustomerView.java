@@ -68,11 +68,7 @@ public class CustomerView
 		lineContainer.setPrefWidth(4); // Give it some space
 		lineContainer.setAlignment(Pos.CENTER);
 
-<<<<<<< HEAD
 		hbRoot = new HBox(10, vbSearchPage, lineContainer, vbTrolleyPage); // initialize to show trolleyPage
-=======
-		hbRoot = new HBox(10, vbSearchPage, lineContainer, vbTrolleyPage); // initialise to show trolleyPage
->>>>>>> branch 'master' of https://github.com/tgilholm/HappyShop
 		hbRoot.setAlignment(Pos.CENTER);
 		hbRoot.setStyle(UIStyle.rootStyle);
 
@@ -104,11 +100,7 @@ public class CustomerView
 		HBox hbName = new HBox(10, laName, tfName);
 
 		Label laPlaceHolder = new Label(" ".repeat(15)); // create left-side spacing so that this HBox aligns with
-<<<<<<< HEAD
-															// others in the layout.
-=======
 														// others in the layout.
->>>>>>> branch 'master' of https://github.com/tgilholm/HappyShop
 		Button btnSearch = new Button("Search");
 		btnSearch.setStyle(UIStyle.buttonStyle);
 		btnSearch.setOnAction(this::buttonClicked);
@@ -196,11 +188,8 @@ public class CustomerView
 			if (action.equals("Add to Trolley"))
 			{
 				showTrolleyOrReceiptPage(vbTrolleyPage); // ensure trolleyPage shows if the last customer did not close
-<<<<<<< HEAD
 															// their receiptPage
-=======
 														// their receiptPage
->>>>>>> branch 'master' of https://github.com/tgilholm/HappyShop
 			}
 			if (action.equals("OK & Close"))
 			{

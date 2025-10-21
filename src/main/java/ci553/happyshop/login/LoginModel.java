@@ -13,9 +13,7 @@ public class LoginModel
 	public LoginView lView;
 	private LoginPopup loginPopup;
 	
-	
-	
-	s
+
 	public void openLoginWindow(String windowTitle)
 	{
 		// Opens either a customer or warehouse login window
