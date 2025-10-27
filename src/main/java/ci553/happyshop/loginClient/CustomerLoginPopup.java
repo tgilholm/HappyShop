@@ -1,4 +1,4 @@
-package ci553.happyshop.login;
+package ci553.happyshop.loginClient;
 
 import java.io.IOException;
 
@@ -7,11 +7,11 @@ import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 
 // A child class of LoginPopup that supports customer login only
-public class WarehouseLoginPopup extends LoginPopup
+public class CustomerLoginPopup extends LoginPopup
 {
-	public WarehouseLoginPopup(LoginView v)
+	public CustomerLoginPopup(LoginView v, LoginModel m)
 	{
-		super(v);
+		super(v, m);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -30,13 +30,13 @@ public class WarehouseLoginPopup extends LoginPopup
 		WindowBounds bounds = View.getWindowBounds();
 		window.setX(bounds.x + bounds.width / 2);
 		window.setY(bounds.y + bounds.height / 2);
-		window.setTitle("Warehouse Login");
+		window.setTitle("Customer Login");
 		window.show();
 	}
 
 	// Overrides the buttonClicked method to handle customer logins
 	protected void buttonClicked(ActionEvent event) throws IOException
 	{
-
+		Model.customerLogin(txtUsername.getText(), txtPassword.getText());
 	}
 }

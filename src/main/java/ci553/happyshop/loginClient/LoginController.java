@@ -1,4 +1,4 @@
-package ci553.happyshop.login;
+package ci553.happyshop.loginClient;
 
 
 /**
@@ -18,11 +18,14 @@ public class LoginController
 		switch (btnText)
 		{
 		case "Customer Login":
-			lModel.openCusLoginWindow();
+			lModel.showCusLoginPopup();
 			// Open the customer login popup
+			break;
 			
 		case "Warehouse Login":
+			lModel.showWarLoginPopup();
 			// Open the warehouse login popup
+			break;
 		}
 	}
 	

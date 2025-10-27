@@ -1,4 +1,4 @@
-package ci553.happyshop.login;
+package ci553.happyshop.loginClient;
 
 import java.io.IOException;
 
@@ -20,7 +20,8 @@ import javafx.stage.Stage;
 public class LoginPopup
 {
 	// Connects to the loginView
-	public LoginView View;
+	protected LoginView View;
+	protected LoginModel Model;
 	protected Stage window;		// Protected keyword is used to allow access by child classes
 	protected Scene scene;
 
@@ -33,9 +34,11 @@ public class LoginPopup
 	protected TextField txtPassword;
 	protected Button btnLogin;
 
-	public LoginPopup(LoginView v)
+	// Connects the popup to the view and model to pass information to them
+	protected LoginPopup(LoginView v, LoginModel m)
 	{
 		View = v;
+		Model = m;
 		window = new Stage();
 	}
 	
@@ -59,15 +62,17 @@ public class LoginPopup
 				buttonClicked(event);
 			} catch (IOException e)
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("Error occurred attempting to login: " + e);
 			}
 		});
 
-		// Create rows of label, textfield
+		// Create rows of label, textfield and set them into the centre of the popup
 		HBox usernameRow = new HBox(10, lbUsername, txtUsername);
 		HBox passwordRow = new HBox(10, lbPassword, txtPassword);
+		usernameRow.setAlignment(Pos.CENTER);
+		passwordRow.setAlignment(Pos.CENTER);
 
+		// Add the layout elements to a VBox and show it on the screen
 		VBox layoutBox = new VBox(10, lbTitle, usernameRow, passwordRow, btnLogin);
 		layoutBox.setAlignment(Pos.CENTER);
 		scene = new Scene(layoutBox, UIStyle.loginPopupWidth, UIStyle.loginPopupHeight);
@@ -76,11 +81,12 @@ public class LoginPopup
 	// Default buttonClicked method, child classes override it
 	protected void buttonClicked(ActionEvent event) throws IOException {};
 
+	// Generates the GUI for the popup & adds the layout elements to it
 	protected void createWindow()
 	{
 		if (scene == null)
 		{
-			createScene();
+			createScene();	// Invoke the createScene method to add the layout elements
 		}
 
 		window = new Stage();
@@ -101,5 +107,10 @@ public class LoginPopup
 		{
 			createWindow();
 		}
+	}
+	
+	public boolean isShowing()
+	{
+		return window.isShowing();
 	}
 }
