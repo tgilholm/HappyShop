@@ -9,6 +9,12 @@ import javafx.stage.Stage;
 // A child class of LoginPopup that supports customer login only
 public class WarehouseLoginPopup extends LoginPopup
 {
+	public WarehouseLoginPopup(LoginView v)
+	{
+		super(v);
+		// TODO Auto-generated constructor stub
+	}
+
 	// Overrides the createWindow method to set the title to Customer Login
 	protected void createWindow()
 	{

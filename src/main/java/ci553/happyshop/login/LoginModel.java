@@ -11,13 +11,13 @@ public class LoginModel
 {
 	// LoginModel connects to the LoginView, which displays GUI items to the user
 	public LoginView lView;
-	private LoginPopup loginPopup;
 	
 
-	public void openLoginWindow(String windowTitle)
+	public void openCusLoginWindow()
 	{
 		// Opens either a customer or warehouse login window
-		loginPopup.showLoginWindow(windowTitle); 
+		CustomerLoginPopup cusLoginPopup = new CustomerLoginPopup(lView);
+		cusLoginPopup.showLoginWindow(); 
 	}
 	
 }

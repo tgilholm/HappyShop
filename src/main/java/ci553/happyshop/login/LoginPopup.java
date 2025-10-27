@@ -33,6 +33,12 @@ public class LoginPopup
 	protected TextField txtPassword;
 	protected Button btnLogin;
 
+	public LoginPopup(LoginView v)
+	{
+		View = v;
+		window = new Stage();
+	}
+	
 	protected void createScene()
 	{
 		// Instantiate labels
@@ -89,9 +95,9 @@ public class LoginPopup
 	}
 
 	// Opens an instance of the login window
-	public void showLoginWindow(String windowTitle)
+	public void showLoginWindow()
 	{
-		if (!(window.isShowing()))
+		if (!window.isShowing())
 		{
 			createWindow();
 		}

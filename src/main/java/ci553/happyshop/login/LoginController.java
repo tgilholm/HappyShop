@@ -18,7 +18,7 @@ public class LoginController
 		switch (btnText)
 		{
 		case "Customer Login":
-			
+			lModel.openCusLoginWindow();
 			// Open the customer login popup
 			
 		case "Warehouse Login":
