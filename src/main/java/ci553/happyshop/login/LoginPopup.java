@@ -21,6 +21,9 @@ public class LoginPopup
 {
 	// Connects to the loginView
 	public LoginView View;
+	
+	// Connects to the loginModel
+	public LoginModel Model;
 	protected Stage window;		// Protected keyword is used to allow access by child classes
 	protected Scene scene;
 
@@ -33,9 +36,10 @@ public class LoginPopup
 	protected TextField txtPassword;
 	protected Button btnLogin;
 
-	public LoginPopup(LoginView v)
+	public LoginPopup(LoginView v, LoginModel m)
 	{
 		View = v;
+		Model = m;
 		window = new Stage();
 	}
 	

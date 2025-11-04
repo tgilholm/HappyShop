@@ -1,21 +1,19 @@
 package ci553.happyshop.storageAccess;
 
 import ci553.happyshop.catalogue.Product;
+import ci553.happyshop.catalogue.Customer;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-/** ProductTable definition
- * "CREATE TABLE ProductTable(" +
- *         "productID CHAR(4) PRIMARY KEY," +
- *         "description VARCHAR(100)," +
- *         "unitPrice DOUBLE," +
- *         "image VARCHAR(100)," +
- *         "inStock INT," +
- *         "CHECK (inStock >= 0)" +
- *           ")",
+/**
+ * ProductTable definition "CREATE TABLE ProductTable(" + "productID CHAR(4)
+ * PRIMARY KEY," + "description VARCHAR(100)," + "unitPrice DOUBLE," + "image
+ * VARCHAR(100)," + "inStock INT," + "CHECK (inStock >= 0)" + ")",
  */
 
 public class DerbyRW implements DatabaseRW
@@ -23,10 +21,11 @@ public class DerbyRW implements DatabaseRW
 	private static String dbURL = DatabaseRWFactory.dbURL; // Shared by all instances
 	private Lock lock = new ReentrantLock(); // Each instance has its own lock
 
-	//search product by product Id or name, return a list of products or null
-	//search by Id at first, if get null, search by product name
-	//currently used by warehouseModel.
-	// try to use this method to upgrade customer client so that user can search by id and name
+	// search product by product Id or name, return a list of products or null
+	// search by Id at first, if get null, search by product name
+	// currently used by warehouseModel.
+	// try to use this method to upgrade customer client so that user can search by
+	// id and name
 	public ArrayList<Product> searchProduct(String keyword) throws SQLException
 	{
 		ArrayList<Product> productList = new ArrayList<>();
@@ -49,7 +48,7 @@ public class DerbyRW implements DatabaseRW
 		return productList;
 	}
 
-	//search  by product Id, return a product or null
+	// search by product Id, return a product or null
 	public Product searchByProductId(String proId) throws SQLException
 	{
 		Product product = null;
@@ -80,8 +79,8 @@ public class DerbyRW implements DatabaseRW
 		return product;
 	}
 
-	//helper method
-	//search  by product name, return a List of products or null
+	// helper method
+	// search by product name, return a List of products or null
 	private ArrayList<Product> searchByProName(String name)
 	{
 		ArrayList<Product> productList = new ArrayList<>();
@@ -114,7 +113,7 @@ public class DerbyRW implements DatabaseRW
 		return productList; // could be empty if no matches
 	}
 
-	//make a Product object from the database record
+	// make a Product object from the database record
 	private Product makeProObjFromDbRecord(ResultSet rs) throws SQLException
 	{
 		Product product = null;
@@ -149,7 +148,7 @@ public class DerbyRW implements DatabaseRW
 
 	public ArrayList<Product> purchaseStocks(ArrayList<Product> proList) throws SQLException
 	{
-		lock.lock();  // Lock the critical section to prevent concurrent access
+		lock.lock(); // Lock the critical section to prevent concurrent access
 		ArrayList<Product> insufficientProducts = new ArrayList<>();
 
 		String checkSql = "SELECT inStock FROM ProductTable WHERE productId = ?";
@@ -205,18 +204,19 @@ public class DerbyRW implements DatabaseRW
 				{
 					// If all products have sufficient stock, execute the batch and commit
 					updateStmt.executeBatch();
-					conn.commit();  // Commit all updates if all updates succeed
+					conn.commit(); // Commit all updates if all updates succeed
 					System.out.println("Database update successful.");
 				} else
 				{
-					// If there's insufficient stock for any product, rollback the entire transaction
+					// If there's insufficient stock for any product, rollback the entire
+					// transaction
 					conn.rollback();
 					System.out.println("Insufficient stock for some products, all updates rolled back.");
 				}
 
 			} catch (SQLException e)
 			{
-				conn.rollback();  // Rollback if anything failed inside
+				conn.rollback(); // Rollback if anything failed inside
 				System.out.println("Database update error, update failed");
 			}
 		} finally
@@ -227,7 +227,7 @@ public class DerbyRW implements DatabaseRW
 		return insufficientProducts;
 	}
 
-	//warehouse edits an existing product
+	// warehouse edits an existing product
 	public void updateProduct(String id, String des, double price, String iName, int stock) throws SQLException
 	{
 		lock.lock();
@@ -286,7 +286,7 @@ public class DerbyRW implements DatabaseRW
 		}
 	}
 
-	//warehouse delete an existing product
+	// warehouse delete an existing product
 	public void deleteProduct(String proId) throws SQLException
 	{
 		lock.lock();
@@ -329,19 +329,21 @@ public class DerbyRW implements DatabaseRW
 		}
 	}
 
-	//check if product ID is unique
-	//warehouse tries to add a new prodcut, id must be unique
+	// check if product ID is unique
+	// warehouse tries to add a new prodcut, id must be unique
 	public boolean isProIdAvailable(String proId) throws SQLException
 	{
 		String query = "SELECT COUNT(*) FROM ProductTable WHERE productID = ?";
-		//the count of records that match the given proId.
+		// the count of records that match the given proId.
 		try (Connection conn = DriverManager.getConnection(dbURL);
 				PreparedStatement stmt = conn.prepareStatement(query))
 		{
 			stmt.setString(1, proId);
 			ResultSet rs = stmt.executeQuery();
-			// the rs is the COUNT(*) result (a single number): how many records that match the given proId.
-			// If count > 0, the ID is already in the database, so it's not available, return false
+			// the rs is the COUNT(*) result (a single number): how many records that match
+			// the given proId.
+			// If count > 0, the ID is already in the database, so it's not available,
+			// return false
 			// If count = 0, the ID is available, return true
 			if (rs.next())
 			{ // Move cursor to the first (and only) row
@@ -355,8 +357,8 @@ public class DerbyRW implements DatabaseRW
 		}
 	}
 
-	//   /images/0001TV.jpg
-	//warehouse adds a new product to database
+	// /images/0001TV.jpg
+	// warehouse adds a new product to database
 	public void insertNewProduct(String id, String des, double price, String image, int stock) throws SQLException
 	{
 		lock.lock();
@@ -376,7 +378,7 @@ public class DerbyRW implements DatabaseRW
 			insertStmt.executeUpdate();
 			ResultSet rs = selectStmt.executeQuery();
 			if (rs.next())
-			{ //print the inserted record
+			{ // print the inserted record
 				System.out.println("Insert successful for Product ID: \" + id");
 				System.out.println("ID: " + rs.getString("productID"));
 				System.out.println("Description: " + rs.getString("description"));
@@ -388,5 +390,91 @@ public class DerbyRW implements DatabaseRW
 			lock.unlock(); // Always release the lock after the operation
 		}
 	}
+
+	@Override
+	public boolean checkLoginDetails(String inputUsername, String inputPassword) throws SQLException
+	{
+		lock.lock(); // lock the database to prevent sync errors
+
+		// ArrayList to hold list of customers
+		ArrayList<Customer> customerList = new ArrayList<Customer>();
+
+		// SQL query to retrieve all login details
+		String query = "SELECT * FROM LoginTable ";
+
+		// Execute the SQL query on the database
+		try (Connection connection = DriverManager.getConnection(dbURL); Statement stat = connection.createStatement())
+		{
+			ResultSet rs = stat.executeQuery(query); // Holds the result of the SQL query
+			// Adds each new line of the ResultSet to a new Customer object
+			while (rs.next())
+			{
+				String userID = rs.getString("userID");
+				String username = rs.getString("username");
+				String password = rs.getString("password");
+
+				Customer cus = new Customer(userID, username, password);
+				customerList.add(cus);
+			}
+		} finally
+		{
+			lock.unlock(); // Unlocks the DB after execution
+		}
+		
+		System.out.println(customerList);
+
+		// If the customer is not found, cusFound is unchanged and the method returns false
+		boolean cusFound = false;
+		
+		// Search the customerSet
+		for (Customer i : customerList)
+		{
+			System.out.println(i.getUsername());
+			System.out.println(i.getPassword());
+			
+			
+			
+			if (inputUsername.equals(i.getUsername()) && inputPassword.equals(i.getPassword()))
+			{
+				cusFound = true;
+			}
+		}
+		
+		return cusFound;
+	}
+
+//	//helper method
+//	//search  by product name, return a List of products or null
+//	private ArrayList<Product> searchByProName(String name)
+//	{
+//		ArrayList<Product> productList = new ArrayList<>();
+//		String query = "SELECT * FROM ProductTable WHERE LOWER(description) LIKE LOWER(?)";
+//
+//		try (Connection conn = DriverManager.getConnection(dbURL);
+//				PreparedStatement stmt = conn.prepareStatement(query))
+//		{
+//
+//			stmt.setString(1, "%" + name.toLowerCase() + "%");
+//
+//			try (ResultSet rs = stmt.executeQuery())
+//			{
+//				while (rs.next())
+//				{
+//					productList.add(makeProObjFromDbRecord(rs)); // Add all matching products to list
+//				}
+//
+//				if (productList.isEmpty())
+//				{
+//					System.out.println("Product " + name + " not found.");
+//				}
+//			}
+//
+//		} catch (SQLException e)
+//		{
+//			System.out.println("Database query error, search by name: " + name + " " + e.getMessage());
+//		}
+//
+//		return productList; // could be empty if no matches
+//	}
 
 }

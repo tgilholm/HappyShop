@@ -85,4 +85,8 @@ public interface DatabaseRW
 	 * @return true if the ID is available, false if it already exists in the database
 	 */
 	boolean isProIdAvailable(String productId) throws SQLException;
+	
+	
+	// Declares the method for searching the Login table for user details
+	boolean checkLoginDetails(String username, String password) throws SQLException;
 }

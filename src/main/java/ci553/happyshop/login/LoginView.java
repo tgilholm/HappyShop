@@ -59,12 +59,12 @@ public class LoginView
 	{
 		lbTitle = new Label("HappyShop");
 		lbTitle.setStyle(UIStyle.loginTitleStyle);
-		
+
 		btnCust = new Button("Customer Login");
-		btnCust.setOnAction(this::buttonClicked); 
+		btnCust.setOnAction(this::buttonClicked);
 		btnCust.setStyle(UIStyle.loginButtonStyle);
-		
-		btnWarehouse = new  Button("Warehouse Login");
+
+		btnWarehouse = new Button("Warehouse Login");
 		btnWarehouse.setOnAction(this::buttonClicked);
 		btnWarehouse.setStyle(UIStyle.loginButtonStyle);
 
@@ -72,19 +72,18 @@ public class LoginView
 		vbLoginPage.setAlignment(Pos.CENTER);
 		return vbLoginPage;
 	}
-	
-	// When either of the buttons are clicked, tell the controller to handle it
+
+
+	// When either of the buttons are clicked, open a loginPopup
 	private void buttonClicked(ActionEvent event)
 	{
 		Button button = (Button) event.getSource();
 		String btnText = button.getText();
 		lController.buttonClicked(btnText);
 	}
-	
-    WindowBounds getWindowBounds() {
-        return new WindowBounds(viewWindow.getX(),
-                                viewWindow.getY(),
-                                viewWindow.getWidth(),
-                                viewWindow.getHeight());
-    }
+
+	WindowBounds getWindowBounds()
+	{
+		return new WindowBounds(viewWindow.getX(), viewWindow.getY(), viewWindow.getWidth(), viewWindow.getHeight());
+	}
 }

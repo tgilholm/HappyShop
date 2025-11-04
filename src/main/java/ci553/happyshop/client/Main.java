@@ -126,6 +126,8 @@ public class Main extends Application
 		LoginView lView = new LoginView();
 		LoginController lController = new LoginController();
 		LoginModel lModel = new LoginModel();
+		DatabaseRW _databaseRW = DatabaseRWFactory.createDatabaseRW();
+		lModel.databaseRW = _databaseRW;
 		
 		lView.lController = lController;
 		lController.lModel = lModel;

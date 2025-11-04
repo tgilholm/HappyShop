@@ -11,53 +11,54 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * The setDB class is responsible for resetting the database when the system is first initialized.
- * This class performs operations that delete and recreate the database tables, as well as insert
- * default values for a fresh start. Ensuring that everything is properly set up for the fresh database state
+ * The setDB class is responsible for resetting the database when the system is
+ * first initialized. This class performs operations that delete and recreate
+ * the database tables, as well as insert default values for a fresh start.
+ * Ensuring that everything is properly set up for the fresh database state
  *
- * WARNING: This class should only be used once when starting the system for the first time. It
- * will wipe all current data in the database and replace it with a fresh, predefined structure and data.
+ * WARNING: This class should only be used once when starting the system for the
+ * first time. It will wipe all current data in the database and replace it with
+ * a fresh, predefined structure and data.
  *
- * Key operations:
- * 1. Deletes all existing tables in the database.
- * 2. Recreates the database tables based on the initial schema.
- * 3. Inserts default values into the newly created tables.
- * 4. Deletes all existing image files from the working image folder (images/).
- * 5. Copies all image files from the backup folder (images_resetDB/) into the working image folder.
+ * Key operations: 1. Deletes all existing tables in the database. 2. Recreates
+ * the database tables based on the initial schema. 3. Inserts default values
+ * into the newly created tables. 4. Deletes all existing image files from the
+ * working image folder (images/). 5. Copies all image files from the backup
+ * folder (images_resetDB/) into the working image folder.
  */
 
 public class SetDatabase
 {
 
-	//Use the shared database URL from the factory, appending `;create=true` to create the database if it doesn't exist
+	// Use the shared database URL from the factory, appending `;create=true` to
+	// Create the database if it doesn't exist
 	private static final String dbURL = DatabaseRWFactory.dbURL + ";create=true";
-	//the value is "jdbc:derby:happyShopDB;create=true"
+	// the value is "jdbc:derby:happyShopDB;create=true"
 
 	private static Path imageWorkingFolderPath = StorageLocation.imageFolderPath;
 	private static Path imageBackupFolderPath = StorageLocation.imageResetFolderPath;
 
+	// The two tables in the database are the ProductTable & LoginTable
 	private String[] tables =
-	{ "ProductTable" };
-	// Currently only "ProductTable" exists, but using an array allows easy expansion
-	// if more tables need to be processed in the future without changing the logic structure.
+	{ "ProductTable", "LoginTable" };
 
-	private static final Lock lock = new ReentrantLock();    // Create a global lock
+	private static final Lock lock = new ReentrantLock(); // Create a global lock for synchronisation
 
 	public static void main(String[] args) throws SQLException, IOException
 	{
 		SetDatabase setDB = new SetDatabase();
-		setDB.clearTables(); // clear all tables in the tables array from database if they are existing
-		setDB.initializeTable();//create and initialize databse and tables
+		setDB.clearTables(); 
+		setDB.initializeTable();
 		setDB.queryTableAfterInitilization();
 		deleteFilesInFolder(imageWorkingFolderPath);
 		copyFolderContents(imageBackupFolderPath, imageWorkingFolderPath);
 
 	}
 
-	//Deletes all existing tables in the database.
+	// If the tables exist, delete all data within them
 	private void clearTables() throws SQLException
 	{
-		lock.lock();  // 🔒 Lock first
+		lock.lock(); // 🔒 Lock first
 		try (Connection con = DriverManager.getConnection(dbURL); Statement statement = con.createStatement())
 		{
 			System.out.println("Database happyShopDB is connected successfully!");
@@ -71,18 +72,18 @@ public class SetDatabase
 				} catch (SQLException e)
 				{
 					if ("42Y55".equals(e.getSQLState()))
-					{  // 42Y55 = Table does not exist
+					{ // 42Y55 = Table does not exist
 						System.out.println("Table " + table + " does not exist. Skipping...");
 					}
 				}
 			}
 		} finally
 		{
-			lock.unlock();  // 🔓 Always unlock in finally block
+			lock.unlock(); // 🔓 Always unlock in finally block
 		}
 	}
 
-	//Recreates the database tables Inserts default values into the newly created tables.
+	// Creates tables and initialises them with data
 	private void initializeTable() throws SQLException
 	{
 		lock.lock(); // Lock to ensure thread safety
@@ -93,6 +94,8 @@ public class SetDatabase
 				// Create ProductTable
 				"CREATE TABLE ProductTable(" + "productID CHAR(4) PRIMARY KEY," + "description VARCHAR(100),"
 						+ "unitPrice DOUBLE," + "image VARCHAR(100)," + "inStock INT," + "CHECK (inStock >= 0)" + ")",
+				"CREATE TABLE LoginTable(" + "userID CHAR(4) PRIMARY KEY," + "username VARCHAR(32),"
+						+ "password VARCHAR(32)" + ")",
 
 				// Insert data into ProductTable
 				"INSERT INTO ProductTable VALUES('0001', '40 inch TV', 269.00,'0001.jpg',100)",
@@ -106,8 +109,14 @@ public class SetDatabase
 				"INSERT INTO ProductTable VALUES('0009', 'USB3 drive', 8.99, '0009.jpg',100)",
 				"INSERT INTO ProductTable VALUES('0010', 'USB4 drive', 9.99, '0010.jpg',100)",
 				"INSERT INTO ProductTable VALUES('0011', 'USB5 drive', 10.99, '0011.jpg',100)",
-				"INSERT INTO ProductTable VALUES('0012', 'USB6 drive', 10.99, '0011.jpg',100)", };
+				"INSERT INTO ProductTable VALUES('0012', 'USB6 drive', 10.99, '0011.jpg',100)", 
+				
+				// Insert testing data into LoginTable
+				"INSERT INTO LoginTable VALUES('0001', 'admin', 'password')"
+		};
 
+		
+		// Run the SQL statements
 		try (Connection connection = DriverManager.getConnection(dbURL))
 		{
 			System.out.println("Database happyShopDB is created successfully!");
@@ -116,12 +125,12 @@ public class SetDatabase
 			try (Statement statement = connection.createStatement())
 			{
 				// First, create the table (DDL) - Execute this one separately from DML
-				statement.executeUpdate(iniTableSQL[0]);  // Execute Create Table SQL
+				statement.executeUpdate(iniTableSQL[0]); // Execute Create Table SQL
 
 				// Prepare and execute the insert operations (DML)
 				for (int i = 1; i < iniTableSQL.length; i++)
 				{
-					statement.addBatch(iniTableSQL[i]);  // Add insert queries to batch
+					statement.addBatch(iniTableSQL[i]); // Add insert queries to batch
 				}
 
 				// Execute all the insert statements in the batch
@@ -142,16 +151,19 @@ public class SetDatabase
 		}
 	}
 
+	
+	// Output all the data in the tables after initialising them
 	private void queryTableAfterInitilization() throws SQLException
 	{
 		lock.lock();
-		//Query ProductTable
+		// Query ProductTable
 		String sqlQuery = "SELECT * FROM ProductTable";
 
-		System.out.println("-------------Product Information Below -----------------");
+		System.out.println("------------- ProductTable -----------------");
 		String title = String.format("%-12s %-20s %-10s %-10s %s", "productID", "description", "unitPrice", "inStock",
 				"image");
-		System.out.println(title);  // Print formatted output
+		System.out.println(title); // Print formatted output
+
 
 		try (Connection connection = DriverManager.getConnection(dbURL); Statement stat = connection.createStatement())
 		{
@@ -165,11 +177,29 @@ public class SetDatabase
 				int inStock = resultSet.getInt("inStock");
 				String record = String.format("%-12s %-20s %-10.2f %-10d %s", productID, description, unitPrice,
 						inStock, image);
-				System.out.println(record);  // Print formatted output
+				System.out.println(record); // Print formatted output
+			}
+		
+		
+		sqlQuery = "SELECT * From LoginTable";
+		System.out.println("------------- LoginTable -----------------");
+		
+		try
+		{
+			resultSet = stat.executeQuery(sqlQuery);
+			while (resultSet.next())
+			{
+				String userID = resultSet.getString("userID");
+				String username = resultSet.getString("username");
+				String password = resultSet.getString("password");
+				String record = String.format("%s %20s %20s", userID, username,
+						password);
+				System.out.println(record); // Print formatted output
 			}
 		} finally
 		{
 			lock.unlock();
+		}
 		}
 	}
 
@@ -186,7 +216,7 @@ public class SetDatabase
 					@Override
 					public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException
 					{
-						Files.delete(file); //delete individual files
+						Files.delete(file); // delete individual files
 						return FileVisitResult.CONTINUE;
 					}
 				});
@@ -202,22 +232,29 @@ public class SetDatabase
 	}
 
 	/**
-	 * The method Files.walkFileTree(Path, FileVisitor) traverses (or "walks through") a directory and all of its subdirectories.
-	 * It accepts two arguments:
-	 * 1. directory (Path or folder) path from which the traversal begins (the starting point of the walk).
-	 * 2. A FileVisitor object that defines the actions to be performed when a file or directory is visited.
-	 *    The visitor is an instance of the FileVisitor interface, which provides methods for handling different events during the traversal.
+	 * The method Files.walkFileTree(Path, FileVisitor) traverses (or "walks
+	 * through") a directory and all of its subdirectories. It accepts two
+	 * arguments: 1. directory (Path or folder) path from which the traversal begins
+	 * (the starting point of the walk). 2. A FileVisitor object that defines the
+	 * actions to be performed when a file or directory is visited. The visitor is
+	 * an instance of the FileVisitor interface, which provides methods for handling
+	 * different events during the traversal.
 	 *
-	 * Here, we use an anonymous class to create the second argument - the instance (object) –
-	 * An anonymous class allows you to extend a superclass (or implement an interface) and instantiate it in a single, concise step,
-	 * without needing to define a separate named class. It combines both class extension and object creation into one operation,
-	 * typically used when you need a one-off implementation of a class or interface.
-	 * (Note: the object is the anonymous class's)
+	 * Here, we use an anonymous class to create the second argument - the instance
+	 * (object) – An anonymous class allows you to extend a superclass (or implement
+	 * an interface) and instantiate it in a single, concise step, without needing
+	 * to define a separate named class. It combines both class extension and object
+	 * creation into one operation, typically used when you need a one-off
+	 * implementation of a class or interface. (Note: the object is the anonymous
+	 * class's)
 	 *
-	 * We did not use Files.walkFileTree(folder, new FileVisitor<>()) because FileVisitor is an interface, and we would need to implement
-	 * all of its methods ourselves. Instead, we use Files.walkFileTree(folder, new SimpleFileVisitor<>()) because:
-	 * - SimpleFileVisitor<> is an abstract class that implements the FileVisitor interface with default method implementations.
-	 * - We only need to override the methods (visitFile, postVisitDirectory) that we're interested in, which simplifies our code.
+	 * We did not use Files.walkFileTree(folder, new FileVisitor<>()) because
+	 * FileVisitor is an interface, and we would need to implement all of its
+	 * methods ourselves. Instead, we use Files.walkFileTree(folder, new
+	 * SimpleFileVisitor<>()) because: - SimpleFileVisitor<> is an abstract class
+	 * that implements the FileVisitor interface with default method
+	 * implementations. - We only need to override the methods (visitFile,
+	 * postVisitDirectory) that we're interested in, which simplifies our code.
 	 */
 
 	// Copies all files from source folder to destination folder
@@ -236,7 +273,8 @@ public class SetDatabase
 		}
 
 		// Copy files from source folder to destination folder
-		//Files.newDirectoryStream(source): list all entries (files and folders) directly in the source directory
+		// Files.newDirectoryStream(source): list all entries (files and folders)
+		// directly in the source directory
 		try (DirectoryStream<Path> stream = Files.newDirectoryStream(source))
 		{
 			for (Path file : stream)
