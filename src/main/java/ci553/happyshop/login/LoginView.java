@@ -38,9 +38,18 @@ public class LoginView
 	private Label lbTitle;
 	private Button btnCust;
 	private Button btnWarehouse;
+	private Stage window;
+
+	// LoginView Constructor, takes the stage as parameter
+	// Allows Stage window to be re-used later to hide the view
+	public LoginView(Stage s)
+	{
+		window = s;
+		this.start();	// Invokes start upon construction
+	}
 
 	// Starts the loginView
-	public void start(Stage window)
+	public void start()
 	{
 		vbLoginPage = createLoginPage();
 		hbRoot = new HBox(10, vbLoginPage); // Adds all the layout elements to the root
@@ -73,7 +82,6 @@ public class LoginView
 		return vbLoginPage;
 	}
 
-
 	// When either of the buttons are clicked, open a loginPopup
 	private void buttonClicked(ActionEvent event)
 	{
@@ -85,5 +93,10 @@ public class LoginView
 	WindowBounds getWindowBounds()
 	{
 		return new WindowBounds(viewWindow.getX(), viewWindow.getY(), viewWindow.getWidth(), viewWindow.getHeight());
+	}
+
+	public void hideWindow()
+	{
+		window.hide();
 	}
 }

@@ -1,6 +1,7 @@
 package ci553.happyshop.login;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import ci553.happyshop.utility.WindowBounds;
 import javafx.event.ActionEvent;
@@ -37,6 +38,12 @@ public class WarehouseLoginPopup extends LoginPopup
 	// Overrides the buttonClicked method to handle customer logins
 	protected void buttonClicked(ActionEvent event) throws IOException
 	{
-
+		try
+		{
+			Model.warLogin(txtUsername.getText(), txtPassword.getText());
+		} catch (SQLException e)
+		{
+			System.out.println("Login failed " + e);
+		}
 	}
 }

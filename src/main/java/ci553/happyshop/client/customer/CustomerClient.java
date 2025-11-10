@@ -36,7 +36,7 @@ public class CustomerClient extends Application
 		CustomerModel cusModel = new CustomerModel();
 		DatabaseRW databaseRW = DatabaseRWFactory.createDatabaseRW();
 
-		cusView.cusControsller = cusController;
+		cusView.cusController = cusController;
 		cusController.cusModel = cusModel;
 		cusModel.cusView = cusView;
 		cusModel.databaseRW = databaseRW;

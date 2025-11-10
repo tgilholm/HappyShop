@@ -72,7 +72,7 @@ public class Main extends Application
 	 * Also creates the RemoveProductNotifier, which tracks the position of the Customer View
 	 * and is triggered by the Customer Model when needed.
 	 */
-	private void startCustomerClient()
+	public void startCustomerClient()
 	{
 		CustomerView cusView = new CustomerView();
 		CustomerController cusController = new CustomerController();
@@ -123,7 +123,7 @@ public class Main extends Application
 	// Link together the model, view and controller objects for the login window & start the interface
 	private void startLoginWindow()
 	{
-		LoginView lView = new LoginView();
+		LoginView lView = new LoginView(new Stage()); // Launches the login window
 		LoginController lController = new LoginController();
 		LoginModel lModel = new LoginModel();
 		DatabaseRW _databaseRW = DatabaseRWFactory.createDatabaseRW();
@@ -133,7 +133,6 @@ public class Main extends Application
 		lController.lModel = lModel;
 		lModel.lView = lView;
 		
-		lView.start(new Stage()); // Launches the login window
 	}
 	
 	/**

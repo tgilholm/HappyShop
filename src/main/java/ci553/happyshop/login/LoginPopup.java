@@ -10,21 +10,26 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+
+// TODO fix formatting
+// TODO add incorrect password feature
+// TODO add create account feature
 // Displays a compact login window. Parent class of CustomerLoginPopup and WarehouseLoginPopup classes
 
 public class LoginPopup
 {
 	// Connects to the loginView
 	public LoginView View;
-	
+
 	// Connects to the loginModel
 	public LoginModel Model;
-	protected Stage window;		// Protected keyword is used to allow access by child classes
+	protected Stage window; // Protected keyword is used to allow access by child classes
 	protected Scene scene;
 
 	// The labels, text fields and button
@@ -33,7 +38,7 @@ public class LoginPopup
 	protected Label lbPassword;
 	protected Label lbErrorMessage;
 	protected TextField txtUsername;
-	protected TextField txtPassword;
+	protected PasswordField txtPassword; // Use a PasswordField to protect user privacy
 	protected Button btnLogin;
 
 	public LoginPopup(LoginView v, LoginModel m)
@@ -42,7 +47,7 @@ public class LoginPopup
 		Model = m;
 		window = new Stage();
 	}
-	
+
 	protected void createScene()
 	{
 		// Instantiate labels
@@ -53,7 +58,7 @@ public class LoginPopup
 
 		// Instantiate text fields
 		txtUsername = new TextField();
-		txtPassword = new TextField();
+		txtPassword = new PasswordField();
 
 		// Instantiate button
 		btnLogin = new Button("Login");
@@ -76,9 +81,11 @@ public class LoginPopup
 		layoutBox.setAlignment(Pos.CENTER);
 		scene = new Scene(layoutBox, UIStyle.loginPopupWidth, UIStyle.loginPopupHeight);
 	}
-	
+
 	// Default buttonClicked method, child classes override it
-	protected void buttonClicked(ActionEvent event) throws IOException {};
+	protected void buttonClicked(ActionEvent event) throws IOException
+	{
+	};
 
 	protected void createWindow()
 	{
@@ -105,5 +112,12 @@ public class LoginPopup
 		{
 			createWindow();
 		}
+	}
+
+	// Shut down the popup on a successful login
+	public void closePopup()
+	{
+		System.out.println("xyz");
+		window.close();
 	}
 }

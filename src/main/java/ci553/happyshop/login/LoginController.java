@@ -22,6 +22,7 @@ public class LoginController
 			// Open the customer login popup
 			
 		case "Warehouse Login":
+			lModel.openWarLoginWindow();
 			// Open the warehouse login popup
 		}
 	}
