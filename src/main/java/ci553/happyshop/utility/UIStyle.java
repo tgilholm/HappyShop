@@ -53,7 +53,7 @@ public record UIStyle()
 	public static final int loginPopupHeight = 200;
 
 	public static final String labelTitleStyle = "-fx-font-weight: bold; "
-			+ "-fx-font-size: 16px; -fx-text-fill: purple;";
+			+ "-fx-font-size: 24px; -fx-text-fill: purple;";
 
 	public static final String labelStyle = "-fx-font-weight: bold; " + "-fx-font-size: 14px; "
 			+ "-fx-text-fill: black; " + "-fx-background-color: lightblue;";

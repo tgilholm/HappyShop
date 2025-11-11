@@ -3,6 +3,7 @@ package ci553.happyshop.client.customer;
 import ci553.happyshop.utility.UIStyle;
 import ci553.happyshop.utility.WinPosManager;
 import ci553.happyshop.utility.WindowBounds;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -112,15 +113,20 @@ public class CustomerView
 
 	// four controllers needs updating when program going on
 	private ImageView ivProduct; // image area in searchPage
+	private ImageView ivSearchIcon; // Search icon on top bar
 	private Label lbProductInfo;// product text info in searchPage
 	private TextArea taTrolley; // in trolley Page
 	private TextArea taReceipt;// in receipt page
+	
+	private ComboBox<String> cbCategories; // drop-down box to allow users to select categories
 
 	// Holds a reference to this CustomerView window for future access and
 	// management
 	// (e.g., positioning the removeProductNotifier when needed).
 	private Stage viewWindow;
 
+	
+	// Create the VBoxes, draw a divider line and start the view
 	public void start(Stage window)
 	{
 		VBox vbSearchPage = createSearchPage();
@@ -147,24 +153,44 @@ public class CustomerView
 		viewWindow = window;// Sets viewWindow to this window for future reference and management.
 	}
 
+	// TODO reformat search page
+	// Handles the layout for the search box
 	private VBox createSearchPage()
 	{
-		Label laPageTitle = new Label("Search by Product ID/Name");
+		// Put the title in a separate HBox for alignment
+		Label laPageTitle = new Label("HappyShop");
 		laPageTitle.setStyle(UIStyle.labelTitleStyle);
+		laPageTitle.setAlignment(Pos.TOP_LEFT);
+		HBox hbTitle = new HBox(laPageTitle);
 
-		Label laId = new Label("ID:      ");
-		laId.setStyle(UIStyle.labelStyle);
+		// Search Bar
+		
+		// Set label properties
 		tfId = new TextField();
-		tfId.setPromptText("eg. 0001");
+		tfId.setPromptText("Search for an item by name or ID");
 		tfId.setStyle(UIStyle.textFiledStyle);
-		HBox hbId = new HBox(10, laId, tfId);
+		tfId.setPrefWidth(COLUMN_WIDTH / 2);
+
+		// Display the search icon
+		int icon_xy = 32;
+		ivSearchIcon = new ImageView("search_icon.png");
+		ivSearchIcon.setFitHeight(icon_xy);
+		ivSearchIcon.setFitWidth(icon_xy);
+		
+		// Categories ComboBox
+		cbCategories = new ComboBox<String>();
+		cbCategories.getItems().add("Select Category");
+		cbCategories.getSelectionModel().selectFirst();
+		HBox hbId = new HBox(10, ivSearchIcon, tfId, cbCategories);
 
 		Label laName = new Label("Name:");
 		laName.setStyle(UIStyle.labelStyle);
 		tfName = new TextField();
 		tfName.setPromptText("implement it if you want");
 		tfName.setStyle(UIStyle.textFiledStyle);
-		HBox hbName = new HBox(10, laName, tfName);
+		HBox hbName = new HBox(10, laName, tfName);	// Attach the Search bar and ComboBox to a HBox
+		
+		// Search result box
 
 		Label laPlaceHolder = new Label(" ".repeat(15)); // create left-side spacing so that this HBox aligns with
 														// others in the layout.
@@ -189,7 +215,7 @@ public class CustomerView
 		HBox hbSearchResult = new HBox(5, ivProduct, lbProductInfo);
 		hbSearchResult.setAlignment(Pos.CENTER_LEFT);
 
-		VBox vbSearchPage = new VBox(15, laPageTitle, hbId, hbName, hbBtns, hbSearchResult);
+		VBox vbSearchPage = new VBox(15, hbTitle, hbId, hbName, hbBtns, hbSearchResult);
 		vbSearchPage.setPrefWidth(COLUMN_WIDTH);
 		vbSearchPage.setAlignment(Pos.TOP_CENTER);
 		vbSearchPage.setStyle("-fx-padding: 15px;");
