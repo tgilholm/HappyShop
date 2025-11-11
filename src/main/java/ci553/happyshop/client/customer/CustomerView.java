@@ -26,6 +26,66 @@ import java.sql.SQLException;
  * Page depending on the current context. Only one of these is shown at a time.
  */
 
+
+/* TODO VIEW REDESIGN
+ * - divide the screen up: list of items available on one side, specific item on the other
+ * item list takes about 2/3, item view takes about 1/3
+ * 
+ * do the layout first, get the items where they should be
+ * add a search bar (add a hint telling users what to do)
+ * search bar will automatically search as the user types
+ * search results appear in the box below sorted alphabetically
+ * 
+ * add a category selection dropdown
+ * (need to edit SQL database to support categories)
+ * when a category is selected, only the items that appear in that
+ * category will show in the search result
+ * search result needs to allow scrolling through options
+ * 
+ * search result may have to be custom implementation
+ * new class for the container- use a canvas?
+ * box contains "cards" with their own layout
+ * icon: name__________no# in cart___ add/remove from cart
+ * 
+ * each card is a set size and needs to fit in two columns in the search result
+ * the positions will be recalculated dynamically
+ * 
+ * make sure the code is reusable because it will be used again for the cart
+ * 
+ * 
+ * out of stock items default to the bottom of the search result- show the in stock items first
+ * then a greyed-out out of stock option
+ * 
+ * need to add a LOT of test data to get all of this tested
+ * 
+ * 
+ * individual item view:
+ * box next to the search result
+ * larger icon of the item with item info next to it
+ * such as the ID, name and amount remaining
+ * 
+ * also any style options
+ * this is another box inside the item view
+ * (add more sql shit) certain items have styles like clothes
+ * will need to sort that out later on***
+ * 
+ * 
+ * also include a logout, help and cart buttton
+ * logout redirects back to home page
+ * cart opens the cart
+ * help displays a popup telling users what to do
+ * 
+ * 
+ * cart view will be another card list
+ * total price is calculated dynamically
+ * users can add and remove items
+ * when an item has none remaining it disappears from the cart
+ *
+ * 
+ * customer view must be resizable
+ * 
+ */
+
 public class CustomerView
 {
 	public CustomerController cusController;
@@ -34,12 +94,19 @@ public class CustomerView
 	private final int HEIGHT = UIStyle.customerWinHeight;
 	private final int COLUMN_WIDTH = WIDTH / 2 - 10;
 
+	private Label title;
+	
+	
+	
 	private HBox hbRoot; // Top-level layout manager
 	private VBox vbTrolleyPage; // vbTrolleyPage and vbReceiptPage will swap with each other when need
 	private VBox vbReceiptPage;
 
 	TextField tfId; // for user input on the search page. Made accessible so it can be accessed or
 					// modified by CustomerModel
+	
+					// where your get/setters! WHERE YOUR GET SETTERS SHINE
+	
 	TextField tfName; // for user input on the search page. Made accessible so it can be accessed by
 						// CustomerModel
 

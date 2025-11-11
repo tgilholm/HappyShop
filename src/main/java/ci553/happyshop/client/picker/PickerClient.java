@@ -8,6 +8,13 @@ import javafx.stage.Stage;
  * Designed for early-stage testing, though full functionality may require other clients to be active.
  */
 
+
+// TODO picker GUI client - ENTIRELY OPTIONAL AND ONLY IF I HAVE TIME
+
+// basically a little man runs around and picks orders
+
+
+
 public class PickerClient extends Application
 {
 

@@ -27,6 +27,14 @@ import java.util.concurrent.locks.ReentrantLock;
  * folder (images_resetDB/) into the working image folder.
  */
 
+
+/* TODO database edits
+ * 
+ * Item table needs to be edited to support categories
+ * And perhaps add a styles table
+ * 
+ */
+
 public class SetDatabase
 {
 

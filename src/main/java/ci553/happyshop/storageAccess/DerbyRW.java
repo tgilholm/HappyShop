@@ -391,6 +391,7 @@ public class DerbyRW implements DatabaseRW
 		}
 	}
 
+	// TODO refactor to support warehouse login as well, by type
 	@Override
 	public boolean checkLoginDetails(String inputUsername, String inputPassword) throws SQLException
 	{
@@ -429,11 +430,6 @@ public class DerbyRW implements DatabaseRW
 		// Search the customerSet
 		for (Customer i : customerList)
 		{
-			System.out.println(i.getUsername());
-			System.out.println(i.getPassword());
-			
-			
-			
 			if (inputUsername.equals(i.getUsername()) && inputPassword.equals(i.getPassword()))
 			{
 				cusFound = true;

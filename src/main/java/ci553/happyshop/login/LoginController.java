@@ -18,12 +18,12 @@ public class LoginController
 		switch (btnText)
 		{
 		case "Customer Login":
-			lModel.openCusLoginWindow();
 			// Open the customer login popup
-			
+			lModel.openCusLoginWindow();
+			break;
 		case "Warehouse Login":
-			lModel.openWarLoginWindow();
 			// Open the warehouse login popup
+			lModel.openWarLoginWindow();
 		}
 	}
 	

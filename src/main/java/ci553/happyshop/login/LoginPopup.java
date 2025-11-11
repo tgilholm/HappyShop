@@ -117,7 +117,6 @@ public class LoginPopup
 	// Shut down the popup on a successful login
 	public void closePopup()
 	{
-		System.out.println("xyz");
 		window.close();
 	}
 }
