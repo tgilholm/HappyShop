@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+   <children>
+      <HBox layoutX="0" layoutY="0" prefHeight="15.0" prefWidth="239.0">
+         <children>
+            <Label id = "label1" text="ListCell Test" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

@@ -1,12 +1,17 @@
 package ci553.happyshop.client.customer;
 
+import ci553.happyshop.catalogue.Product;
+import ci553.happyshop.utility.ProductCell;
+import ci553.happyshop.utility.ProductCellFactory;
 import ci553.happyshop.utility.UIStyle;
 import ci553.happyshop.utility.WinPosManager;
 import ci553.happyshop.utility.WindowBounds;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -15,6 +20,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -27,26 +33,23 @@ import java.sql.SQLException;
  * Page depending on the current context. Only one of these is shown at a time.
  */
 
-
-/* TODO VIEW REDESIGN
- * - divide the screen up: list of items available on one side, specific item on the other
- * item list takes about 2/3, item view takes about 1/3
+/*
+ * TODO VIEW REDESIGN - divide the screen up: list of items available on one
+ * side, specific item on the other item list takes about 2/3, item view takes
+ * about 1/3
  * 
- * do the layout first, get the items where they should be
- * add a search bar (add a hint telling users what to do)
- * search bar will automatically search as the user types
- * search results appear in the box below sorted alphabetically
+ * do the layout first, get the items where they should be add a search bar (add
+ * a hint telling users what to do) search bar will automatically search as the
+ * user types search results appear in the box below sorted alphabetically
  * 
- * add a category selection dropdown
- * (need to edit SQL database to support categories)
- * when a category is selected, only the items that appear in that
- * category will show in the search result
- * search result needs to allow scrolling through options
+ * add a category selection dropdown (need to edit SQL database to support
+ * categories) when a category is selected, only the items that appear in that
+ * category will show in the search result search result needs to allow
+ * scrolling through options
  * 
- * search result may have to be custom implementation
- * new class for the container- use a canvas?
- * box contains "cards" with their own layout
- * icon: name__________no# in cart___ add/remove from cart
+ * search result may have to be custom implementation new class for the
+ * container- use a canvas? box contains "cards" with their own layout icon:
+ * name__________no# in cart___ add/remove from cart
  * 
  * each card is a set size and needs to fit in two columns in the search result
  * the positions will be recalculated dynamically
@@ -54,33 +57,27 @@ import java.sql.SQLException;
  * make sure the code is reusable because it will be used again for the cart
  * 
  * 
- * out of stock items default to the bottom of the search result- show the in stock items first
- * then a greyed-out out of stock option
+ * out of stock items default to the bottom of the search result- show the in
+ * stock items first then a greyed-out out of stock option
  * 
  * need to add a LOT of test data to get all of this tested
  * 
  * 
- * individual item view:
- * box next to the search result
- * larger icon of the item with item info next to it
- * such as the ID, name and amount remaining
+ * individual item view: box next to the search result larger icon of the item
+ * with item info next to it such as the ID, name and amount remaining
  * 
- * also any style options
- * this is another box inside the item view
- * (add more sql shit) certain items have styles like clothes
- * will need to sort that out later on***
+ * also any style options this is another box inside the item view (add more sql
+ * shit) certain items have styles like clothes will need to sort that out later
+ * on***
  * 
  * 
- * also include a logout, help and cart buttton
- * logout redirects back to home page
- * cart opens the cart
- * help displays a popup telling users what to do
+ * also include a logout, help and cart buttton logout redirects back to home
+ * page cart opens the cart help displays a popup telling users what to do
  * 
  * 
- * cart view will be another card list
- * total price is calculated dynamically
- * users can add and remove items
- * when an item has none remaining it disappears from the cart
+ * cart view will be another card list total price is calculated dynamically
+ * users can add and remove items when an item has none remaining it disappears
+ * from the cart
  *
  * 
  * customer view must be resizable
@@ -96,28 +93,28 @@ public class CustomerView
 	private final int COLUMN_WIDTH = WIDTH / 2 - 10;
 
 	private Label title;
-	
-	
-	
+
 	private HBox hbRoot; // Top-level layout manager
 	private VBox vbTrolleyPage; // vbTrolleyPage and vbReceiptPage will swap with each other when need
 	private VBox vbReceiptPage;
 
-	TextField tfId; // for user input on the search page. Made accessible so it can be accessed or
-					// modified by CustomerModel
-	
-					// where your get/setters! WHERE YOUR GET SETTERS SHINE
-	
+	TextField tfSearchBar; // for user input on the search page. Made accessible so it can be accessed or
+	// modified by CustomerModel
+
+	// where your get/setters! WHERE YOUR GET SETTERS SHINE
+
 	TextField tfName; // for user input on the search page. Made accessible so it can be accessed by
 						// CustomerModel
 
-	// four controllers needs updating when program going on
+	private ListView<Product> lvCardContainer; // List view to hold the dynamic item cards
+
+	
 	private ImageView ivProduct; // image area in searchPage
 	private ImageView ivSearchIcon; // Search icon on top bar
 	private Label lbProductInfo;// product text info in searchPage
 	private TextArea taTrolley; // in trolley Page
 	private TextArea taReceipt;// in receipt page
-	
+
 	private ComboBox<String> cbCategories; // drop-down box to allow users to select categories
 
 	// Holds a reference to this CustomerView window for future access and
@@ -125,7 +122,6 @@ public class CustomerView
 	// (e.g., positioning the removeProductNotifier when needed).
 	private Stage viewWindow;
 
-	
 	// Create the VBoxes, draw a divider line and start the view
 	public void start(Stage window)
 	{
@@ -163,37 +159,42 @@ public class CustomerView
 		laPageTitle.setAlignment(Pos.TOP_LEFT);
 		HBox hbTitle = new HBox(laPageTitle);
 
-		// Search Bar
-		
-		// Set label properties
-		tfId = new TextField();
-		tfId.setPromptText("Search for an item by name or ID");
-		tfId.setStyle(UIStyle.textFiledStyle);
-		tfId.setPrefWidth(COLUMN_WIDTH / 2);
+		// Create the search bar
+		tfSearchBar = new TextField();
+		tfSearchBar.setPromptText("Search for an item by name or ID");
+		tfSearchBar.setStyle(UIStyle.textFiledStyle);
+		tfSearchBar.setPrefWidth(COLUMN_WIDTH);
 
 		// Display the search icon
 		int icon_xy = 32;
 		ivSearchIcon = new ImageView("search_icon.png");
 		ivSearchIcon.setFitHeight(icon_xy);
 		ivSearchIcon.setFitWidth(icon_xy);
-		
+
 		// Categories ComboBox
+		// TODO combobox functionality
 		cbCategories = new ComboBox<String>();
 		cbCategories.getItems().add("Select Category");
 		cbCategories.getSelectionModel().selectFirst();
-		HBox hbId = new HBox(10, ivSearchIcon, tfId, cbCategories);
+		cbCategories.setMinWidth(COLUMN_WIDTH / 4);
 
-		Label laName = new Label("Name:");
-		laName.setStyle(UIStyle.labelStyle);
-		tfName = new TextField();
-		tfName.setPromptText("implement it if you want");
-		tfName.setStyle(UIStyle.textFiledStyle);
-		HBox hbName = new HBox(10, laName, tfName);	// Attach the Search bar and ComboBox to a HBox
+		// Attach the Search bar and ComboBox to a HBox
+		HBox hbSearch = new HBox(10, ivSearchIcon, tfSearchBar, cbCategories);
+
+		
+		// add an example product
+		// ('0001', '40 inch TV', 269.00,'0001.jpg',100)
+		ObservableList<Product> test = FXCollections
+				.observableArrayList(new Product("0001", "40 inch TV", "0001.jpg", 269, 100));
 		
 		// Search result box
+		lvCardContainer = createResultBox();
+		lvCardContainer.setItems(test);
+		
+		HBox hbSearchResult = new HBox(10, lvCardContainer);
 
 		Label laPlaceHolder = new Label(" ".repeat(15)); // create left-side spacing so that this HBox aligns with
-														// others in the layout.
+															// others in the layout.
 		Button btnSearch = new Button("Search");
 		btnSearch.setStyle(UIStyle.buttonStyle);
 		btnSearch.setOnAction(this::buttonClicked);
@@ -212,10 +213,8 @@ public class CustomerView
 		lbProductInfo.setWrapText(true);
 		lbProductInfo.setMinHeight(Label.USE_PREF_SIZE); // Allow auto-resize
 		lbProductInfo.setStyle(UIStyle.labelMulLineStyle);
-		HBox hbSearchResult = new HBox(5, ivProduct, lbProductInfo);
-		hbSearchResult.setAlignment(Pos.CENTER_LEFT);
 
-		VBox vbSearchPage = new VBox(15, hbTitle, hbId, hbName, hbBtns, hbSearchResult);
+		VBox vbSearchPage = new VBox(15, hbTitle, hbSearch, hbSearchResult, hbBtns);
 		vbSearchPage.setPrefWidth(COLUMN_WIDTH);
 		vbSearchPage.setAlignment(Pos.TOP_CENTER);
 		vbSearchPage.setStyle("-fx-padding: 15px;");
@@ -282,7 +281,7 @@ public class CustomerView
 			{
 				showTrolleyOrReceiptPage(vbTrolleyPage); // ensure trolleyPage shows if the last customer did not close
 															// their receiptPage
-														// their receiptPage
+															// their receiptPage
 			}
 			if (action.equals("OK & Close"))
 			{
@@ -321,6 +320,17 @@ public class CustomerView
 			hbRoot.getChildren().set(lastIndex, pageToShow);
 		}
 	}
+
+	private ListView<Product> createResultBox()
+	{
+		// Use setCellFactory to override default cells & replace with custom ones
+		ListView<Product> listView = new ListView<>();
+		listView.setPrefSize(COLUMN_WIDTH, HEIGHT);
+		//listView.setCellFactory(productListView -> new ProductCell());
+		
+		return listView;
+	}
+
 
 	WindowBounds getWindowBounds()
 	{

@@ -39,7 +39,7 @@ public class CustomerModel
 	void search() throws SQLException
 	{
 		// Retrieves product ID from search bar, checks if empty
-		String productId = cusView.tfId.getText().trim();
+		String productId = cusView.tfSearchBar.getText().trim();
 		if (!productId.isEmpty())
 		{
 			// If product ID is not empty, find the product in the database

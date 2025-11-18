@@ -18,6 +18,7 @@ module ci553.happyshop
 	exports ci553.happyshop;
 	exports ci553.happyshop.client;
 	exports ci553.happyshop.utility;
+	exports ci553.happyshop.catalogue;
 	exports ci553.happyshop.client.customer;
 	exports ci553.happyshop.client.orderTracker;
 	exports ci553.happyshop.client.emergency;
