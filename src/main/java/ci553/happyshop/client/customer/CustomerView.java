@@ -9,6 +9,7 @@ import ci553.happyshop.utility.WindowBounds;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -94,7 +95,6 @@ public class CustomerView
 
 	private Label title;
 
-	private HBox hbRoot; // Top-level layout manager
 	private VBox vbTrolleyPage; // vbTrolleyPage and vbReceiptPage will swap with each other when need
 	private VBox vbReceiptPage;
 
@@ -108,7 +108,6 @@ public class CustomerView
 
 	private ListView<Product> lvCardContainer; // List view to hold the dynamic item cards
 
-	
 	private ImageView ivProduct; // image area in searchPage
 	private ImageView ivSearchIcon; // Search icon on top bar
 	private Label lbProductInfo;// product text info in searchPage
@@ -122,110 +121,100 @@ public class CustomerView
 	// (e.g., positioning the removeProductNotifier when needed).
 	private Stage viewWindow;
 
-	// Create the VBoxes, draw a divider line and start the view
+	// Load the FXML and start the window
 	public void start(Stage window)
 	{
-		VBox vbSearchPage = createSearchPage();
+		//VBox vbSearchPage = createSearchPage();
 		vbTrolleyPage = CreateTrolleyPage();
 		vbReceiptPage = createReceiptPage();
 
-		// Create a divider line
-		Line line = new Line(0, 0, 0, HEIGHT);
-		line.setStrokeWidth(4);
-		line.setStroke(Color.PINK);
-		VBox lineContainer = new VBox(line);
-		lineContainer.setPrefWidth(4); // Give it some space
-		lineContainer.setAlignment(Pos.CENTER);
+		// Create an FXML loader
+		FXMLLoader loader = new FXMLLoader();
+		HBox hbox = null;
 
-		hbRoot = new HBox(10, vbSearchPage, lineContainer, vbTrolleyPage); // initialize to show trolleyPage
-		hbRoot.setAlignment(Pos.CENTER);
-		hbRoot.setStyle(UIStyle.rootStyle);
+		// Attempt to load the FXML file
+		try
+		{
+			loader.setLocation(getClass().getResource("/fxml/CustomerView.fxml"));
+			hbox = loader.<HBox>load();
+		} catch (IOException e)
+		{
+			System.out.println("FXML loading failed. " + e.getMessage());
+		}
 
-		Scene scene = new Scene(hbRoot, WIDTH, HEIGHT);
+		// Start the window
+		Scene scene = new Scene(hbox, WIDTH, HEIGHT);
+		scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
 		window.setScene(scene);
 		window.setTitle("🛒 HappyShop Customer Client");
 		WinPosManager.registerWindow(window, WIDTH, HEIGHT); // calculate position x and y for this window
 		window.show();
 		viewWindow = window;// Sets viewWindow to this window for future reference and management.
+
+		//lvCardContainer.refresh();
+		//System.out.println(lvCardContainer.getItems().size());
 	}
 
 	// TODO reformat search page
 	// Handles the layout for the search box
-	private VBox createSearchPage()
-	{
-		// Put the title in a separate HBox for alignment
-		Label laPageTitle = new Label("HappyShop");
-		laPageTitle.setStyle(UIStyle.labelTitleStyle);
-		laPageTitle.setAlignment(Pos.TOP_LEFT);
-		HBox hbTitle = new HBox(laPageTitle);
-
-		// Create the search bar
-		tfSearchBar = new TextField();
-		tfSearchBar.setPromptText("Search for an item by name or ID");
-		tfSearchBar.setStyle(UIStyle.textFiledStyle);
-		tfSearchBar.setPrefWidth(COLUMN_WIDTH);
-
-		// Display the search icon
-		int icon_xy = 32;
-		ivSearchIcon = new ImageView("search_icon.png");
-		ivSearchIcon.setFitHeight(icon_xy);
-		ivSearchIcon.setFitWidth(icon_xy);
-
-		// Categories ComboBox
-		// TODO combobox functionality
-		cbCategories = new ComboBox<String>();
-		cbCategories.getItems().add("Select Category");
-		cbCategories.getSelectionModel().selectFirst();
-		cbCategories.setMinWidth(COLUMN_WIDTH / 4);
-
-		// Attach the Search bar and ComboBox to a HBox
-		HBox hbSearch = new HBox(10, ivSearchIcon, tfSearchBar, cbCategories);
-
-		
-		// add an example product
-		// ('0001', '40 inch TV', 269.00,'0001.jpg',100)
-		ObservableList<Product> test = FXCollections
-				.observableArrayList(new Product("0001", "40 inch TV", "0001.jpg", 269, 100));
-		
-		// Search result box
-		lvCardContainer = createResultBox();
-		lvCardContainer.setItems(test);
-		
-		HBox hbSearchResult = new HBox(10, lvCardContainer);
-
-		Label laPlaceHolder = new Label(" ".repeat(15)); // create left-side spacing so that this HBox aligns with
-															// others in the layout.
-		Button btnSearch = new Button("Search");
-		btnSearch.setStyle(UIStyle.buttonStyle);
-		btnSearch.setOnAction(this::buttonClicked);
-		Button btnAddToTrolley = new Button("Add to Trolley");
-		btnAddToTrolley.setStyle(UIStyle.buttonStyle);
-		btnAddToTrolley.setOnAction(this::buttonClicked);
-		HBox hbBtns = new HBox(10, laPlaceHolder, btnSearch, btnAddToTrolley);
-
-		ivProduct = new ImageView("imageHolder.jpg");
-		ivProduct.setFitHeight(60);
-		ivProduct.setFitWidth(60);
-		ivProduct.setPreserveRatio(true); // Image keeps its original shape and fits inside 60×60
-		ivProduct.setSmooth(true); // make it smooth and nice-looking
-
-		lbProductInfo = new Label("Thank you for shopping with us.");
-		lbProductInfo.setWrapText(true);
-		lbProductInfo.setMinHeight(Label.USE_PREF_SIZE); // Allow auto-resize
-		lbProductInfo.setStyle(UIStyle.labelMulLineStyle);
-
-		VBox vbSearchPage = new VBox(15, hbTitle, hbSearch, hbSearchResult, hbBtns);
-		vbSearchPage.setPrefWidth(COLUMN_WIDTH);
-		vbSearchPage.setAlignment(Pos.TOP_CENTER);
-		vbSearchPage.setStyle("-fx-padding: 15px;");
-
-		return vbSearchPage;
-	}
-
+	/*
+	 * private VBox createSearchPage() {
+	 * 
+	 * // TODO display image in controller // Display the search icon int icon_xy =
+	 * 32; ivSearchIcon = new ImageView("search_icon.png");
+	 * ivSearchIcon.setFitHeight(icon_xy); ivSearchIcon.setFitWidth(icon_xy);
+	 * 
+	 * // Categories ComboBox // TODO combobox functionality cbCategories = new
+	 * ComboBox<String>(); cbCategories.getItems().add("Select Category");
+	 * cbCategories.getSelectionModel().selectFirst();
+	 * cbCategories.setMinWidth(COLUMN_WIDTH / 4);
+	 * 
+	 * // Attach the Search bar and ComboBox to a HBox HBox hbSearch = new HBox(10,
+	 * ivSearchIcon, tfSearchBar, cbCategories);
+	 * 
+	 * 
+	 * // add an example product // ('0001', '40 inch TV', 269.00,'0001.jpg',100)
+	 * ObservableList<Product> test = FXCollections .observableArrayList(new
+	 * Product("0001", "40 inch TV", "0001.jpg", 269, 100));
+	 * 
+	 * lvCardContainer = new ListView<Product>();
+	 * 
+	 * // Search result box lvCardContainer = createResultBox();
+	 * lvCardContainer.setItems(test);
+	 * 
+	 * HBox hbSearchResult = new HBox(10, lvCardContainer);
+	 * 
+	 * Label laPlaceHolder = new Label(" ".repeat(15)); // create left-side spacing
+	 * so that this HBox aligns with // others in the layout. Button btnSearch = new
+	 * Button("Search"); btnSearch.setStyle(UIStyle.buttonStyle);
+	 * btnSearch.setOnAction(this::buttonClicked); Button btnAddToTrolley = new
+	 * Button("Add to Trolley"); btnAddToTrolley.setStyle(UIStyle.buttonStyle);
+	 * btnAddToTrolley.setOnAction(this::buttonClicked); HBox hbBtns = new HBox(10,
+	 * laPlaceHolder, btnSearch, btnAddToTrolley);
+	 * 
+	 * ivProduct = new ImageView("imageHolder.jpg"); ivProduct.setFitHeight(60);
+	 * ivProduct.setFitWidth(60); ivProduct.setPreserveRatio(true); // Image keeps
+	 * its original shape and fits inside 60×60 ivProduct.setSmooth(true); // make
+	 * it smooth and nice-looking
+	 * 
+	 * lbProductInfo = new Label("Thank you for shopping with us.");
+	 * lbProductInfo.setWrapText(true);
+	 * lbProductInfo.setMinHeight(Label.USE_PREF_SIZE); // Allow auto-resize
+	 * lbProductInfo.setStyle(UIStyle.labelMulLineStyle);
+	 * 
+	 * 
+	 * VBox vbSearchPage = new VBox(15, hbTitle, hbSearch, hbSearchResult, hbBtns);
+	 * vbSearchPage.setPrefWidth(COLUMN_WIDTH);
+	 * vbSearchPage.setAlignment(Pos.TOP_CENTER);
+	 * vbSearchPage.setStyle("-fx-padding: 15px;");
+	 * 
+	 * 
+	 * //return vbSearchPage; }
+	 */
 	private VBox CreateTrolleyPage()
 	{
 		Label laPageTitle = new Label("🛒🛒  Trolley 🛒🛒");
-		laPageTitle.setStyle(UIStyle.labelTitleStyle);
+		// laPageTitle.setStyle(UIStyle.labelTitleStyle);
 
 		taTrolley = new TextArea();
 		taTrolley.setEditable(false);
@@ -253,7 +242,7 @@ public class CustomerView
 	private VBox createReceiptPage()
 	{
 		Label laPageTitle = new Label("Receipt");
-		laPageTitle.setStyle(UIStyle.labelTitleStyle);
+		// laPageTitle.setStyle(UIStyle.labelTitleStyle);
 
 		taReceipt = new TextArea();
 		taReceipt.setEditable(false);
@@ -279,13 +268,13 @@ public class CustomerView
 			String action = btn.getText();
 			if (action.equals("Add to Trolley"))
 			{
-				showTrolleyOrReceiptPage(vbTrolleyPage); // ensure trolleyPage shows if the last customer did not close
+				//showTrolleyOrReceiptPage(vbTrolleyPage); // ensure trolleyPage shows if the last customer did not close
 															// their receiptPage
 															// their receiptPage
 			}
 			if (action.equals("OK & Close"))
 			{
-				showTrolleyOrReceiptPage(vbTrolleyPage);
+				//showTrolleyOrReceiptPage(vbTrolleyPage);
 			}
 			cusController.doAction(action);
 		} catch (SQLException e)
@@ -305,32 +294,28 @@ public class CustomerView
 		taTrolley.setText(trolley);
 		if (!receipt.equals(""))
 		{
-			showTrolleyOrReceiptPage(vbReceiptPage);
+			//showTrolleyOrReceiptPage(vbReceiptPage);
 			taReceipt.setText(receipt);
 		}
 	}
 
 	// Replaces the last child of hbRoot with the specified page.
 	// the last child is either vbTrolleyPage or vbReceiptPage.
-	private void showTrolleyOrReceiptPage(Node pageToShow)
-	{
-		int lastIndex = hbRoot.getChildren().size() - 1;
-		if (lastIndex >= 0)
-		{
-			hbRoot.getChildren().set(lastIndex, pageToShow);
-		}
-	}
+	/*
+	 * private void showTrolleyOrReceiptPage(Node pageToShow) { int lastIndex =
+	 * hbRoot.getChildren().size() - 1; if (lastIndex >= 0) {
+	 * hbRoot.getChildren().set(lastIndex, pageToShow); } }
+	 */
 
 	private ListView<Product> createResultBox()
 	{
 		// Use setCellFactory to override default cells & replace with custom ones
 		ListView<Product> listView = new ListView<>();
 		listView.setPrefSize(COLUMN_WIDTH, HEIGHT);
-		//listView.setCellFactory(productListView -> new ProductCell());
-		
+		listView.setCellFactory(productListView -> new ProductCell());
+
 		return listView;
 	}
-
 
 	WindowBounds getWindowBounds()
 	{

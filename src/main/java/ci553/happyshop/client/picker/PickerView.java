@@ -66,7 +66,7 @@ public class PickerView
 	private VBox createOrderMapRoot()
 	{
 		Label laOrderMapRootTitle = new Label("Orders Waiting for Processing");
-		laOrderMapRootTitle.setStyle(UIStyle.labelTitleStyle);
+		//laOrderMapRootTitle.setStyle(UIStyle.labelTitleStyle);
 
 		taOrderMap.setEditable(false);
 		taOrderMap.setPrefSize(WIDTH, HEIGHT - 100);
@@ -86,7 +86,7 @@ public class PickerView
 	private VBox createOrderDetailRoot()
 	{
 		laDetailRootTitle = new Label("Progressing Order Details");
-		laDetailRootTitle.setStyle(UIStyle.labelTitleStyle);
+		//laDetailRootTitle.setStyle(UIStyle.labelTitleStyle);
 
 		taOrderDetail.setEditable(false);
 		taOrderDetail.setPrefSize(WIDTH, HEIGHT - 100);

@@ -1,0 +1,20 @@
+/*  Style the FXML elements  */
+
+/* Set default style- children will inherit or override this */
+.rootStyle{
+	-fx-padding: 8px;
+	-fx-background-color: lightgreen;
+}
+
+
+
+.searchResult {
+	-fx-font-size: 16px;
+}
+
+/* Style the title label */
+.titleText {
+	-fx-font-size: 24px;
+	-fx-font-weight: bold;
+	-fx-text-fill: purple;
+}

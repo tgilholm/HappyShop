@@ -161,7 +161,7 @@ public class WarehouseView
 	private VBox createSearchPage()
 	{
 		Label laTitle = new Label("Search by product ID/Name");
-		laTitle.setStyle(UIStyle.labelTitleStyle);
+		//laTitle.setStyle(UIStyle.labelTitleStyle);
 
 		tfSearchKeyword = new TextField();
 		tfSearchKeyword.setStyle(UIStyle.textFiledStyle);

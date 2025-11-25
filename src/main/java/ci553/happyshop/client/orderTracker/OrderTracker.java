@@ -33,7 +33,7 @@ public class OrderTracker
 	public OrderTracker()
 	{
 		Label laTitle = new Label("Order_ID,  State");
-		laTitle.setStyle(UIStyle.labelTitleStyle);
+		//laTitle.setStyle(UIStyle.labelTitleStyle);
 
 		taDisplay = new TextArea();
 		taDisplay.setEditable(false);

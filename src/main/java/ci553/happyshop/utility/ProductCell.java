@@ -17,9 +17,10 @@ public class ProductCell extends ListCell<Product>
 	@FXML 
 	private AnchorPane anchorPane;
 	
-	public void updateItem(Product product, Boolean empty)
+	protected void updateItem(Product product, Boolean empty)
 	{
 		super.updateItem(product, empty);
+		System.out.println("not empty");
 
 		// TODO set layout with xml
 
@@ -40,7 +41,7 @@ public class ProductCell extends ListCell<Product>
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+			setText(product.getProductDescription());
 			
 			// Set the layout elements
 			label1.setText(product.getProductDescription());

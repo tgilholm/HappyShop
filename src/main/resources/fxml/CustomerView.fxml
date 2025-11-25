@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<!-- The layout for the Customer Client view -->
+<!-- Connects the SearchResult and ItemSelected layouts -->
+
+
+<!-- The root element is a HBox -->
+<HBox alignment="CENTER" spacing="10" styleClass="rootStyle" 
+xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+			<!-- Include the layout for the search result page -->
+		<fx:include source="SearchResult.fxml" fx:id="searchResult"/>
+		
+		<!-- Display a dividing line between the sections -->
+		<Line startX="600" endX="600" startY="0" endY="600"/>
+		
+		<!-- Include the layout for the selected item page -->
+		<fx:include source="ItemSelected.fxml" fx:id="itemSelected"/>
+	
+	</children>
+
+</HBox>
+

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+
+<!--
+    Search Page - Left side of CustomerView
+    Contains:
+    - Title
+    - Search bar with icon
+    - Category dropdown
+    - Product list (ListView)
+    - Product detail display (image + info)
+    - Action buttons (Search, Add to Trolley)
+-->
+
+<VBox 
+    xmlns:fx="http://javafx.com/fxml/1"
+    spacing="15"
+    alignment="TOP_CENTER"
+    prefWidth="600"
+    style="-fx-padding: 15px;">
+    
+    <!-- Page Title -->
+    <HBox>
+        <children>
+            <Label text="HappyShop" 
+                   style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #333;"/>
+        </children>
+    </HBox>
+    
+    <!-- Search Bar Section -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <children>
+            <!-- Search Icon -->
+            <ImageView fx:id="ivSearchIcon" 
+                       fitHeight="32" 
+                       fitWidth="32"
+                       preserveRatio="true"
+                       smooth="true"/>
+            
+            <!-- Search TextField -->
+            <TextField fx:id="tfSearchBar"
+                       promptText="Search for an item by name or ID"
+                       prefWidth="300"
+                       style="-fx-padding: 8px; -fx-font-size: 12px;"/>
+            
+            <!-- Category ComboBox -->
+            <ComboBox fx:id="cbCategories"
+                      minWidth="150"
+                      style="-fx-font-size: 12px;"/>
+        </children>
+    </HBox>
+    
+    <!-- Search Results - ListView of Products -->
+    <HBox>
+        <children>
+            <ListView fx:id="lvCardContainer"
+                      prefWidth="580"
+                      prefHeight="250"
+                      style="-fx-font-size: 12px;"/>
+        </children>
+    </HBox>
+    
+    <!-- Product Detail Display Section -->
+    <HBox spacing="10" style="-fx-border-color: #ddd; -fx-border-width: 1; -fx-padding: 10px;">
+        <children>
+            <!-- Product Image -->
+            <ImageView fx:id="ivProduct"
+                       fitHeight="80"
+                       fitWidth="80"
+                       preserveRatio="true"
+                       smooth="true"/>
+            
+            <!-- Product Info -->
+            <Label fx:id="lbProductInfo"
+                   text="Thank you for shopping with us."
+                   wrapText="true"
+                   style="-fx-font-size: 12px; -fx-text-fill: #555;"/>
+        </children>
+        <HBox.setHgrow>true</HBox.setHgrow>
+    </HBox>
+    
+    <!-- Action Buttons -->
+    <HBox spacing="10" alignment="CENTER">
+        <children>
+            <Label text=" " />  <!-- Placeholder for spacing -->
+            <Button text="Search"
+                    onAction="#onSearchClicked"
+                    style="-fx-padding: 8px 16px; -fx-font-size: 12px;"/>
+            <Button text="Add to Trolley"
+                    onAction="#onAddToTrolleyClicked"
+                    style="-fx-padding: 8px 16px; -fx-font-size: 12px;"/>
+        </children>
+    </HBox>
+    
+    <!-- Make VBox grow to fill space -->
+    <VBox.setVgrow>true</VBox.setVgrow>
+    
+</VBox>
