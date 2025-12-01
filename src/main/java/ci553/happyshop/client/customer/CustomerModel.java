@@ -30,7 +30,7 @@ public class CustomerModel
 	private ArrayList<Product> trolley = new ArrayList<>(); // a list of products in trolley
 
 	// Four UI elements to be passed to CustomerView for display updates.
-	private String imageName = "imageHolder.jpg";                // Image to show in product preview (Search Page)
+	private String imageName = "images/imageHolder.jpg";                // Image to show in product preview (Search Page)
 	private String displayLaSearchResult = "No Product was searched yet"; // Label showing search result message (Search Page)
 	private String displayTaTrolley = "";                                // Text area content showing current trolley items (Trolley Page)
 	private String displayTaReceipt = "";                                // Text area content showing receipt after checkout (Receipt Page)
@@ -208,7 +208,7 @@ public class CustomerModel
 			System.out.println("Image absolute path: " + imageFullPath); // Debugging to ensure path is correct
 		} else
 		{
-			imageName = "imageHolder.jpg";
+			imageName = "images/imageHolder.jpg";
 		}
 		cusView.update(imageName, displayLaSearchResult, displayTaTrolley, displayTaReceipt);
 	}
