@@ -3,10 +3,8 @@
 <?import javafx.scene.layout.*?>
 
 <!-- The layout for the Customer Client view -->
-<!-- Connects the SearchResult and ItemSelected layouts -->
-
-
-<!-- The root element is a HBox -->
+<!-- Connects to the CustomerController to provide user input -->
+<!-- The root element is a GridPane for easy layout arrangement -->
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.control.TextField?>
@@ -14,11 +12,11 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Button?>
-
-
 <?import javafx.geometry.Insets?>
+
+
 <GridPane styleClass="root" hgap="10" vgap="10"
-          xmlns:fx="http://javafx.com/fxml/1">
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="ci553.happyshop.client.customer.CustomerController">
     <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
     <!-- COLUMN 0 -->
 
@@ -42,19 +40,21 @@
 
     <!-- The search results container-->
     <HBox GridPane.columnIndex="0" GridPane.rowIndex="2">
-        <ListView fx:id="lvCardContainer" prefWidth="800"/>
+        <ListView fx:id="lvProducts" prefWidth="800"/>
     </HBox>
 
     <!-- COLUMN 1 -->
     <!-- Selected item layout -->
         <!-- Account and Cart Buttons-->
         <HBox alignment="TOP_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="0">
-            <Button text="Account">
+            <Button fx:id="btnAccount" text="Account"
+            onAction="#accountClicked">
 
 
             </Button>
 
-            <Button text="Cart">
+            <Button text="Cart" fx:id="btnCart"
+            onAction="#cartClicked">
 
 
             </Button>

@@ -5,7 +5,6 @@ import ci553.happyshop.utility.ProductCell;
 import ci553.happyshop.utility.UIStyle;
 import ci553.happyshop.utility.WinPosManager;
 import ci553.happyshop.utility.WindowBounds;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -15,7 +14,6 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 /**
  * The CustomerView is separated into two sections by a line :
@@ -63,7 +61,7 @@ import java.sql.SQLException;
  * on***
  * 
  * 
- * also include a logout, help and cart buttton logout redirects back to home
+ * also include a logout, help and cart button logout redirects back to home
  * page cart opens the cart help displays a popup telling users what to do
  * 
  * 
@@ -80,16 +78,9 @@ public class CustomerView
 {
 	public CustomerController cusController;
 
-
     TextField tfSearchBar; // for user input on the search page. Made accessible so it can be accessed or
 	// modified by CustomerModel
 
-	// where your get/setters! WHERE YOUR GET SETTERS SHINE
-
-	TextField tfName; // for user input on the search page. Made accessible so it can be accessed by
-						// CustomerModel
-
-	private ListView<Product> lvCardContainer; // List view to hold the dynamic item cards
 
 	private ImageView ivProduct; // image area in searchPage
 	private Label lbProductInfo;// product text info in searchPage
@@ -100,6 +91,7 @@ public class CustomerView
 	// management
 	// (e.g., positioning the removeProductNotifier when needed).
 	private Stage viewWindow;
+
 
 	// Load the FXML and start the window
 	public void start(Stage window)
@@ -112,7 +104,6 @@ public class CustomerView
 		try
 		{
 			loader.setLocation(getClass().getResource("/fxml/CustomerView.fxml"));
-            loader.setController(cusController);
             gridPane = loader.load();
 		} catch (IOException e)
 		{
@@ -134,31 +125,7 @@ public class CustomerView
     }
 
 
-	private void buttonClicked(ActionEvent event)
-	{
-		try
-		{
-			Button btn = (Button) event.getSource();
-			String action = btn.getText();
-			if (action.equals("Add to Trolley"))
-			{
-				//showTrolleyOrReceiptPage(vbTrolleyPage); // ensure trolleyPage shows if the last customer did not close
-															// their receiptPage
-			}
-			if (action.equals("OK & Close"))
-			{
-				//showTrolleyOrReceiptPage(vbTrolleyPage);
-			}
-			cusController.doAction(action);
-		} catch (SQLException e)
-		{
-			e.printStackTrace();
-		} catch (IOException e)
-		{
-			throw new RuntimeException(e);
-		}
-	}
-
+    // Update the view when new data is received from the model
 	public void update(String imageName, String searchResult, String trolley, String receipt)
 	{
 
@@ -172,22 +139,6 @@ public class CustomerView
 		}
 	}
 
-	// Replaces the last child of hbRoot with the specified page.
-	// the last child is either vbTrolleyPage or vbReceiptPage.
-	/*
-	 * private void showTrolleyOrReceiptPage(Node pageToShow) { int lastIndex =
-	 * hbRoot.getChildren().size() - 1; if (lastIndex >= 0) {
-	 * hbRoot.getChildren().set(lastIndex, pageToShow); } }
-	 */
-
-	private ListView<Product> createResultBox()
-	{
-		// Use setCellFactory to override default cells and replace with custom ones
-		ListView<Product> listView = new ListView<>();
-		listView.setCellFactory(productListView -> new ProductCell());
-
-		return listView;
-	}
 
 	WindowBounds getWindowBounds()
 	{
