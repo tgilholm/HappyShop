@@ -46,7 +46,6 @@
     </HBox>
 
     <!-- COLUMN 1 -->
-
     <!-- Selected item layout -->
         <!-- Account and Cart Buttons-->
         <HBox alignment="TOP_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="0">
@@ -72,6 +71,5 @@
 
             </TextArea>
         </HBox>
-
 </GridPane>
 

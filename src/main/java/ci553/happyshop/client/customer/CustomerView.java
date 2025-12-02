@@ -92,12 +92,9 @@ public class CustomerView
 	private ListView<Product> lvCardContainer; // List view to hold the dynamic item cards
 
 	private ImageView ivProduct; // image area in searchPage
-	private ImageView ivSearchIcon; // Search icon on top bar
 	private Label lbProductInfo;// product text info in searchPage
 	private TextArea taTrolley; // in trolley Page
 	private TextArea taReceipt;// in receipt page
-
-	private ComboBox<String> cbCategories; // drop-down box to allow users to select categories
 
 	// Holds a reference to this CustomerView window for future access and
 	// management
@@ -130,11 +127,10 @@ public class CustomerView
 
 		window.setScene(scene);
 		window.setTitle("🛒 HappyShop Customer Client");
-		WinPosManager.registerWindow(window, WIDTH, HEIGHT); // calculate position x and y for this
+		WinPosManager.registerWindow(window, WIDTH, HEIGHT); // calculate position x and y for this window
 
 		window.show();        // Start the window
 		viewWindow = window;// Sets viewWindow to this window for future reference and management.
-
     }
 
 
@@ -169,7 +165,7 @@ public class CustomerView
 		ivProduct.setImage(new Image(imageName));
 		lbProductInfo.setText(searchResult);
 		taTrolley.setText(trolley);
-		if (!receipt.equals(""))
+		if (!receipt.isEmpty())
 		{
 			//showTrolleyOrReceiptPage(vbReceiptPage);
 			taReceipt.setText(receipt);
@@ -186,7 +182,7 @@ public class CustomerView
 
 	private ListView<Product> createResultBox()
 	{
-		// Use setCellFactory to override default cells & replace with custom ones
+		// Use setCellFactory to override default cells and replace with custom ones
 		ListView<Product> listView = new ListView<>();
 		listView.setCellFactory(productListView -> new ProductCell());
 

@@ -1,22 +1,25 @@
 package ci553.happyshop.client.customer;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 
 // Controller class for the customer client
-
+// Initializes FXML elements and handles user input
 public class CustomerController
 {
 	public CustomerModel cusModel;
 
     @FXML
     private ImageView ivSearchIcon;
+
+    @FXML
+    private ComboBox<String> cbCategories;
 
 
     // Initializes the controller after the root element is finished processing
@@ -30,6 +33,11 @@ public class CustomerController
         } else {
             System.err.println("Image not found: /images/search_icon.png");
         }
+
+        // Set the ComboBox to display "Select Category" initially
+        cbCategories.getItems().add("Select Category");
+        cbCategories.getSelectionModel().selectFirst();
+
     }
 
 
@@ -54,6 +62,4 @@ public class CustomerController
 			break;
 		}
 	}
-
-
 }
