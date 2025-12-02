@@ -109,14 +109,14 @@ public class CustomerView
 	{
 		// Create an FXML loader
 		FXMLLoader loader = new FXMLLoader();
-		HBox hbox = null;
+		GridPane gridPane = null;
 
 		// Attempt to load the FXML file
 		try
 		{
 			loader.setLocation(getClass().getResource("/fxml/CustomerView.fxml"));
             loader.setController(cusController);
-			hbox = loader.load();
+            gridPane = loader.load();
 		} catch (IOException e)
 		{
 			System.out.println("FXML loading failed. " + e.getMessage());
@@ -125,7 +125,7 @@ public class CustomerView
         int WIDTH = UIStyle.customerWinWidth;
         int HEIGHT = UIStyle.customerWinHeight;
 
-        Scene scene = new Scene(hbox, WIDTH, HEIGHT);
+        Scene scene = new Scene(gridPane, WIDTH, HEIGHT);
 		scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
 
 		window.setScene(scene);

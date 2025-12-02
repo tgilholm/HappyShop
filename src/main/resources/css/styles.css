@@ -1,7 +1,7 @@
 /*  Style the FXML elements  */
 
 /* Set default style- children will inherit or override this */
-.rootStyle{
+.root{
 	-fx-padding: 16px;
 	-fx-background-color: lightgreen;
 }
