@@ -9,6 +9,7 @@ module ci553.happyshop
 
 	opens ci553.happyshop to javafx.fxml;
 	opens ci553.happyshop.client to javafx.fxml;
+    opens ci553.happyshop.utility to javafx.fxml;
 	opens ci553.happyshop.client.customer;
 	opens ci553.happyshop.client.picker;
 	opens ci553.happyshop.client.orderTracker;

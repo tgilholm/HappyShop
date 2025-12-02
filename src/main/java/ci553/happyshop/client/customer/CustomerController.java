@@ -1,6 +1,7 @@
 package ci553.happyshop.client.customer;
 
 import ci553.happyshop.catalogue.Product;
+import ci553.happyshop.utility.ProductCell;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -49,11 +50,12 @@ public class CustomerController {
         cbCategories.getSelectionModel().selectFirst();
 
         // Initializes the ListView with the custom cell factory
-        // The layout is taken from ListCell.fxml
-        // New ListCell items are created using this factory
-        lvProducts.setCellFactory(product -> new ListCell<>() {
+        // Uses the ProductCell class to display the product details
+        lvProducts.setCellFactory(listView -> new ProductCell());
 
-        });
+        // Add a sample product for testing
+        lvProducts.getItems().add(new Product("1234", "1234", "0001.jpg", 10, 100));
+        lvProducts.refresh();
     }
 
     // Handle the "account" button input
