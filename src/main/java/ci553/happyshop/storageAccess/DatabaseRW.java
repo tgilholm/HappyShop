@@ -29,6 +29,9 @@ import java.util.ArrayList;
 public interface DatabaseRW
 {
 
+	// Get the whole product list
+	public ArrayList<Product> getAll();
+
 	/**
 	 * Searches for products by a keyword, which may match the product ID or appear in the description.
 	 *

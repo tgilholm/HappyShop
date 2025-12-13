@@ -6,6 +6,8 @@ import ci553.happyshop.storageAccess.DatabaseRW;
 import ci553.happyshop.orderManagement.OrderHub;
 import ci553.happyshop.utility.StorageLocation;
 import ci553.happyshop.utility.ProductListFormatter;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -13,27 +15,54 @@ import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+// TODO search by keyword
+
+// TODO update ProductCell layout with add product, num remaining & other details
+// TODO fill out product details page when product clicked
+
+
 /**
- * TODO
- * You can either directly modify the CustomerModel class to implement the required tasks,
- * or create a subclass of CustomerModel and override specific methods where appropriate.
+ * The CustomerModel is responsible for exposing an Observable productList that is bound to the View by the CustomerController.
+ * User search is facilitated by a FilteredList
  */
 public class CustomerModel
 {
 	public CustomerView cusView;
-	public DatabaseRW databaseRW; //Interface type, not specific implementation
-									//Benefits: Flexibility: Easily change the database implementation.
+	public DatabaseRW databaseRW;
+	private final ObservableList<Product> productList = FXCollections.observableArrayList();		// Observable product list
 
 	private Product theProduct = null; // product found from search
 	private ArrayList<Product> trolley = new ArrayList<>(); // a list of products in trolley
 
 	// Four UI elements to be passed to CustomerView for display updates.
-	private String imageName = "imageHolder.jpg";                // Image to show in product preview (Search Page)
+	private String imageName = "images/imageHolder.jpg";                // Image to show in product preview (Search Page)
 	private String displayLaSearchResult = "No Product was searched yet"; // Label showing search result message (Search Page)
 	private String displayTaTrolley = "";                                // Text area content showing current trolley items (Trolley Page)
 	private String displayTaReceipt = "";                                // Text area content showing receipt after checkout (Receipt Page)
+
+
+
+	/**
+	 * Exposes an ObservableList version of the product list. If the productList changes, observers will be triggered.
+	 * @return <code>productList</code>
+	 */
+	public ObservableList<Product> getProducts()
+    {
+		return productList;
+	}
+
+	/**
+	 * Queries the DB to get the current list of products.
+	 */
+	public void loadProducts()
+	{
+		// Use setAll to update the productList
+		productList.setAll(databaseRW.getAll());
+	}
+
 
 	//SELECT productID, description, image, unitPrice,inStock quantity
 	void search() throws SQLException
@@ -208,7 +237,7 @@ public class CustomerModel
 			System.out.println("Image absolute path: " + imageFullPath); // Debugging to ensure path is correct
 		} else
 		{
-			imageName = "imageHolder.jpg";
+			imageName = "images/imageHolder.jpg";
 		}
 		cusView.update(imageName, displayLaSearchResult, displayTaTrolley, displayTaReceipt);
 	}

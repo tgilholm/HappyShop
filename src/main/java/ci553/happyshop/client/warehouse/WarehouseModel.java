@@ -2,7 +2,6 @@ package ci553.happyshop.client.warehouse;
 
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.storageAccess.DatabaseRW;
-import ci553.happyshop.storageAccess.DerbyRW;
 import ci553.happyshop.storageAccess.ImageFileManager;
 import ci553.happyshop.utility.StorageLocation;
 
@@ -29,7 +28,7 @@ public class WarehouseModel
 	String displayPriceEdit = "";
 	String displayStockEdit = "";
 	String displayDescriptionEdit = "";
-	String displayImageUrlEdit = "WarehouseImageHolder.jpg";
+	String displayImageUrlEdit = "images/WarehouseImageHolder.jpg";
 
 	public HistoryWindow historyWindow;
 	public AlertSimulator alertSimulator;

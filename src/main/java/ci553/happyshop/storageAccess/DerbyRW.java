@@ -21,6 +21,31 @@ public class DerbyRW implements DatabaseRW
 	private static String dbURL = DatabaseRWFactory.dbURL; // Shared by all instances
 	private Lock lock = new ReentrantLock(); // Each instance has its own lock
 
+	// Get all the products from the DB
+	public ArrayList<Product> getAll()
+	{
+		ArrayList<Product> productList = new ArrayList<>();
+		String query = "SELECT * FROM ProductTable";
+
+		try (Connection conn = DriverManager.getConnection(dbURL);
+			 PreparedStatement pstmt = conn.prepareStatement(query))
+		{
+			try (ResultSet rs = pstmt.executeQuery())
+			{
+				while (rs.next())
+				{
+					productList.add(makeProObjFromDbRecord(rs));
+				}
+
+			}
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return productList;
+	}
+
+
 	// search product by product Id or name, return a list of products or null
 	// search by Id at first, if get null, search by product name
 	// currently used by warehouseModel.

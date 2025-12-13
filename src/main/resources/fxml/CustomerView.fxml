@@ -1,27 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
 
 <!-- The layout for the Customer Client view -->
-<!-- Connects the SearchResult and ItemSelected layouts -->
+<!-- Connects to the CustomerController to provide user input -->
+<!-- The root element is a GridPane for easy layout arrangement -->
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.geometry.Insets?>
+
+<!-- The Controller is attached to the View here -->
+<GridPane styleClass="root" hgap="10" vgap="10"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="ci553.happyshop.client.customer.CustomerController">
+    <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+    <!-- COLUMN 0 -->
+
+    <!-- Title -->
+    <HBox spacing="10" styleClass="titleText" GridPane.columnIndex="0" GridPane.rowIndex="0">
+        <Label text="HappyShop" />
+    </HBox>
+
+    <!-- Search bar with search icon, text field and ComboBox -->
+    <HBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="1">
+        <ImageView fx:id="ivSearchIcon" fitHeight="32"
+                   fitWidth="32" preserveRatio="true"/>
+
+        <!-- The search bar itself -->
+        <TextField fx:id="tfSearchBar"
+                   promptText="Search for an item by name or ID" prefWidth="400"/>
+
+        <!-- The category selection ComboBox -->
+        <ComboBox fx:id="cbCategories" prefWidth="200"/>
+    </HBox>
+
+    <!-- The search results container-->
+    <HBox GridPane.columnIndex="0" GridPane.rowIndex="2">
+        <ListView fx:id="lvProducts" prefWidth="800"/>
+    </HBox>
+
+    <!-- COLUMN 1 -->
+    <!-- Selected item layout -->
+        <!-- Account and Cart Buttons-->
+        <HBox alignment="TOP_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="0">
+            <Button fx:id="btnAccount" text="Account"
+            onAction="#accountClicked">
 
 
-<!-- The root element is a HBox -->
-<HBox alignment="CENTER" spacing="10" styleClass="rootStyle" 
-xmlns:fx="http://javafx.com/fxml/1">
-	<children>
-			<!-- Include the layout for the search result page -->
-		<fx:include source="SearchResult.fxml" fx:id="searchResult"/>
-		
-		<!-- Display a dividing line between the sections -->
-		<Line startX="600" endX="600" startY="0" endY="600"/>
-		
-		<!-- Include the layout for the selected item page -->
-		<fx:include source="ItemSelected.fxml" fx:id="itemSelected"/>
-	
-	</children>
+            </Button>
 
-</HBox>
+            <Button text="Cart" fx:id="btnCart"
+            onAction="#cartClicked">
+
+
+            </Button>
+        </HBox>
+
+        <!-- Selected Item Title-->
+        <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Label text="Selected Item" id="headerText"/>
+        </HBox>
+
+        <!-- Selected Item Information-->
+        <HBox GridPane.columnIndex="01" GridPane.rowIndex="2">
+            <TextArea>
+
+            </TextArea>
+        </HBox>
+</GridPane>
 

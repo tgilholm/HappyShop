@@ -216,41 +216,35 @@ public class WarehouseView
 		 * When is setCellFactory() NOT Needed?
 		 * Each row is just plain text without images or formatting.
 		 */
-		obrLvProducts.setCellFactory(param -> new ListCell<Product>()
-		{
-			@Override
-			protected void updateItem(Product product, boolean empty)
-			{
-				super.updateItem(product, empty);
+		obrLvProducts.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(Product product, boolean empty) {
+                super.updateItem(product, empty);
 
-				if (empty || product == null)
-				{
-					setGraphic(null);
-					System.out.println("setCellFactory - empty item");
-				} else
-				{
-					String imageName = product.getProductImageName(); // Get image name (e.g. "0001.jpg")
-					String relativeImageUrl = StorageLocation.imageFolder + imageName;
-					// Get the full absolute path to the image
-					Path imageFullPath = Paths.get(relativeImageUrl).toAbsolutePath();
-					String imageFullUri = imageFullPath.toUri().toString();// Build the full image Uri
+                if (empty || product == null) {
+                    setGraphic(null);
+                    System.out.println("setCellFactory - empty item");
+                } else {
+                    String imageName = product.getProductImageName(); // Get image name (e.g. "0001.jpg")
+                    String relativeImageUrl = StorageLocation.imageFolder + imageName;
+                    // Get the full absolute path to the image
+                    Path imageFullPath = Paths.get(relativeImageUrl).toAbsolutePath();
+                    String imageFullUri = imageFullPath.toUri().toString();// Build the full image Uri
 
-					ImageView ivPro;
-					try
-					{
-						ivPro = new ImageView(new Image(imageFullUri, 50, 45, true, true)); // Attempt to load the product image
-					} catch (Exception e)
-					{
-						// If loading fails, use a default image directly from the resources folder
-						ivPro = new ImageView(new Image("imageHolder.jpg", 50, 45, true, true)); // Directly load from resources
-					}
+                    ImageView ivPro;
+                    try {
+                        ivPro = new ImageView(new Image(imageFullUri, 50, 45, true, true)); // Attempt to load the product image
+                    } catch (Exception e) {
+                        // If loading fails, use a default image directly from the resources folder
+                        ivPro = new ImageView(new Image("images/imageHolder.jpg", 50, 45, true, true)); // Directly load from resources
+                    }
 
-					Label laProToString = new Label(product.toString()); // Create a label for product details
-					HBox hbox = new HBox(10, ivPro, laProToString); // Put ImageView and label in a horizontal layout
-					setGraphic(hbox);  // Set the whole row content
-				}
-			}
-		});
+                    Label laProToString = new Label(product.toString()); // Create a label for product details
+                    HBox hbox = new HBox(10, ivPro, laProToString); // Put ImageView and label in a horizontal layout
+                    setGraphic(hbox);  // Set the whole row content
+                }
+            }
+        });
 
 		VBox vbSearchPage = new VBox(10, laTitle, hbSearch, vbSearchResult);
 
@@ -324,7 +318,7 @@ public class WarehouseView
 		VBox vbIdPrice = new VBox(10, hbId, hbPrice);
 
 		// Product Image
-		ivProEdit = new ImageView("WarehouseImageHolder.jpg");
+		ivProEdit = new ImageView("images/WarehouseImageHolder.jpg");
 		ivProEdit.setFitWidth(100);
 		ivProEdit.setFitHeight(70);
 		ivProEdit.setPreserveRatio(true); //Image keeps its original shape and fits inside 100×70
@@ -428,7 +422,7 @@ public class WarehouseView
 		VBox vbIdPriceStock = new VBox(10, hbId, hbPrice, hbStock);
 
 		// VBox for Product Image and name keyword
-		ivProNewPro = new ImageView("WarehouseImageHolder.jpg");
+		ivProNewPro = new ImageView("images/WarehouseImageHolder.jpg");
 		ivProNewPro.setFitWidth(100);
 		ivProNewPro.setFitHeight(70);
 		ivProEdit.setPreserveRatio(true); //Image keeps its original shape and fits inside 100×70
@@ -569,7 +563,7 @@ public class WarehouseView
 		} catch (Exception e)
 		{
 			// If loading fails, use a default image directly from the resources folder
-			ivProEdit.setImage(new Image("imageHolder.jpg"));
+			ivProEdit.setImage(new Image("images/imageHolder.jpg"));
 		}
 	}
 
@@ -580,7 +574,7 @@ public class WarehouseView
 		tfStockEdit.setText("");
 		tfChangeByEdit.setText("");
 		taDescriptionEdit.setText("");
-		ivProEdit.setImage(new Image("WarehouseImageHolder.jpg"));
+		ivProEdit.setImage(new Image("images/WarehouseImageHolder.jpg"));
 		disableEditProductChild(true);
 	}
 
@@ -590,7 +584,7 @@ public class WarehouseView
 		tfPriceNewPro.setText("");
 		tfStockNewPro.setText("");
 		taDescriptionNewPro.setText("");
-		ivProNewPro.setImage(new Image("WarehouseImageHolder.jpg"));
+		ivProNewPro.setImage(new Image("images/WarehouseImageHolder.jpg"));
 		imageUriNewPro = null; //clear the selcted image
 		System.out.println("resetNewProChild in view called");
 	}

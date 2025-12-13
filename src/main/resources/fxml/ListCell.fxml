@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!-- TODO list cell layout-->
+<?import javafx.scene.image.ImageView?>
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <HBox>
+        <ImageView fx:id="ivImage" fitHeight="50" fitWidth="50" preserveRatio="true"/>
+        <Label fx:id="lbName" text="Name Text"/>
+        <Label fx:id="lbPrice" text="Price Text"/>
+    </HBox>
+</AnchorPane>
