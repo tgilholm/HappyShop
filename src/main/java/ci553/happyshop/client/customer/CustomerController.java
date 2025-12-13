@@ -69,14 +69,11 @@ public class CustomerController
         // Set lvProducts cell factory to the custom ProductCell
         lvProducts.setCellFactory(listView -> new ProductCell());
 
-        cusModel.loadProducts();                                    // Load the product list in the Model
-        lvProducts.setItems(cusModel.getFilteredProducts());        // Binds the filteredList to the ListView
+        // Load the product list in the Model
+        cusModel.loadProducts();
 
-        // Add a listener to tfSearch to automatically search as users type
-        tfSearchBar.textProperty().addListener((observable, oldValue, newValue) ->
-        {
-            cusModel.setSearchFilter(newValue);
-        });
+        // Binds the product list in the Model to the ListView
+        lvProducts.setItems(cusModel.getProducts());
     }
 
     // Handle the "account" button input
