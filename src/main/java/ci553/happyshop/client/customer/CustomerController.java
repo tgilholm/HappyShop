@@ -3,10 +3,8 @@ package ci553.happyshop.client.customer;
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.utility.ProductCell;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -33,7 +31,7 @@ public class CustomerController {
     @FXML
     private ListView<Product> lvProducts;
 
-    // Initializes the controller after the root element is finished processing
+    // Initialises the controller after the root element is finished processing
     @FXML
     public void initialize() {
         System.out.println("Loading Images");
@@ -53,9 +51,9 @@ public class CustomerController {
         // Uses the ProductCell class to display the product details
         lvProducts.setCellFactory(listView -> new ProductCell());
 
-        // Add a sample product for testing
-        lvProducts.getItems().add(new Product("1234", "1234", "0001.jpg", 10, 100));
-        lvProducts.refresh();
+        // Binds the product list in the Model to the ListView
+        // JavaFX supports providing an ObservableList to a ListView
+        lvProducts.setItems(cusModel.getProducts());
     }
 
     // Handle the "account" button input
