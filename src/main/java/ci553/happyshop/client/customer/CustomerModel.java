@@ -18,7 +18,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// TODO display DB items in search box
+// TODO search by keyword
+
+// TODO update ProductCell layout with add product, num remaining & other details
+// TODO fill out product details page when product clicked
+
 
 /**
  * The CustomerModel is responsible for exposing an Observable productList that is bound to the View by the CustomerController.
@@ -27,11 +31,8 @@ import java.util.Map;
 public class CustomerModel
 {
 	public CustomerView cusView;
-	public DatabaseRW databaseRW; //Interface type, not specific implementation
-									//Benefits: Flexibility: Easily change the database implementation.
-
-	// Hold the products in an observable list
-	private final ObservableList<Product> productList = FXCollections.observableArrayList();
+	public DatabaseRW databaseRW;
+	private final ObservableList<Product> productList = FXCollections.observableArrayList();		// Observable product list
 
 	private Product theProduct = null; // product found from search
 	private ArrayList<Product> trolley = new ArrayList<>(); // a list of products in trolley
@@ -52,7 +53,6 @@ public class CustomerModel
     {
 		return productList;
 	}
-
 
 	/**
 	 * Queries the DB to get the current list of products.

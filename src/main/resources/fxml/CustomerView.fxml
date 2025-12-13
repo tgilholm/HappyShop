@@ -16,7 +16,7 @@
 
 
 <GridPane styleClass="root" hgap="10" vgap="10"
-          xmlns:fx="http://javafx.com/fxml/1" fx:controller="ci553.happyshop.client.customer.CustomerController">
+          xmlns:fx="http://javafx.com/fxml/1">
     <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
     <!-- COLUMN 0 -->
 

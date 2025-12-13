@@ -14,6 +14,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * The CustomerView is separated into two sections by a line :
@@ -95,26 +96,40 @@ public class CustomerView
 
 	// Load the FXML and start the window
 	public void start(Stage window)
-	{
-		// Create an FXML loader
-		FXMLLoader loader = new FXMLLoader();
-		GridPane gridPane = null;
+    {
+		GridPane gridPane;					// Root attribute of CustomerView.fxml
 
-		// Attempt to load the FXML file
-		try
+		// Null-check the FXML file
+		URL fxmlURL = getClass().getResource("/fxml/CustomerView.fxml");
+		if (fxmlURL == null)
 		{
-			loader.setLocation(getClass().getResource("/fxml/CustomerView.fxml"));
-            gridPane = loader.load();
-		} catch (IOException e)
-		{
-			System.out.println("FXML loading failed. " + e.getMessage());
+			throw new IllegalStateException("CustomerView.fxml not found");
 		}
+		FXMLLoader loader = new FXMLLoader(fxmlURL);		// Loads the FXML
+		loader.setController(cusController);				// Bind the controller
+
+        try
+        {
+            gridPane = loader.load();
+        } catch (IOException e)
+        {
+            throw new RuntimeException("Failed to load FXML");
+        }
 
         int WIDTH = UIStyle.customerWinWidth;
         int HEIGHT = UIStyle.customerWinHeight;
 
         Scene scene = new Scene(gridPane, WIDTH, HEIGHT);
-		scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
+
+		// Load the CSS
+		URL resource = getClass().getResource("/css/styles.css");
+		if (resource != null)
+		{
+			scene.getStylesheets().add(resource.toExternalForm());
+		}
+		else {
+			throw new IllegalStateException("Failed to load CSS");
+		}
 
 		window.setScene(scene);
 		window.setTitle("🛒 HappyShop Customer Client");
@@ -128,7 +143,6 @@ public class CustomerView
     // Update the view when new data is received from the model
 	public void update(String imageName, String searchResult, String trolley, String receipt)
 	{
-
 		ivProduct.setImage(new Image(imageName));
 		lbProductInfo.setText(searchResult);
 		taTrolley.setText(trolley);
@@ -140,6 +154,7 @@ public class CustomerView
 	}
 
 
+	// Retrieve the X, Y coordinates of the extreme coordinates of this window
 	WindowBounds getWindowBounds()
 	{
 		return new WindowBounds(viewWindow.getX(), viewWindow.getY(), viewWindow.getWidth(), viewWindow.getHeight());
