@@ -70,7 +70,7 @@ public class CustomerController
         lvProducts.setCellFactory(listView -> new ProductCell());
 
         cusModel.loadProducts();                                    // Load the product list in the Model
-        lvProducts.setItems(cusModel.getFilteredProducts());        // Binds the filteredList to the ListView
+        lvProducts.setItems(cusModel.getSearchFilteredList());      // Binds the filteredList to the ListView
 
         // Add a listener to tfSearch to automatically search as users type
         tfSearchBar.textProperty().addListener((observable, oldValue, newValue) ->

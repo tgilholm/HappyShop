@@ -4,11 +4,45 @@
 <?import javafx.scene.layout.*?>
 
 <!-- TODO list cell layout-->
+
+<!-- Each ListCell displays the product image and description, the price and stock remaining -->
+<!-- It also holds buttons to add and remove the item from the basket and displays the amount in the basket-->
 <?import javafx.scene.image.ImageView?>
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-    <HBox>
-        <ImageView fx:id="ivImage" fitHeight="50" fitWidth="50" preserveRatio="true"/>
-        <Label fx:id="lbName" text="Name Text"/>
-        <Label fx:id="lbPrice" text="Price Text"/>
+<GridPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+
+    <!-- Column Constraints -->
+    <columnConstraints>
+        <ColumnConstraints minWidth="60" maxWidth="60"/>
+        <ColumnConstraints minWidth="100" maxWidth="100"/>
+        <ColumnConstraints minWidth="50" maxWidth="50"/>
+        <ColumnConstraints minWidth="75" maxWidth="75"/>
+    </columnConstraints>
+
+    <!-- Product icon -->
+    <!-- A stackPane provides padding around the edge to force all rows to be the same height-->
+    <StackPane minWidth="50" maxWidth="50" minHeight="50" maxHeight="50"
+               GridPane.columnIndex="0">
+        <ImageView fx:id="ivImage" fitHeight="45" fitWidth="45" preserveRatio="true"/>
+    </StackPane>
+
+
+    <!-- Item description -->
+    <!-- textOverrun is set to ELLIPSIS to prevent spacing issues -->
+    <Label fx:id="lbName" text="Name Text"
+           GridPane.columnIndex="1"/>
+
+    <!-- Item price -->
+    <Label fx:id="lbPrice" text="Price Text"
+           GridPane.columnIndex="2"/>
+
+    <!-- Item remaining stock -->
+    <Label fx:id="lbStockRemaining" text="Items remaining"
+           GridPane.columnIndex="3"/>
+
+    <!-- Buttons -->
+    <HBox GridPane.columnIndex="4" spacing="5" alignment="CENTER">
+        <Button fx:id="btnRemove" text="-" maxWidth="10"/>
+        <Label fx:id="lbBasketQuantity" text="0" minWidth="20" alignment="CENTER"/>
+        <Button fx:id="btnAdd" text="+" minWidth="20"/>
     </HBox>
-</AnchorPane>
+</GridPane>
