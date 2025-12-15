@@ -3,19 +3,22 @@ package ci553.happyshop.client.customer;
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.utility.ProductCell;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.TilePane;
 
 import java.net.URL;
 
 /**
  * Controller class for the customer client.
  * Initializes FXML elements and binds the Model to the View
-  */
+ */
 
 public class CustomerController
 {
@@ -38,7 +41,7 @@ public class CustomerController
     private Button btnCart;
 
     @FXML
-    private ListView<Product> lvProducts;
+    private TilePane tpProducts;
 
     /**
      * Initialises the controller after the root element is finished processing.<br>
@@ -62,21 +65,71 @@ public class CustomerController
             System.err.println("Image not found: /images/search_icon.png");
         }
 
-        // Set the ComboBox to display "Select Category" initially
+        // Set up category combobox
         cbCategories.getItems().add("Select Category");
         cbCategories.getSelectionModel().selectFirst();
 
-        // Set lvProducts cell factory to the custom ProductCell
-        lvProducts.setCellFactory(listView -> new ProductCell());
+        // Load products from the database
+        cusModel.loadProducts();
 
-        cusModel.loadProducts();                                    // Load the product list in the Model
-        lvProducts.setItems(cusModel.getSearchFilteredList());      // Binds the filteredList to the ListView
+        // Bind the product list to the view
+        bindProductList();
 
-        // Add a listener to tfSearch to automatically search as users type
+        // Add a listener to automatically search as users type
         tfSearchBar.textProperty().addListener((observable, oldValue, newValue) ->
         {
             cusModel.setSearchFilter(newValue);
         });
+    }
+
+    private void bindProductList()
+    {
+        // Clear the tilePane
+        tpProducts.getChildren().clear();
+
+        // Define the callback for the ProductCell
+        ProductCell.ButtonActionCallback callback = new ProductCell.ButtonActionCallback()
+        {
+            @Override
+            public void onAddItem(Product product)
+            {
+                // todo basket
+            }
+
+            @Override
+            public void onRemoveItem(Product product)
+            {
+
+            }
+
+            @Override
+            public int getBasketQuantity(Product product)
+            {
+                return 0;
+            }
+        };
+
+        // Add each of the products as a card
+        for (Product product : cusModel.getSearchFilteredList())
+        {
+            GridPane productCard = createProductCard(product, callback);
+
+            // Add the click listener to select a product
+            productCard.setOnMouseClicked(x ->
+            {
+                // todo detail pane
+            });
+
+            tpProducts.getChildren().add(productCard);
+        }
+    }
+
+    // Load the layout for each card
+    private GridPane createProductCard(Product product, ProductCell.ButtonActionCallback callback)
+    {
+        try {
+            FXMLLoader.
+        }
     }
 
     // Handle the "account" button input

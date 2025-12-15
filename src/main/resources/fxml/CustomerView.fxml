@@ -15,14 +15,17 @@
 <?import javafx.geometry.Insets?>
 
 <!-- The Controller is attached to the View here -->
+<?import javafx.scene.control.ScrollPane?>
 <GridPane styleClass="root" hgap="10" vgap="10"
           xmlns:fx="http://javafx.com/fxml/1" fx:controller="ci553.happyshop.client.customer.CustomerController">
-    <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+    <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+    </padding>
     <!-- COLUMN 0 -->
 
     <!-- Title -->
     <HBox spacing="10" styleClass="titleText" GridPane.columnIndex="0" GridPane.rowIndex="0">
-        <Label text="HappyShop" />
+        <Label text="HappyShop"/>
     </HBox>
 
     <!-- Search bar with search icon, text field and ComboBox -->
@@ -39,37 +42,39 @@
     </HBox>
 
     <!-- The search results container-->
-    <HBox GridPane.columnIndex="0" GridPane.rowIndex="2">
-        <ListView fx:id="lvProducts" prefWidth="800"/>
-    </HBox>
+    <!-- TilePane is used as a two column list -->
+    <ScrollPane GridPane.columnIndex="0" GridPane.rowIndex="2" fitToWidth="true">
+        <TilePane fx:id="tpProducts" prefColumns="2" hgap="10" vgap="10"
+                  prefTileWidth="250" prefTileHeight="200"/>
+    </ScrollPane>
 
     <!-- COLUMN 1 -->
     <!-- Selected item layout -->
-        <!-- Account and Cart Buttons-->
-        <HBox alignment="TOP_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="0">
-            <Button fx:id="btnAccount" text="Account"
-            onAction="#accountClicked">
+    <!-- Account and Cart Buttons-->
+    <HBox alignment="TOP_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="0">
+        <Button fx:id="btnAccount" text="Account"
+                onAction="#accountClicked">
 
 
-            </Button>
+        </Button>
 
-            <Button text="Cart" fx:id="btnCart"
-            onAction="#cartClicked">
+        <Button text="Cart" fx:id="btnCart"
+                onAction="#cartClicked">
 
 
-            </Button>
-        </HBox>
+        </Button>
+    </HBox>
 
-        <!-- Selected Item Title-->
-        <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
-            <Label text="Selected Item" id="headerText"/>
-        </HBox>
+    <!-- Selected Item Title-->
+    <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <Label text="Selected Item" id="headerText"/>
+    </HBox>
 
-        <!-- Selected Item Information-->
-        <HBox GridPane.columnIndex="01" GridPane.rowIndex="2">
-            <TextArea>
+    <!-- Selected Item Information-->
+    <HBox GridPane.columnIndex="01" GridPane.rowIndex="2">
+        <TextArea>
 
-            </TextArea>
-        </HBox>
+        </TextArea>
+    </HBox>
 </GridPane>
 

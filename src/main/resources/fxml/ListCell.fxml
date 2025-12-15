@@ -3,8 +3,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<!-- TODO list cell layout-->
-
 <!-- Each ListCell displays the product image and description, the price and stock remaining -->
 <!-- It also holds buttons to add and remove the item from the basket and displays the amount in the basket-->
 <?import javafx.scene.image.ImageView?>
