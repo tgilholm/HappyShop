@@ -53,9 +53,9 @@ public class CustomerController
     }
 
     /**
-     * Initialises the controller after the root element is finished processing.<br>
+     * Initializes the controller after the root element is finished processing.<br>
      * <pre>
-     *     - Initialises the View elements
+     *     - Initializes the View elements
      *     - Sets the ListView cell factory
      *     - Binds the Model productList to the View and loads all products
      * </pre>
@@ -78,11 +78,8 @@ public class CustomerController
         cbCategories.getItems().add("Select Category");
         cbCategories.getSelectionModel().selectFirst();
 
-        // Load products from the database
-        cusModel.loadProducts();
-
-        // Bind the product list to the view
-        bindProductList();
+        cusModel.loadProducts();            // Load products from the database
+        bindProductList();                  // Bind the product list to the view
 
         // Add a listener to automatically search as users type
         tfSearchBar.textProperty().addListener((observable, oldValue, newValue) ->
@@ -97,8 +94,7 @@ public class CustomerController
      */
     private void bindProductList()
     {
-        // Clear the tilePane
-        tpProducts.getChildren().clear();
+        tpProducts.getChildren().clear();            // Load products from the database
 
         // Define the callback for the ProductCardPane
         ProductCardPane.ButtonActionCallback callback = new ProductCardPane.ButtonActionCallback()

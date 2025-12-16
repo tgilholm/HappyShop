@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 // TODO update ProductCell layout with add product, num remaining & other details
-// TODO fill out product details page when product clicked
 
 
 /**
