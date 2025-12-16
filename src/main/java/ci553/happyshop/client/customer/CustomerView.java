@@ -6,8 +6,6 @@ import ci553.happyshop.utility.WindowBounds;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -86,10 +84,6 @@ public class CustomerView
     // modified by CustomerModel
 
 
-    private ImageView ivProduct; // image area in searchPage
-    private Label lbProductInfo;// product text info in searchPage
-    private TextArea taTrolley; // in trolley Page
-    private TextArea taReceipt;// in receipt page
 
     // Holds a reference to this CustomerView window for future access and
     // management
@@ -172,20 +166,6 @@ public class CustomerView
             }
         });
         return loader;
-    }
-
-
-    // Update the view when new data is received from the model
-    public void update(String imageName, String searchResult, String trolley, String receipt)
-    {
-        ivProduct.setImage(new Image(imageName));
-        lbProductInfo.setText(searchResult);
-        taTrolley.setText(trolley);
-        if (!receipt.isEmpty())
-        {
-            //showTrolleyOrReceiptPage(vbReceiptPage);
-            taReceipt.setText(receipt);
-        }
     }
 
 

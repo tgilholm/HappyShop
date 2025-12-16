@@ -8,7 +8,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Button?>
 <?import javafx.geometry.Insets?>
@@ -20,8 +19,21 @@
     <padding>
         <Insets top="25" right="25" bottom="25" left="25"/>
     </padding>
-    <!-- COLUMN 0 -->
 
+    <!-- Column Constraints-->
+    <columnConstraints>
+        <ColumnConstraints percentWidth="70" minWidth="400"/>
+        <ColumnConstraints percentWidth="30" minWidth="250"/>
+    </columnConstraints>
+
+    <!-- Row Constraints -->
+    <rowConstraints>
+        <RowConstraints vgrow="NEVER"/>  <!-- Title row has fixed height -->
+        <RowConstraints vgrow="NEVER"/>  <!-- Search bar row has fixed height -->
+        <RowConstraints vgrow="ALWAYS"/> <!-- Content row grows to fill space -->
+    </rowConstraints>
+
+    <!-- COLUMN 0 -->
     <!-- Title -->
     <HBox spacing="10" styleClass="titleText" GridPane.columnIndex="0" GridPane.rowIndex="0">
         <Label text="HappyShop"/>
@@ -69,11 +81,43 @@
         <Label text="Selected Item" id="headerText"/>
     </HBox>
 
-    <!-- Selected Item Information-->
-    <HBox GridPane.columnIndex="01" GridPane.rowIndex="2">
-        <TextArea>
 
-        </TextArea>
-    </HBox>
+    <!-- Shows a larger image and more detailed information about each item -->
+    <!-- Selected Item Information-->
+    <VBox GridPane.columnIndex="01" GridPane.rowIndex="2" style="-fx-background-color: white; -fx-padding: 10;"
+          spacing="15">
+
+        <!-- Product Image -->
+        <StackPane style="-fx-border-color: lightgray; -fx-border-width: 1;">
+            <ImageView fx:id="ivDetailImage"
+                       fitHeight="200"
+                       fitWidth="200"
+                       preserveRatio="true"/>
+        </StackPane>
+
+        <VBox spacing="10">
+            <!-- Product Description -->
+            <Label fx:id="lbDetailName"
+                   text="Select a product"
+                   style="-fx-font-size: 18px; -fx-font-weight: bold;"
+                   wrapText="true"/>
+
+            <!-- Product ID -->
+            <Label fx:id="lbDetailID"
+                   style="-fx-font-size: 16px;"/>
+
+            <!-- Product Price -->
+            <Label fx:id="lbDetailPrice"
+                   style="-fx-font-size: 16px;"/>
+
+            <!-- Number in stock -->
+            <Label fx:id="lbStockQty"
+                   style="-fx-font-size: 16px;"/>
+
+            <!-- Number in basket -->
+            <Label fx:id="lbDetailBasketQty"
+                   style="-fx-font-size: 16px;"/>
+        </VBox>
+    </VBox>
 </GridPane>
 

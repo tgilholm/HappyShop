@@ -1,16 +1,17 @@
 package ci553.happyshop.client.customer;
 
 import ci553.happyshop.catalogue.Product;
+import ci553.happyshop.utility.ImageHandler;
 import ci553.happyshop.utility.ProductCardPane;
+import ci553.happyshop.utility.StockDisplayHelper;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 
@@ -29,7 +30,10 @@ public class CustomerController
     public TextField tfSearchBar;
 
     @FXML
-    private ImageView ivSearchIcon;
+    private Label lbDetailName, lbDetailPrice, lbDetailBasketQty, lbStockQty, lbDetailID;
+
+    @FXML
+    private ImageView ivSearchIcon, ivDetailImage;
 
     @FXML
     private ComboBox<String> cbCategories;
@@ -82,9 +86,7 @@ public class CustomerController
 
         // Add a listener to automatically search as users type
         tfSearchBar.textProperty().addListener((observable, oldValue, newValue) ->
-        {
-            cusModel.setSearchFilter(newValue);
-        });
+                cusModel.setSearchFilter(newValue));
 
         // Automatically refresh when the filteredList changes
         cusModel.getSearchFilteredList().addListener((ListChangeListener<Product>) change -> bindProductList());
@@ -128,11 +130,31 @@ public class CustomerController
             // Add the click listener to select a product
             productCard.setOnMouseClicked(x ->
             {
-                // todo detail pane
+                // Reset style to remove border on unselected cards
+                tpProducts.getChildren().forEach(node ->
+                {
+                    node.setStyle("-fx-cursor: hand");
+                });
+
+                // Draw a border around the selected item
+                productCard.setStyle("-fx-border-color: lightgray; -fx-border-width: 1; -fx-cursor: hand");
+                updateDetailPane(product);
             });
 
             tpProducts.getChildren().add(productCard);
         }
+    }
+
+
+    private void updateDetailPane(Product product)
+    {
+        ivDetailImage.setImage(ImageHandler.getImageFromProduct(product));
+        lbDetailName.setText(product.getProductDescription());
+        lbDetailID.setText("ID: " + product.getProductId());
+        lbDetailPrice.setText(String.format("£%.2f", product.getUnitPrice()));
+
+        // Use the dynamic stock colour method from StockDisplayHelper
+        StockDisplayHelper.updateStockLabel(lbStockQty, product.getStockQuantity());
     }
 
     // Load the layout for each card

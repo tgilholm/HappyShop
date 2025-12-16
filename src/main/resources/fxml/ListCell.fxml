@@ -10,7 +10,7 @@
 <?import javafx.geometry.Insets?>
 <fx:root type="javafx.scene.layout.VBox"
          xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-         prefHeight="200" prefWidth="120" spacing="5">
+         prefHeight="200" prefWidth="120" spacing="5" style= "-fx-cursor: hand;">
 
     <padding>
         <Insets top="10" right="10" bottom="10" left="10"/>
@@ -18,7 +18,7 @@
 
     <!-- Product icon -->
     <!-- A stackPane provides padding around the edge to force a maximum size -->
-    <StackPane minWidth="120" maxWidth="120" minHeight="120" maxHeight="120" alignment="CENTER">
+    <StackPane minWidth="120" maxWidth="120" minHeight="120" maxHeight="120">
         <ImageView fx:id="ivImage" fitHeight="110" fitWidth="110" preserveRatio="true"/>
     </StackPane>
 

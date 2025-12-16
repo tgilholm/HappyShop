@@ -5,9 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,9 +40,10 @@ public class ProductCardPane extends VBox
     }
 
     /**
-     *
-     * @param product
-     * @param callback
+     * Constructs a new <code>ProductCardPane</code> from a specified <code>Product</code> and a <code>callback</code>
+     * Loads FXML from ListCell.fxml and initializes with product data.
+     * @param product the specific product to initialize the layout with
+     * @param callback defined actions for the buttons on the layout
      */
     public ProductCardPane(Product product, ButtonActionCallback callback)
     {
@@ -60,8 +59,7 @@ public class ProductCardPane extends VBox
             loader.load();
         } catch (IOException e)
         {
-            System.err.println("Error loading ListCell.fxml ");
-            e.printStackTrace();
+            System.err.println("Error loading ListCell.fxml " + e);
         }
 
         // Initialise the product data
@@ -72,31 +70,15 @@ public class ProductCardPane extends VBox
     {
         // Set text fields
         lbName.setText(product.getProductDescription());
-        lbPrice.setText(String.format("$%.2f", product.getUnitPrice()));
+        lbPrice.setText(String.format("£%.2f", product.getUnitPrice()));
 
         // Set product image
-        String imageURI = getImageURI(product);
-        ivImage.setImage(new Image(imageURI));
+        ivImage.setImage(ImageHandler.getImageFromProduct(product));
 
         // The colour of lbStock changes depending on the quantity remaining
         int stockRemaining = product.getStockQuantity();
+        StockDisplayHelper.updateStockLabel(lbStock, stockRemaining);
 
-        if (stockRemaining == 0)
-        {
-            // Red "out of stock" if none left
-            lbStock.setStyle("-fx-text-fill: red;");
-            lbStock.setText("Out of Stock");
-        } else if (stockRemaining < 10)
-        {
-            // Orange "... left" if only a few left
-            lbStock.setStyle("-fx-text-fill: orange;");
-            lbStock.setText(product.getStockQuantity() + " left");
-        } else
-        {
-            // Green "... in stock" if plentiful
-            lbStock.setStyle("-fx-text-fill: green;");
-            lbStock.setText(product.getStockQuantity() + " in stock");
-        }
 
         lbBasketQty.setText(String.valueOf(callback.getBasketQuantity(product)));
 
@@ -119,12 +101,5 @@ public class ProductCardPane extends VBox
 
     }
 
-    private static String getImageURI(@NotNull Product product)
-    {
-        return StorageLocation.imageFolderPath
-                .resolve(product.getProductImageName())
-                .toAbsolutePath()
-                .toUri()
-                .toString();
-    }
+
 }
