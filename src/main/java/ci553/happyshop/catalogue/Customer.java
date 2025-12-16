@@ -4,9 +4,9 @@ package ci553.happyshop.catalogue;
 // The class for Customer objects. Holds their username & password
 public class Customer
 {
-	private String userID;
-	private String username;
-	private String password;
+	private final String userID;
+	private final String username;
+	private final String password;
 	
 	public Customer(String uid, String u, String p)
 	{

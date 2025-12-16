@@ -6,8 +6,6 @@ import ci553.happyshop.utility.WindowBounds;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -75,16 +73,17 @@ import java.net.URL;
 
 public class CustomerView
 {
-    public CustomerController cusController;
+    private final CustomerController cusController;
+
+    public CustomerView(CustomerController cusController)
+    {
+        this.cusController = cusController;
+    }
 
     TextField tfSearchBar; // for user input on the search page. Made accessible so it can be accessed or
     // modified by CustomerModel
 
 
-    private ImageView ivProduct; // image area in searchPage
-    private Label lbProductInfo;// product text info in searchPage
-    private TextArea taTrolley; // in trolley Page
-    private TextArea taReceipt;// in receipt page
 
     // Holds a reference to this CustomerView window for future access and
     // management
@@ -94,6 +93,7 @@ public class CustomerView
 
     /**
      * Loads the FXML and starts a new Stage
+     *
      * @param window the Stage to start
      */
     public void start(Stage window)
@@ -113,7 +113,7 @@ public class CustomerView
             gridPane = loader.load();
         } catch (IOException e)
         {
-            throw new RuntimeException("Failed to load FXML");
+            throw new RuntimeException("Failed to load FXML: " + e.getMessage());
         }
 
         int WIDTH = UIStyle.customerWinWidth;
@@ -141,6 +141,7 @@ public class CustomerView
 
     /**
      * Creates an FXML loader from a URL and binds <code>CustomerController</code> to it
+     *
      * @param fxmlURL the location of the fxml file to load
      * @return an FXML loader set to the location specified by <code>fxmlURL</code>
      */
@@ -165,20 +166,6 @@ public class CustomerView
             }
         });
         return loader;
-    }
-
-
-    // Update the view when new data is received from the model
-    public void update(String imageName, String searchResult, String trolley, String receipt)
-    {
-        ivProduct.setImage(new Image(imageName));
-        lbProductInfo.setText(searchResult);
-        taTrolley.setText(trolley);
-        if (!receipt.isEmpty())
-        {
-            //showTrolleyOrReceiptPage(vbReceiptPage);
-            taReceipt.setText(receipt);
-        }
     }
 
 

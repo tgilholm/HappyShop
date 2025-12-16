@@ -55,7 +55,7 @@ public class LoginModel
 			System.out.println(String.format("Logging in... username: %s, password: %s", username, password));
 
 			// Invoke the startCustomerClient() and close the LoginPopup and LoginView
-			openWindows.startCustomerClient();
+			//openWindows.startCustomerClient();
 			cusLoginPopup.closePopup();
 			lView.hideWindow(); // Hide is used instead of close so we can return to it later
 		} else

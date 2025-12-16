@@ -11,12 +11,9 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 // TODO update ProductCell layout with add product, num remaining & other details
@@ -29,12 +26,24 @@ import java.util.Map;
  */
 public class CustomerModel
 {
-    public CustomerView cusView;
-    public DatabaseRW databaseRW;
+    private final DatabaseRW databaseRW;
 
 
-    private ObservableList<Product> productList = FXCollections.observableArrayList();        // Observable product list
-    private FilteredList<Product> filteredList;                                               // Filtered product list
+    /**
+     * Constructs a new CustomerModel instance that handles data from the DB.
+     *
+     * @param databaseRW for interacting with the database
+     */
+    public CustomerModel(DatabaseRW databaseRW)
+    {
+        this.databaseRW = databaseRW;
+    }
+
+
+    private final ObservableList<Product> productList = FXCollections.observableArrayList();        // Observable product list
+    private FilteredList<Product> searchFilteredList;                                                // Filtered product list
+    private FilteredList<Product> categoryFilteredList;                                             // Product list filtered by category
+
 
     private Product theProduct = null; // product found from search
     private ArrayList<Product> trolley = new ArrayList<>(); // a list of products in trolley
@@ -65,34 +74,58 @@ public class CustomerModel
         productList.setAll(databaseRW.getAll());
     }
 
+    // TODO implement categories
 
     /**
-     * Gets the list of products with the filter applied. If filteredList is null, it is created as a wrapper around productList
+     * Gets the list of products matching the specified category. Defaults to the base <code>productList</code>.
+     * Creates a new <code>filteredList</code> if <code>categoryFilteredList</code> doesn't already exist, returns the existing list
+     * otherwise.
      *
-     * @return the <code>FilteredList</code> of products
+     * @return the <code>FilteredList</code> of products matching the category filter
      */
-    public FilteredList<Product> getFilteredProducts()
+    public FilteredList<Product> getCategoryFilteredList()
     {
-        // Creates filteredProducts if it doesn't exist
-        if (filteredList == null)
+        //
+        // Defaults to "no category"
+        if (categoryFilteredList == null)
         {
             // productList is passed to the filteredList
-            filteredList = new FilteredList<>(productList, p -> true);
+            categoryFilteredList = new FilteredList<>(productList, p -> true);
         }
-        return filteredList;
+        return categoryFilteredList;
     }
 
+    /**
+     * Gets the (already filtered by category) list of products matching the search filter.
+     * Searches in product description and ID. Creates a new <code>filteredList</code> if
+     * <code>searcFilteredList</code> doesn't already exist, returns the existing list otherwise.
+     *
+     * @return the <code>FilteredList</code> of products matching the filter
+     */
+    public FilteredList<Product> getSearchFilteredList()
+    {
+        // Creates filteredProducts if it doesn't exist
+        if (searchFilteredList == null)
+        {
+            // categoryFilteredList is passed
+            searchFilteredList = new FilteredList<>(productList, p -> true);
+        }
+        return searchFilteredList;
+    }
+
+    // todo category searching
+    //public void setCategoryFilter()
 
     /**
-     * Updates the predicate of the filteredList. Searches by product ID or description and
-     * returns the products that match the predicate <code>searchFilter</code>.
+     * Updates the predicate of the searchFilteredList to search by product ID or description and
+     * return the products that match the predicate <code>searchFilter</code>.
      *
      * @param searchFilter a <code>String</code> literal matching either the product ID or description
      */
     public void setSearchFilter(String searchFilter)
     {
         // Update the predicate of filteredList
-        filteredList.setPredicate(product ->
+        searchFilteredList.setPredicate(product ->
         {
             if (searchFilter == null)
             {
@@ -107,44 +140,6 @@ public class CustomerModel
         });
     }
 
-
-    //SELECT productID, description, image, unitPrice,inStock quantity
-    void search() throws SQLException
-    {
-        // Retrieves product ID from search bar, checks if empty
-        String productId = cusView.tfSearchBar.getText().trim();
-        if (!productId.isEmpty())
-        {
-            // If product ID is not empty, find the product in the database
-            theProduct = databaseRW.searchByProductId(productId);
-            if (theProduct != null && theProduct.getStockQuantity() > 0)
-            {
-                // If the product exists and has stock, show it in the search result
-                double unitPrice = theProduct.getUnitPrice();
-                String description = theProduct.getProductDescription();
-                int stock = theProduct.getStockQuantity();
-
-                String baseInfo = String.format("Product_Id: %s\n%s,\nPrice: £%.2f", productId, description, unitPrice);
-                String quantityInfo = stock < 100 ? String.format("\n%d units left.", stock) : "";
-                displayLaSearchResult = baseInfo + quantityInfo;
-                System.out.println(displayLaSearchResult);
-            } else
-            {
-                // If the product does not exist or has no stock, output an error
-                theProduct = null;
-                displayLaSearchResult = "No Product was found with ID " + productId;
-                System.out.println("No Product was found with ID " + productId);
-            }
-        } else
-        {
-            // If the user did not type in an ID, output an error
-            theProduct = null;
-            displayLaSearchResult = "Please type ProductID";
-            System.out.println("Please type ProductID.");
-        }
-        // Refresh the view to display results
-        updateView();
-    }
 
     // Appends a product to the end of the trolley arrayList
     void addToTrolley()
@@ -165,7 +160,6 @@ public class CustomerModel
             System.out.println("must search and get an available product before add to trolley");
         }
         displayTaReceipt = ""; // Clear receipt to switch back to trolleyPage (receipt shows only when not empty)
-        updateView();
     }
 
     // Called when a user wants to finish adding items and pay
@@ -217,7 +211,6 @@ public class CustomerModel
             displayTaTrolley = "Your trolley is empty";
             System.out.println("Your trolley is empty");
         }
-        updateView();
     }
 
     /**
@@ -261,30 +254,14 @@ public class CustomerModel
     {
         trolley.clear();
         displayTaTrolley = "";
-        updateView();
     }
 
     void closeReceipt()
     {
+
         displayTaReceipt = "";
     }
 
-    void updateView()
-    {
-        if (theProduct != null)
-        {
-            imageName = theProduct.getProductImageName();
-            String relativeImageUrl = StorageLocation.imageFolder + imageName; //relative file path, e.g. images/0001.jpg
-            // Get the full absolute path to the image
-            Path imageFullPath = Paths.get(relativeImageUrl).toAbsolutePath();
-            imageName = imageFullPath.toUri().toString(); //get the image full Uri then convert to String
-            System.out.println("Image absolute path: " + imageFullPath); // Debugging to ensure path is correct
-        } else
-        {
-            imageName = "images/imageHolder.jpg";
-        }
-        cusView.update(imageName, displayLaSearchResult, displayTaTrolley, displayTaReceipt);
-    }
     // extra notes:
     //Path.toUri(): Converts a Path object (a file or a directory path) to a URI object.
     //File.toURI(): Converts a File object (a file on the filesystem) to a URI object

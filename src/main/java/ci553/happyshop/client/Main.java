@@ -74,20 +74,20 @@ public class Main extends Application
 	 */
 	public void startCustomerClient()
 	{
-		CustomerView cusView = new CustomerView();
-		CustomerController cusController = new CustomerController();
-		CustomerModel cusModel = new CustomerModel();
-		DatabaseRW databaseRW = DatabaseRWFactory.createDatabaseRW();
+//		CustomerView cusView = new CustomerView();
+//		CustomerController cusController = new CustomerController();
+//		CustomerModel cusModel = new CustomerModel();
+//		DatabaseRW databaseRW = DatabaseRWFactory.createDatabaseRW();
 
 		// Initialises Customer, Picker and Order Windows
 //		startCustomerClient();
 //		startPickerClient();
 //		startOrderTracker();
-		cusView.cusController = cusController;
-		cusController.cusModel = cusModel;
-		cusModel.cusView = cusView;
-		cusModel.databaseRW = databaseRW;
-		cusView.start(new Stage());
+//		cusView.cusController = cusController;
+//		cusController.cusModel = cusModel;
+//		cusModel.cusView = cusView;
+//		cusModel.databaseRW = databaseRW;
+		//cusView.start(new Stage());
 
 		// Initializes the order map for the OrderHub. This must be called after
 		// starting the observer clients

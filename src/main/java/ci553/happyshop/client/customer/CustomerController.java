@@ -1,32 +1,39 @@
 package ci553.happyshop.client.customer;
 
 import ci553.happyshop.catalogue.Product;
-import ci553.happyshop.utility.ProductCell;
+import ci553.happyshop.utility.ImageHandler;
+import ci553.happyshop.utility.ProductCardPane;
+import ci553.happyshop.utility.StockDisplayHelper;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
 
 import java.net.URL;
 
 /**
  * Controller class for the customer client.
  * Initializes FXML elements and binds the Model to the View
-  */
+ */
 
 public class CustomerController
 {
-    public CustomerModel cusModel;
-
+    private final CustomerModel cusModel;
 
     @FXML
     public TextField tfSearchBar;
 
     @FXML
-    private ImageView ivSearchIcon;
+    private Label lbDetailName, lbDetailPrice, lbDetailBasketQty, lbStockQty, lbDetailID;
+
+    @FXML
+    private ImageView ivSearchIcon, ivDetailImage;
 
     @FXML
     private ComboBox<String> cbCategories;
@@ -38,7 +45,12 @@ public class CustomerController
     private Button btnCart;
 
     @FXML
-    private ListView<Product> lvProducts;
+    private TilePane tpProducts;
+
+    public CustomerController(CustomerModel cusModel)
+    {
+        this.cusModel = cusModel;
+    }
 
     /**
      * Initialises the controller after the root element is finished processing.<br>
@@ -62,21 +74,93 @@ public class CustomerController
             System.err.println("Image not found: /images/search_icon.png");
         }
 
-        // Set the ComboBox to display "Select Category" initially
+        // Set up category combobox
         cbCategories.getItems().add("Select Category");
         cbCategories.getSelectionModel().selectFirst();
 
-        // Set lvProducts cell factory to the custom ProductCell
-        lvProducts.setCellFactory(listView -> new ProductCell());
+        // Load products from the database
+        cusModel.loadProducts();
 
-        cusModel.loadProducts();                                    // Load the product list in the Model
-        lvProducts.setItems(cusModel.getFilteredProducts());        // Binds the filteredList to the ListView
+        // Bind the product list to the view
+        bindProductList();
 
-        // Add a listener to tfSearch to automatically search as users type
+        // Add a listener to automatically search as users type
         tfSearchBar.textProperty().addListener((observable, oldValue, newValue) ->
+                cusModel.setSearchFilter(newValue));
+
+        // Automatically refresh when the filteredList changes
+        cusModel.getSearchFilteredList().addListener((ListChangeListener<Product>) change -> bindProductList());
+    }
+
+    /**
+     * Refreshes the tilePane with the filtered product list. Defines the ButtonActionCallback
+     */
+    private void bindProductList()
+    {
+        // Clear the tilePane
+        tpProducts.getChildren().clear();
+
+        // Define the callback for the ProductCardPane
+        ProductCardPane.ButtonActionCallback callback = new ProductCardPane.ButtonActionCallback()
         {
-            cusModel.setSearchFilter(newValue);
-        });
+            @Override
+            public void onAddItem(Product product)
+            {
+                // todo basket
+            }
+
+            @Override
+            public void onRemoveItem(Product product)
+            {
+
+            }
+
+            @Override
+            public int getBasketQuantity(Product product)
+            {
+                return 0;
+            }
+        };
+
+        // Add each of the products as a card
+        for (Product product : cusModel.getSearchFilteredList())
+        {
+            VBox productCard = createProductCard(product, callback);
+
+            // Add the click listener to select a product
+            productCard.setOnMouseClicked(x ->
+            {
+                // Reset style to remove border on unselected cards
+                tpProducts.getChildren().forEach(node ->
+                {
+                    node.setStyle("-fx-cursor: hand");
+                });
+
+                // Draw a border around the selected item
+                productCard.setStyle("-fx-border-color: lightgray; -fx-border-width: 1; -fx-cursor: hand");
+                updateDetailPane(product);
+            });
+
+            tpProducts.getChildren().add(productCard);
+        }
+    }
+
+
+    private void updateDetailPane(Product product)
+    {
+        ivDetailImage.setImage(ImageHandler.getImageFromProduct(product));
+        lbDetailName.setText(product.getProductDescription());
+        lbDetailID.setText("ID: " + product.getProductId());
+        lbDetailPrice.setText(String.format("£%.2f", product.getUnitPrice()));
+
+        // Use the dynamic stock colour method from StockDisplayHelper
+        StockDisplayHelper.updateStockLabel(lbStockQty, product.getStockQuantity());
+    }
+
+    // Load the layout for each card
+    private VBox createProductCard(Product product, ProductCardPane.ButtonActionCallback callback)
+    {
+        return new ProductCardPane(product, callback);
     }
 
     // Handle the "account" button input
