@@ -75,7 +75,12 @@ import java.net.URL;
 
 public class CustomerView
 {
-    public CustomerController cusController;
+    private final CustomerController cusController;
+
+    public CustomerView(CustomerController cusController)
+    {
+        this.cusController = cusController;
+    }
 
     TextField tfSearchBar; // for user input on the search page. Made accessible so it can be accessed or
     // modified by CustomerModel
@@ -94,6 +99,7 @@ public class CustomerView
 
     /**
      * Loads the FXML and starts a new Stage
+     *
      * @param window the Stage to start
      */
     public void start(Stage window)
@@ -141,6 +147,7 @@ public class CustomerView
 
     /**
      * Creates an FXML loader from a URL and binds <code>CustomerController</code> to it
+     *
      * @param fxmlURL the location of the fxml file to load
      * @return an FXML loader set to the location specified by <code>fxmlURL</code>
      */

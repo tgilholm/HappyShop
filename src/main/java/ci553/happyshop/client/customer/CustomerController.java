@@ -4,7 +4,6 @@ import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.utility.ProductCardPane;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -22,8 +21,7 @@ import java.net.URL;
 
 public class CustomerController
 {
-    public CustomerModel cusModel;
-
+    private final CustomerModel cusModel;
 
     @FXML
     public TextField tfSearchBar;
@@ -42,6 +40,11 @@ public class CustomerController
 
     @FXML
     private TilePane tpProducts;
+
+    public CustomerController(CustomerModel cusModel)
+    {
+        this.cusModel = cusModel;
+    }
 
     /**
      * Initialises the controller after the root element is finished processing.<br>

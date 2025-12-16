@@ -54,6 +54,7 @@ public class ProductCardPane extends GridPane
         {
             loader.setLocation(getClass().getResource("/fxml/ListCell.fxml"));
             loader.setController(this);
+            loader.setRoot(this);
 
             loader.load();
         } catch (IOException e)

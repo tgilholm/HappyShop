@@ -6,7 +6,9 @@
 <!-- Each ListCell displays the product image and description, the price and stock remaining -->
 <!-- It also holds buttons to add and remove the item from the basket and displays the amount in the basket-->
 <?import javafx.scene.image.ImageView?>
-<GridPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+
+<fx:root type="javafx.scene.layout.GridPane"
+         xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 
     <!-- Column Constraints -->
     <columnConstraints>
@@ -34,13 +36,13 @@
            GridPane.columnIndex="2"/>
 
     <!-- Item remaining stock -->
-    <Label fx:id="lbStockRemaining" text="Items remaining"
+    <Label fx:id="lbStock" text="Items remaining"
            GridPane.columnIndex="3"/>
 
     <!-- Buttons -->
     <HBox GridPane.columnIndex="4" spacing="5" alignment="CENTER">
         <Button fx:id="btnRemove" text="-" maxWidth="10"/>
-        <Label fx:id="lbBasketQuantity" text="0" minWidth="20" alignment="CENTER"/>
+        <Label fx:id="lbBasketQty" text="0" minWidth="20" alignment="CENTER"/>
         <Button fx:id="btnAdd" text="+" minWidth="20"/>
     </HBox>
-</GridPane>
+</fx:root>

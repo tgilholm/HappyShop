@@ -3,6 +3,7 @@ package ci553.happyshop.client.customer;
 import ci553.happyshop.storageAccess.DatabaseRW;
 import ci553.happyshop.storageAccess.DatabaseRWFactory;
 import javafx.application.Application;
+import javafx.scene.chart.PieChart;
 import javafx.stage.Stage;
 
 /**
@@ -31,15 +32,12 @@ public class CustomerClient extends Application
 	public void start(Stage window)
 	{
 		// Starts the view, model and controller for the customer client and connects to the database read/writer
-		CustomerView cusView = new CustomerView();
-		CustomerModel cusModel = new CustomerModel();
-		CustomerController cusController = new CustomerController();
-		DatabaseRW databaseRW = DatabaseRWFactory.createDatabaseRW();
 
-		cusController.cusModel = cusModel;
-		cusView.cusController = cusController;
-		cusModel.cusView = cusView;
-		cusModel.databaseRW = databaseRW;
+		// Dependency injection is used to connect the classes properly
+		DatabaseRW databaseRW = DatabaseRWFactory.createDatabaseRW();
+		CustomerModel cusModel = new CustomerModel(databaseRW);
+		CustomerController cusController = new CustomerController(cusModel);
+		CustomerView cusView = new CustomerView(cusController);
 		cusView.start(window);
 
 		//RemoveProductNotifier removeProductNotifier = new RemoveProductNotifier();

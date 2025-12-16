@@ -13,20 +13,20 @@ import javafx.stage.Stage;
 public class OpenWindows
 {
 	// Open the customer client window when the user is logged in
-	public void startCustomerClient()
-	{
-		// Initialise Model, View, Controller
-		CustomerView cusView = new CustomerView();
-		CustomerController cusController = new CustomerController();
-		CustomerModel cusModel = new CustomerModel();
-		DatabaseRW databaseRW = DatabaseRWFactory.createDatabaseRW();
-
-		cusView.cusController = cusController;
-		cusController.cusModel = cusModel;
-		cusModel.cusView = cusView;
-		cusModel.databaseRW = databaseRW;
-		cusView.start(new Stage());
-	}
+//	public void startCustomerClient()
+//	{
+//		// Initialise Model, View, Controller
+//		CustomerView cusView = new CustomerView();
+//		CustomerController cusController = new CustomerController();
+//		CustomerModel cusModel = new CustomerModel();
+//		DatabaseRW databaseRW = DatabaseRWFactory.createDatabaseRW();
+//
+//		cusView.cusController = cusController;
+//		cusController.cusModel = cusModel;
+//		cusModel.cusView = cusView;
+//		cusModel.databaseRW = databaseRW;
+//		cusView.start(new Stage());
+//	}
 	
 	// Open the warehouse client window on login
 	public void startWarehouseClient()

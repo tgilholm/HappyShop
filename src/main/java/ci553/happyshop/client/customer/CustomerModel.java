@@ -11,8 +11,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,8 +26,18 @@ import java.util.Map;
  */
 public class CustomerModel
 {
-    public CustomerView cusView;
-    public DatabaseRW databaseRW;
+    private final DatabaseRW databaseRW;
+
+
+    /**
+     * Constructs a new CustomerModel instance that handles data from the DB.
+     *
+     * @param databaseRW for interacting with the database
+     */
+    public CustomerModel(DatabaseRW databaseRW)
+    {
+        this.databaseRW = databaseRW;
+    }
 
 
     private final ObservableList<Product> productList = FXCollections.observableArrayList();        // Observable product list
@@ -152,7 +160,6 @@ public class CustomerModel
             System.out.println("must search and get an available product before add to trolley");
         }
         displayTaReceipt = ""; // Clear receipt to switch back to trolleyPage (receipt shows only when not empty)
-        updateView();
     }
 
     // Called when a user wants to finish adding items and pay
@@ -204,7 +211,6 @@ public class CustomerModel
             displayTaTrolley = "Your trolley is empty";
             System.out.println("Your trolley is empty");
         }
-        updateView();
     }
 
     /**
@@ -248,7 +254,6 @@ public class CustomerModel
     {
         trolley.clear();
         displayTaTrolley = "";
-        updateView();
     }
 
     void closeReceipt()
@@ -257,22 +262,6 @@ public class CustomerModel
         displayTaReceipt = "";
     }
 
-    void updateView()
-    {
-        if (theProduct != null)
-        {
-            imageName = theProduct.getProductImageName();
-            String relativeImageUrl = StorageLocation.imageFolder + imageName; //relative file path, e.g. images/0001.jpg
-            // Get the full absolute path to the image
-            Path imageFullPath = Paths.get(relativeImageUrl).toAbsolutePath();
-            imageName = imageFullPath.toUri().toString(); //get the image full Uri then convert to String
-            System.out.println("Image absolute path: " + imageFullPath); // Debugging to ensure path is correct
-        } else
-        {
-            imageName = "images/imageHolder.jpg";
-        }
-        cusView.update(imageName, displayLaSearchResult, displayTaTrolley, displayTaReceipt);
-    }
     // extra notes:
     //Path.toUri(): Converts a Path object (a file or a directory path) to a URI object.
     //File.toURI(): Converts a File object (a file on the filesystem) to a URI object

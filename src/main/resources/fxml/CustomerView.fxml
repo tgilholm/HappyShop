@@ -43,7 +43,7 @@
     <!-- The search results container-->
     <!-- TilePane is used as a two-column list -->
     <ScrollPane GridPane.columnIndex="0" GridPane.rowIndex="2" fitToWidth="true">
-        <TilePane fx:id="tpProducts" prefColumns="2" hgap="10" vgap="10"
+        <TilePane fx:id="tpProducts" prefColumns="1" hgap="10" vgap="10"
                   prefTileWidth="250" prefTileHeight="200"/>
     </ScrollPane>
 
