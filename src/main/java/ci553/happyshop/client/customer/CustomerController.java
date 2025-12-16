@@ -1,12 +1,12 @@
 package ci553.happyshop.client.customer;
 
 import ci553.happyshop.catalogue.Product;
-import ci553.happyshop.utility.ProductCell;
+import ci553.happyshop.utility.ProductCardPane;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -80,15 +80,21 @@ public class CustomerController
         {
             cusModel.setSearchFilter(newValue);
         });
+
+        // Automatically refresh when the filteredList changes
+        cusModel.getSearchFilteredList().addListener((ListChangeListener<Product>) change -> bindProductList());
     }
 
+    /**
+     * Refreshes the tilePane with the filtered product list. Defines the ButtonActionCallback
+     */
     private void bindProductList()
     {
         // Clear the tilePane
         tpProducts.getChildren().clear();
 
-        // Define the callback for the ProductCell
-        ProductCell.ButtonActionCallback callback = new ProductCell.ButtonActionCallback()
+        // Define the callback for the ProductCardPane
+        ProductCardPane.ButtonActionCallback callback = new ProductCardPane.ButtonActionCallback()
         {
             @Override
             public void onAddItem(Product product)
@@ -125,11 +131,9 @@ public class CustomerController
     }
 
     // Load the layout for each card
-    private GridPane createProductCard(Product product, ProductCell.ButtonActionCallback callback)
+    private GridPane createProductCard(Product product, ProductCardPane.ButtonActionCallback callback)
     {
-        try {
-            FXMLLoader.
-        }
+        return new ProductCardPane(product, callback);
     }
 
     // Handle the "account" button input

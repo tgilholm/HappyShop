@@ -32,12 +32,12 @@ public class CustomerClient extends Application
 	{
 		// Starts the view, model and controller for the customer client and connects to the database read/writer
 		CustomerView cusView = new CustomerView();
-		CustomerController cusController = new CustomerController();
 		CustomerModel cusModel = new CustomerModel();
+		CustomerController cusController = new CustomerController();
 		DatabaseRW databaseRW = DatabaseRWFactory.createDatabaseRW();
 
-		cusView.cusController = cusController;
 		cusController.cusModel = cusModel;
+		cusView.cusController = cusController;
 		cusModel.cusView = cusView;
 		cusModel.databaseRW = databaseRW;
 		cusView.start(window);

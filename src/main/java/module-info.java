@@ -7,8 +7,9 @@ module ci553.happyshop
 	requires javafx.base;
 	requires java.base;
     requires org.jetbrains.annotations;
+	requires java.desktop;
 
-    opens ci553.happyshop to javafx.fxml;
+	opens ci553.happyshop to javafx.fxml;
 	opens ci553.happyshop.client to javafx.fxml;
     opens ci553.happyshop.utility to javafx.fxml;
 	opens ci553.happyshop.client.customer;

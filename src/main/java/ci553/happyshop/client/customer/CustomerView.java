@@ -113,7 +113,7 @@ public class CustomerView
             gridPane = loader.load();
         } catch (IOException e)
         {
-            throw new RuntimeException("Failed to load FXML");
+            throw new RuntimeException("Failed to load FXML: " + e.getMessage());
         }
 
         int WIDTH = UIStyle.customerWinWidth;
