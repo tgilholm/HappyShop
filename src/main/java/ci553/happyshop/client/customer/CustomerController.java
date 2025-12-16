@@ -10,7 +10,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
 
 import java.net.URL;
 
@@ -121,7 +123,7 @@ public class CustomerController
         // Add each of the products as a card
         for (Product product : cusModel.getSearchFilteredList())
         {
-            GridPane productCard = createProductCard(product, callback);
+            VBox productCard = createProductCard(product, callback);
 
             // Add the click listener to select a product
             productCard.setOnMouseClicked(x ->
@@ -134,7 +136,7 @@ public class CustomerController
     }
 
     // Load the layout for each card
-    private GridPane createProductCard(Product product, ProductCardPane.ButtonActionCallback callback)
+    private VBox createProductCard(Product product, ProductCardPane.ButtonActionCallback callback)
     {
         return new ProductCardPane(product, callback);
     }

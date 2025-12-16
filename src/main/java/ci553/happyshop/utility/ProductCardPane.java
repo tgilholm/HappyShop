@@ -7,16 +7,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
 
 /**
- * A custom GridPane subclass that loads ListCell.fxml. Handles button clicks and updates product details.
+ * A custom HBox subclass that loads ListCell.fxml. Handles button clicks and updates product details.
  */
-public class ProductCardPane extends GridPane
+public class ProductCardPane extends VBox
 {
     @FXML
     private ImageView ivImage;
@@ -59,7 +60,8 @@ public class ProductCardPane extends GridPane
             loader.load();
         } catch (IOException e)
         {
-            System.err.println("Error loading ListCell.fxml " + e.getMessage());
+            System.err.println("Error loading ListCell.fxml ");
+            e.printStackTrace();
         }
 
         // Initialise the product data
