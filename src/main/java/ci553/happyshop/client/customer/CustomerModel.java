@@ -133,7 +133,7 @@ public class CustomerModel
             {
                 // Return true if the ID or description match the search filter
                 String lowercaseSearchFilter = searchFilter.toLowerCase();
-                return product.getProductId().toLowerCase().contains(searchFilter)
+                return product.getId().toLowerCase().contains(searchFilter)
                         || product.getProductDescription().toLowerCase().contains(searchFilter);
             }
         });

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
- * Defines the CRUD operations implemented by each of the data repositories.
+ * Defines the CRUD operations to be implemented by more specific repositories.
  * @param <Type> Entity type (Product, Category, User, etc.)
  * @param <ID> Primary key type (String, int, etc.)
  */

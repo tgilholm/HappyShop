@@ -1,6 +1,7 @@
 package ci553.happyshop.data.repository.impl;
 
 import ci553.happyshop.catalogue.Category;
+import ci553.happyshop.data.database.DatabaseConnection;
 import ci553.happyshop.data.repository.CategoryRepository;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -9,6 +10,12 @@ import java.util.List;
 
 public class CategoryRepositoryImpl implements CategoryRepository
 {
+    private final DatabaseConnection dbConnection;
+
+    public CategoryRepositoryImpl(DatabaseConnection dbConnection)
+    {
+        this.dbConnection = dbConnection;
+    }
 
     /**
      * Gets the list of all <code>Category</code> entities
