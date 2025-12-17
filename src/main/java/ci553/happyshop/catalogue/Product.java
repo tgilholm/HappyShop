@@ -11,14 +11,15 @@ package ci553.happyshop.catalogue;
  * - stockQuantity: Quantity currently available in stock.
  */
 
+// todo convert primary key to Long
 public class Product implements Comparable<Product>
 {
-	private String proId;
-	private String proDescription;
-	private String proImageName;
-	private double unitPrice;
-	private int orderedQuantity = 1; //The quantity of this product in the customer's order.
-	private int stockQuantity;
+	private final long ID;
+	private final String name;
+	private final String imageName;
+	private final double unitPrice;
+	private final int stockQuantity;
+	private final long categoryID;
 
 	/**
 	 * Constructor used by DatabaseRW to make a product by searching ResultSet
@@ -28,29 +29,30 @@ public class Product implements Comparable<Product>
 	 * @param aPrice: The price of the product
 	 * @param stockQuantity: The Quantity of the product in stock
 	 */
-	public Product(String id, String des, String image, double aPrice, int stockQuantity)
+	public Product(long ID, String name, String imageName, double unitPrice, int stockQuantity, long categoryID)
 	{
-		proId = id;
-		proDescription = des;
-		proImageName = image;
-		unitPrice = aPrice;
+		this.ID = ID;
+		this.name = name;
+		this.imageName = imageName;
+		this.unitPrice = unitPrice;
 		this.stockQuantity = stockQuantity;
+		this.categoryID = categoryID;
 	}
 
 	// Getter methods
-	public String getProductId()
+	public long getId()
 	{
-		return proId;
+		return ID;
 	}
 
-	public String getProductDescription()
+	public String getName()
 	{
-		return proDescription;
+		return name;
 	}
 
-	public String getProductImageName()
+	public String getImageName()
 	{
-		return proImageName;
+		return imageName;
 	}
 
 	public double getUnitPrice()
@@ -58,21 +60,18 @@ public class Product implements Comparable<Product>
 		return unitPrice;
 	}
 
-	public int getOrderedQuantity()
-	{
-		return orderedQuantity;
-	}
-
 	public int getStockQuantity()
 	{
 		return stockQuantity;
 	}
 
-	// Sets the quantity ordered
-	public void setOrderedQuantity(int _orderedQuantity)
-	{
-		this.orderedQuantity = _orderedQuantity;
-	}
+	public long getCategoryId() {return categoryID;}
+
+//	// Sets the quantity ordered
+//	public void setOrderedQuantity(int _orderedQuantity)
+//	{
+//		this.orderedQuantity = _orderedQuantity;
+//	}
 
 	// Compares this product by ID with any other product
 	@Override
@@ -91,22 +90,5 @@ public class Product implements Comparable<Product>
 		return productInfo;
 	}
 
-	/** alternative constructors retained for possible future use.
-	 *
-	public Product(String id, String des, double aPrice, int orderedQuantity, int stockQuantity) {
-	    proId = id;
-	    proDescription = des;
-	    unitPrice = aPrice;
-	    this.orderedQuantity = orderedQuantity;
-	    this.stockQuantity = stockQuantity;
-	}
-	
-	public Product(String id, String des, double aPrice, int orderedQuantity) {
-	    proId = id;
-	    proDescription = des;
-	    unitPrice = aPrice;
-	    this.orderedQuantity = orderedQuantity;
-	}
-	 */
 
 }
