@@ -1,5 +1,6 @@
 package ci553.happyshop.data.repository;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
  * @param <Type> Entity type (Product, Category, User, etc.)
  * @param <ID> Primary key type (String, int, etc.)
  */
-public interface DataRepository<Type, ID>
+public interface CommonRepository<Type, ID>
 {
 
     /**
@@ -25,34 +26,26 @@ public interface DataRepository<Type, ID>
      * @return The entity or null
      */
     @Nullable
-    Type getById(ID id);
+    Type getById(@NotNull ID id);
 
 
     /**
      * Inserts a new entity
      * @param entity the entity to insert
      */
-    void insert(Type entity);
+    void insert(@NotNull Type entity);
 
 
     /**
      * Updates an existing entity
      * @param entity the entity to update
      */
-    void update(Type entity);
+    void update(@NotNull Type entity);
 
 
     /**
      * Delete an entity by its ID
      * @param id The primary key of the entity
      */
-    void delete(ID id);
-
-
-    /**
-     * Check if an entity exists
-     * @param id The primary key of the entity
-     * @return true if exists, false otherwise
-     */
-    boolean exists(ID id);
+    void delete(@NotNull ID id);
 }
