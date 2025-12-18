@@ -1,9 +1,13 @@
 package ci553.happyshop.client.customer;
 
+import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.Product;
+import ci553.happyshop.catalogue.ProductWithCategory;
 import ci553.happyshop.utility.ImageHandler;
 import ci553.happyshop.utility.ProductCardPane;
 import ci553.happyshop.utility.StockDisplayHelper;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -34,7 +38,7 @@ public class CustomerController
     public TextField tfSearchBar;
 
     @FXML
-    private Label lbDetailName, lbDetailPrice, lbDetailBasketQty, lbStockQty, lbDetailID;
+    private Label lbDetailName, lbDetailPrice, lbDetailBasketQty, lbStockQty, lbDetailID, lbDetailCategoryName;
 
     @FXML
     private ImageView ivSearchIcon, ivDetailImage;
@@ -82,20 +86,44 @@ public class CustomerController
         cbCategories.getItems().add("Select Category");
         cbCategories.getSelectionModel().selectFirst();
 
-        cusModel.loadProducts();            // Load products from the database
+        cusModel.loadProducts();            // Load product list
+        cusModel.loadCategories();          // Load category list
         bindProductList();                  // Bind the product list to the view
+        refreshComboBox();
+
+
+        // Add a listener on the comboBox valueProperty, extract the string and set the categoryFilter
+        cbCategories.valueProperty().addListener((observable, oldValue, newValue) ->
+        {
+            cusModel.setCategoryFilter(newValue);
+        });
 
         // Add a listener to automatically search as users type
         tfSearchBar.textProperty().addListener((observable, oldValue, newValue) ->
                 cusModel.setSearchFilter(newValue));
 
         // Automatically refresh when the filteredList changes
-        cusModel.getSearchFilteredList().addListener((ListChangeListener<Product>) change -> bindProductList());
+        cusModel.getSearchFilteredList().addListener((ListChangeListener<ProductWithCategory>) change -> bindProductList());
+
+        // Update ComboBox when the categoryList changes
+        cusModel.getCategories().addListener((ListChangeListener<Category>) change ->
+                refreshComboBox());
 
         logger.info("Finished initializing controller");
     }
 
 
+    private void refreshComboBox()
+    {
+        // Clear comboBox
+        cbCategories.getItems().clear();
+
+        // Add new categories
+        for (Category c : cusModel.getCategories())
+        {
+            cbCategories.getItems().add(c.getName());
+        }
+    }
 
     /**
      * Refreshes the tilePane with the filtered product list. Defines the ButtonActionCallback
@@ -129,14 +157,14 @@ public class CustomerController
         };
 
         // Add each of the products as a card
-        for (Product product : cusModel.getSearchFilteredList())
+        for (ProductWithCategory productWithCategory : cusModel.getSearchFilteredList())
         {
-            VBox productCard = createProductCard(product, callback);
+            VBox productCard = createProductCard(productWithCategory.product(), callback);
 
             // Add the click listener to select a product
             productCard.setOnMouseClicked(x ->
             {
-                logger.info("Product selected, id: {}", product.getId());
+                logger.info("Product selected, id: {}", productWithCategory.product().getId());
 
                 // Reset style to remove border on unselected cards
                 tpProducts.getChildren().forEach(node ->
@@ -144,7 +172,7 @@ public class CustomerController
 
                 // Draw a border around the selected item
                 productCard.setStyle("-fx-border-color: lightgray; -fx-border-width: 1; -fx-cursor: hand");
-                updateDetailPane(product);
+                updateDetailPane(productWithCategory);
             });
 
             tpProducts.getChildren().add(productCard);
@@ -152,15 +180,18 @@ public class CustomerController
     }
 
 
-    private void updateDetailPane(Product product)
+    private void updateDetailPane(ProductWithCategory productWithCategory)
     {
-        ivDetailImage.setImage(ImageHandler.getImageFromProduct(product));
-        lbDetailName.setText(product.getName());
-        lbDetailID.setText("ID: " + product.getId());
-        lbDetailPrice.setText(String.format("£%.2f", product.getUnitPrice()));
+        ivDetailImage.setImage(ImageHandler.getImageFromProduct(productWithCategory.product()));
+        lbDetailName.setText(productWithCategory.product().getName());
+        lbDetailID.setText("ID: " + productWithCategory.product().getId());
+        lbDetailPrice.setText(String.format("£%.2f", productWithCategory.product().getUnitPrice()));
+
+        // Set the category name
+        lbDetailCategoryName.setText(productWithCategory.category().getName());
 
         // Use the dynamic stock colour method from StockDisplayHelper
-        StockDisplayHelper.updateStockLabel(lbStockQty, product.getStockQuantity());
+        StockDisplayHelper.updateStockLabel(lbStockQty, productWithCategory.product().getStockQuantity());
     }
 
     // Load the layout for each card

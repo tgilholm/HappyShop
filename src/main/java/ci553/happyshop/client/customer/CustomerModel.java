@@ -1,7 +1,10 @@
 package ci553.happyshop.client.customer;
 
+import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.Order;
 import ci553.happyshop.catalogue.Product;
+import ci553.happyshop.catalogue.ProductWithCategory;
+import ci553.happyshop.data.repository.CategoryRepository;
 import ci553.happyshop.data.repository.ProductRepository;
 import ci553.happyshop.data.repository.RepositoryFactory;
 import ci553.happyshop.storageAccess.DatabaseRW;
@@ -30,30 +33,35 @@ public class CustomerModel
 {
     private final Logger logger = LogManager.getLogger();
 
-    // Get an instance of the ProductRepository
+    // Get repository instances
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
 
     /**
      * Constructs a new CustomerModel instance that handles data from the DB.
      *
-     * @param productRepository for interacting with the <code>Product</code> table
+     * @param productRepository  for interacting with the <code>Product</code> table
+     * @param categoryRepository for interacting with the <code>Category</code> table
      */
-    public CustomerModel(ProductRepository productRepository)
+    public CustomerModel(ProductRepository productRepository, CategoryRepository categoryRepository)
     {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
 
-    private final ObservableList<Product> productList = FXCollections.observableArrayList();        // Observable product list
-    private FilteredList<Product> searchFilteredList;                                                // Filtered product list
-    private FilteredList<Product> categoryFilteredList;                                             // Product list filtered by category
+    private final ObservableList<ProductWithCategory> productWithCategoryList = FXCollections.observableArrayList();        // Observable product list
+    private final ObservableList<Category> categoryList = FXCollections.observableArrayList();                              // Observable category list
+    private FilteredList<ProductWithCategory> searchFilteredList;                                                           // Filtered product list
+    private FilteredList<ProductWithCategory> categoryFilteredList;                                                         // Product list filtered by category
 
 
     private Product theProduct = null; // product found from search
     private ArrayList<Product> trolley = new ArrayList<>(); // a list of products in trolley
 
     // Four UI elements to be passed to CustomerView for display updates.
+    // todo re-use placeholder image
     private String imageName = "images/imageHolder.jpg";                // Image to show in product preview (Search Page)
     private String displayLaSearchResult = "No Product was searched yet"; // Label showing search result message (Search Page)
     private String displayTaTrolley = "";                                // Text area content showing current trolley items (Trolley Page)
@@ -63,65 +71,82 @@ public class CustomerModel
 
 
     /**
-     * Exposes an ObservableList version of the product list. If the productList changes, observers will be triggered.
+     * Exposes an <code>ObservableList</code> version of the product list.
      *
-     * @return <code>productList</code>
+     * @return a list of <code>ProductWithCategory</code> objects
      */
-    public ObservableList<Product> getProducts()
+    public ObservableList<ProductWithCategory> getProducts()
     {
-        return productList;
+        return productWithCategoryList;
     }
 
     /**
-     * Queries the DB to get the current list of products.
+     * Exposes an ObservableList version of the category list
+     *
+     * @return the list of <code>Category</code> objects
+     */
+    public ObservableList<Category> getCategories()
+    {
+        return categoryList;
+    }
+
+    /**
+     * Updates the <code>productWithCategoryList</code> from the <code>productRepository</code>
      */
     public void loadProducts()
     {
         // Use setAll to update the productList
-        productList.setAll(productRepository.getAll());
+        productWithCategoryList.setAll(productRepository.getAllWithCategories());
 
-        logger.info("Retrieved {} products from ProductTable", productList.size());
+        logger.info("Retrieved {} products with categories from ProductTable", productWithCategoryList.size());
+    }
+
+    /**
+     * Updates the <code>categoryList</code> from the <code>productRepository</code>
+     */
+    public void loadCategories()
+    {
+        categoryList.setAll(categoryRepository.getAll());
+
+        logger.info("Retrieved {} categories from CategoryTable", categoryList.size());
     }
 
 
     /**
      * Gets the list of products matching the specified category. Defaults to the base <code>productList</code>.
-     * Creates a new <code>filteredList</code> if <code>categoryFilteredList</code> doesn't already exist, returns the existing list
+     * Wraps around <code>productWithCategoryList</code> if <code>categoryFilteredList</code> doesn't already exist, returns the existing list
      * otherwise.
      *
      * @return the <code>FilteredList</code> of products matching the category filter
      */
-    public FilteredList<Product> getCategoryFilteredList()
+    public FilteredList<ProductWithCategory> getCategoryFilteredList()
     {
         // Defaults to "no category"
         if (categoryFilteredList == null)
         {
-            // productList is passed to the filteredList
-            categoryFilteredList = new FilteredList<>(productList, p -> true);
+            // Gets the
+            categoryFilteredList = new FilteredList<>(productWithCategoryList, p -> true);
         }
         return categoryFilteredList;
     }
 
     /**
      * Gets the (already filtered by category) list of products matching the search filter.
-     * Searches in product description and ID. Creates a new <code>filteredList</code> if
-     * <code>searcFilteredList</code> doesn't already exist, returns the existing list otherwise.
+     * Searches in product description and ID. Gets the list of products from <code>categoryFilteredList</code>
+     * if this list doesn't exist, otherwise returns the existing list.
      *
      * @return the <code>FilteredList</code> of products matching the filter
      */
-    public FilteredList<Product> getSearchFilteredList()
+    public FilteredList<ProductWithCategory> getSearchFilteredList()
     {
-        // Creates filteredProducts if it doesn't exist
+        // Creates searchFilteredList if it doesn't exist
         if (searchFilteredList == null)
         {
-            // categoryFilteredList is passed
-            searchFilteredList = new FilteredList<>(productList, p -> true);
+            // Wrap around the categoryFilteredList if this list doesn't exist yet
+            searchFilteredList = new FilteredList<>(getCategoryFilteredList(), p -> true);
         }
         return searchFilteredList;
     }
-
-    // todo category searching
-    //public void setCategoryFilter()
 
     /**
      * Updates the predicate of the searchFilteredList to search by product ID or description and
@@ -131,8 +156,8 @@ public class CustomerModel
      */
     public void setSearchFilter(String searchFilter)
     {
-        // Update the predicate of filteredList
-        searchFilteredList.setPredicate(product ->
+        // Update the predicate of searchFilteredList
+        searchFilteredList.setPredicate(productWithCategory ->
         {
             if (searchFilter == null)
             {
@@ -141,8 +166,31 @@ public class CustomerModel
             {
                 // Return true if the ID or description match the search filter
                 String lowercaseSearchFilter = searchFilter.toLowerCase();
-                return String.valueOf(product.getId()).contains(searchFilter)
-                        || product.getName().toLowerCase().contains(searchFilter);
+                return String.valueOf(productWithCategory.product().getId()).contains(searchFilter)
+                        || productWithCategory.product().getName().toLowerCase().contains(searchFilter);
+            }
+        });
+    }
+
+    /**
+     * Updates the predicate of the categoryFilteredList to search by categoryName and
+     * return the products that match the predicate <code>categoryFilter</code>.
+     *
+     * @param categoryFilter a <code>String</code> literal matching the category name
+     */
+    public void setCategoryFilter(String categoryFilter)
+    {
+        // Update the predicate of categoryFilteredList
+        categoryFilteredList.setPredicate(productWithCategory ->
+        {
+            if (categoryFilter == null)
+            {
+                return true;
+            } else
+            {
+                // Return true if the category name matches the search filter
+                String lowercaseFilter = categoryFilter.toLowerCase().trim();
+                return productWithCategory.category().getName().toLowerCase().equals(lowercaseFilter);
             }
         });
     }

@@ -1,5 +1,7 @@
 package ci553.happyshop.client.customer;
 
+import ci553.happyshop.catalogue.Category;
+import ci553.happyshop.data.repository.CategoryRepository;
 import ci553.happyshop.data.repository.ProductRepository;
 import ci553.happyshop.data.repository.RepositoryFactory;
 import javafx.application.Application;
@@ -31,9 +33,11 @@ public class CustomerClient extends Application
 		logger.info("Launching CustomerClient");
 		// Starts the view, model and controller for the customer client and connects to the database read/writer
 
-		// Dependency injection is used to connect the classes properly
+		// Get instances of the repositories needed
 		ProductRepository productRepository = RepositoryFactory.getProductRepository();
-		CustomerModel cusModel = new CustomerModel(productRepository);
+		CategoryRepository categoryRepository = RepositoryFactory.getCategoryRepository();
+
+		CustomerModel cusModel = new CustomerModel(productRepository, categoryRepository);
 		CustomerController cusController = new CustomerController(cusModel);
 		CustomerView cusView = new CustomerView(cusController);
 		cusView.start(window);

@@ -1,6 +1,7 @@
 package ci553.happyshop.data.repository;
 
 import ci553.happyshop.catalogue.Product;
+import ci553.happyshop.catalogue.ProductWithCategory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,6 +17,11 @@ public interface ProductRepository extends CommonRepository<Product, Long>
      */
     List<Product> getAll();
 
+    /**
+     * Gets the list of <code>Product</code> entities joined to the linked <code>Category</code>
+     * @return a list of <code>ProductWithCategory</code> object
+     */
+    List<ProductWithCategory> getAllWithCategories();
 
     /**
      * Gets a specific <code>Product</code> by its ID

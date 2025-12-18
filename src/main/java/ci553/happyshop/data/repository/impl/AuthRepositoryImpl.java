@@ -5,6 +5,7 @@ import ci553.happyshop.catalogue.Customer;
 import ci553.happyshop.data.database.DatabaseConnection;
 import ci553.happyshop.data.database.DatabaseException;
 import ci553.happyshop.data.repository.AuthRepository;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -99,14 +100,13 @@ public class AuthRepositoryImpl implements AuthRepository
     @Override
     public void addCustomer(@NotNull Customer customer)
     {
-        String query = "INSERT INTO LoginTable (id, username, password) VALUES (?, ?, ?)";
+        String query = "INSERT INTO LoginTable (username, password) VALUES (?, ?)";
 
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query))
         {
-            statement.setLong(1, customer.getId());
-            statement.setString(2, customer.getUsername());
-            statement.setString(3, customer.getPassword());
+            statement.setString(1, customer.getUsername());
+            statement.setString(2, customer.getPassword());
 
             statement.executeUpdate();
         } catch (SQLException e)
@@ -149,7 +149,8 @@ public class AuthRepositoryImpl implements AuthRepository
      * @return a <code>Customer</code> object
      * @throws SQLException if the <code>ResultSet</code> could not be parsed
      */
-    private Customer mapToCustomer(@NotNull ResultSet resultSet) throws SQLException
+    @Contract("_ -> new")
+    private @NotNull Customer mapToCustomer(@NotNull ResultSet resultSet) throws SQLException
     {
         return new Customer(resultSet.getLong(1),
                 resultSet.getString(2),

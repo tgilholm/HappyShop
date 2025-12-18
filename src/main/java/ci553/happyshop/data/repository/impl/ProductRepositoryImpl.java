@@ -1,9 +1,12 @@
 package ci553.happyshop.data.repository.impl;
 
+import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.Product;
+import ci553.happyshop.catalogue.ProductWithCategory;
 import ci553.happyshop.data.database.DatabaseConnection;
 import ci553.happyshop.data.database.DatabaseException;
 import ci553.happyshop.data.repository.ProductRepository;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -65,6 +68,37 @@ public class ProductRepositoryImpl implements ProductRepository
     }
 
     /**
+     * Gets the list of <code>Product</code> entities joined to the linked <code>Category</code>
+     * @return a list of <code>ProductWithCategory</code> object
+     */
+    @Override
+    public List<ProductWithCategory> getAllWithCategories()
+    {
+        String query = """
+                SELECT p.id, p.name, p.imageName, p.unitPrice, p.stockQuantity, p.categoryID, c.id, c.name, c.description
+                FROM ProductTable p
+                JOIN CategoryTable c ON p.categoryID = c.id
+               """;
+        List<ProductWithCategory> productsWithCategories = new ArrayList<>();
+
+        try (Connection connection = dbConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+        ResultSet results = statement.executeQuery())
+        {
+            while(results.next())
+            {
+                productsWithCategories.add(mapToProductWithCategory(results));
+            }
+
+            return productsWithCategories;
+        }
+        catch (SQLException e)
+        {
+            throw new DatabaseException("Failed to get list of products with categories", e);
+        }
+    }
+
+    /**
      * Gets a specific <code>Product</code> by its ID
      *
      * @param id The primary key of the product
@@ -99,8 +133,8 @@ public class ProductRepositoryImpl implements ProductRepository
     @Override
     public void insert(@NotNull Product product)
     {
-        String query = "INSERT INTO ProductTable(id, name, imageName, unitPrice, stockQuantity, categoryID) "
-                + "VALUES(?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO ProductTable(name, imageName, unitPrice, stockQuantity, categoryID) "
+                + "VALUES(?, ?, ?, ?, ?)";
 
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query))
@@ -185,12 +219,11 @@ public class ProductRepositoryImpl implements ProductRepository
     private void setProductParameters(@NotNull PreparedStatement statement,
             @NotNull Product product) throws SQLException
     {
-        statement.setLong(1, product.getId());
-        statement.setString(2, product.getName());
-        statement.setString(3, product.getImageName());
-        statement.setDouble(4, product.getUnitPrice());
-        statement.setInt(5, product.getStockQuantity());
-        statement.setLong(6, product.getCategoryId());
+        statement.setString(1, product.getName());
+        statement.setString(2, product.getImageName());
+        statement.setDouble(3, product.getUnitPrice());
+        statement.setInt(4, product.getStockQuantity());
+        statement.setLong(5, product.getCategoryId());
     }
 
     /**
@@ -200,7 +233,8 @@ public class ProductRepositoryImpl implements ProductRepository
      * @return a <code>Product</code> object
      * @throws SQLException if the <code>ResultSet</code> could not be parsed
      */
-    private Product mapToProduct(@NotNull ResultSet resultSet) throws SQLException
+    @Contract("_ -> new")
+    private @NotNull Product mapToProduct(@NotNull ResultSet resultSet) throws SQLException
     {
         return new Product(
                 resultSet.getLong(1),
@@ -209,6 +243,32 @@ public class ProductRepositoryImpl implements ProductRepository
                 resultSet.getDouble(4),
                 resultSet.getInt(5),
                 resultSet.getLong(6)
+        );
+    }
+
+    /**
+     * Helper method to convert a <code>ResultSet</code> row to a <code>ProductWithCategory</code> object
+     * @param resultSet the result set to parse
+     * @return a <code>ProductWithCategory</code> object
+     * @throws SQLException if the <code>ResultSet</code> could not be parsed
+     */
+    @Contract("_ -> new")
+    private @NotNull ProductWithCategory mapToProductWithCategory(@NotNull ResultSet resultSet) throws SQLException
+    {
+        return new ProductWithCategory(
+                new Product(    // Get the product object
+                        resultSet.getLong(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getDouble(4),
+                        resultSet.getInt(5),
+                        resultSet.getLong(6)
+                ),
+                new Category(   // Get the category object
+                        resultSet.getLong(7),
+                        resultSet.getString(8),
+                        resultSet.getString(9)
+                )
         );
     }
 }

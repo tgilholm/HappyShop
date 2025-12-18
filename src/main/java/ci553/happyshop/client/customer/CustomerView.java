@@ -60,11 +60,13 @@ public class CustomerView
         try
         {
             gridPane = loader.load();
-            logger.info("Loaded FXML file {}", fxmlURL);
         } catch (IOException e)
         {
-            throw new RuntimeException("Failed to load FXML: " + e.getMessage());
+
+            e.printStackTrace();
+            throw new RuntimeException("Failed to load FXML: " + e);
         }
+        logger.info("Loaded FXML file {}", fxmlURL);
 
         int WIDTH = UIStyle.customerWinWidth;
         int HEIGHT = UIStyle.customerWinHeight;

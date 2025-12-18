@@ -65,14 +65,10 @@
     <HBox alignment="TOP_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="0">
         <Button fx:id="btnAccount" text="Account"
                 onAction="#accountClicked">
-
-
         </Button>
 
         <Button text="Cart" fx:id="btnCart"
                 onAction="#cartClicked">
-
-
         </Button>
     </HBox>
 
@@ -84,7 +80,7 @@
 
     <!-- Shows a larger image and more detailed information about each item -->
     <!-- Selected Item Information-->
-    <VBox GridPane.columnIndex="01" GridPane.rowIndex="2" style="-fx-background-color: white; -fx-padding: 10;"
+    <VBox GridPane.columnIndex="1" GridPane.rowIndex="2" style="-fx-background-color: white; -fx-padding: 10;"
           spacing="15">
 
         <!-- Product Image -->
@@ -96,10 +92,16 @@
         </StackPane>
 
         <VBox spacing="10">
-            <!-- Product Description -->
+            <!-- Product Name -->
             <Label fx:id="lbDetailName"
                    text="Select a product"
                    style="-fx-font-size: 18px; -fx-font-weight: bold;"
+                   wrapText="true"/>
+
+            <!-- Category Name-->
+            <Label fx:id="lbDetailCategoryName"
+                   text="Category Name"
+                   style="-fx-font-size: 16px; -fx-font-weight: bold"
                    wrapText="true"/>
 
             <!-- Product ID -->
@@ -114,7 +116,7 @@
             <Label fx:id="lbStockQty"
                    style="-fx-font-size: 16px;"/>
 
-            <!-- Number in basket -->
+            <!-- Number in the basket -->
             <Label fx:id="lbDetailBasketQty"
                    style="-fx-font-size: 16px;"/>
         </VBox>
