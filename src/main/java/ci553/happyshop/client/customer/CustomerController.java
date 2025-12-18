@@ -6,8 +6,6 @@ import ci553.happyshop.catalogue.ProductWithCategory;
 import ci553.happyshop.utility.ImageHandler;
 import ci553.happyshop.utility.ProductCardPane;
 import ci553.happyshop.utility.StockDisplayHelper;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -20,6 +18,7 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
@@ -28,7 +27,6 @@ import java.net.URL;
  * Controller class for the customer client.
  * Initializes FXML elements and binds the Model to the View
  */
-
 public class CustomerController
 {
     private final CustomerModel cusModel;
@@ -113,6 +111,9 @@ public class CustomerController
     }
 
 
+    /**
+     * Updates the categories comboBox with the list of categories from the model
+     */
     private void refreshComboBox()
     {
         // Clear comboBox
@@ -180,7 +181,11 @@ public class CustomerController
     }
 
 
-    private void updateDetailPane(ProductWithCategory productWithCategory)
+    /**
+     * Updates the detailPane on the View with the details from a <code>ProductWithCategory</code> object
+     * @param productWithCategory the <code>ProductWithCategory</code> object to load data from
+     */
+    private void updateDetailPane(@NotNull ProductWithCategory productWithCategory)
     {
         ivDetailImage.setImage(ImageHandler.getImageFromProduct(productWithCategory.product()));
         lbDetailName.setText(productWithCategory.product().getName());
@@ -194,8 +199,14 @@ public class CustomerController
         StockDisplayHelper.updateStockLabel(lbStockQty, productWithCategory.product().getStockQuantity());
     }
 
-    // Load the layout for each card
-    private VBox createProductCard(Product product, ProductCardPane.ButtonActionCallback callback)
+    /**
+     * Create a new <code>ProductCardPane</code> from a <code>Product object</code>
+     * @param product the <code>Product</code> object
+     * @param callback a <code>ProductCardPane.ButtonActionCallback</code>
+     * @return a <code>VBox</code> containing the card layout
+     */
+    @Contract("_, _ -> new")
+    private @NotNull VBox createProductCard(Product product, ProductCardPane.ButtonActionCallback callback)
     {
         return new ProductCardPane(product, callback);
     }
