@@ -141,20 +141,20 @@ public class CustomerController
             public void onAddItem(@NotNull Product product)
             {
                 logger.info("Adding {} to basket", product.getId());
-                // todo basket
+                cusModel.addToBasket(product);
             }
 
             @Override
             public void onRemoveItem(@NotNull Product product)
             {
                 logger.info("Removing {} from basket", product.getId());
-
+                cusModel.removeFromBasket(product);
             }
 
             @Override
             public int getBasketQuantity(Product product)
             {
-                return 0;
+                return cusModel.getBasketQuantity(product);
             }
         };
 

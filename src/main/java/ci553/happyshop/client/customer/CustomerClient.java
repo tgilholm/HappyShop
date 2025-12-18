@@ -1,6 +1,7 @@
 package ci553.happyshop.client.customer;
 
 import ci553.happyshop.catalogue.Category;
+import ci553.happyshop.data.repository.BasketRepository;
 import ci553.happyshop.data.repository.CategoryRepository;
 import ci553.happyshop.data.repository.ProductRepository;
 import ci553.happyshop.data.repository.RepositoryFactory;
@@ -36,8 +37,9 @@ public class CustomerClient extends Application
 		// Get instances of the repositories needed
 		ProductRepository productRepository = RepositoryFactory.getProductRepository();
 		CategoryRepository categoryRepository = RepositoryFactory.getCategoryRepository();
+		BasketRepository basketRepository = RepositoryFactory.getBasketRepository();
 
-		CustomerModel cusModel = new CustomerModel(productRepository, categoryRepository);
+		CustomerModel cusModel = new CustomerModel(productRepository, categoryRepository, basketRepository);
 		CustomerController cusController = new CustomerController(cusModel);
 		CustomerView cusView = new CustomerView(cusController);
 		cusView.start(window);

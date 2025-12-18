@@ -87,8 +87,8 @@ public class SetDatabase
                 customerID BIGINT NOT NULL,
                 productID BIGINT NOT NULL,
                 quantity INT NOT NULL DEFAULT 0,
-                PRIMARY KEY (userID, productID),
-                FOREIGN KEY (userID) REFERENCES LoginTable(id) ON DELETE CASCADE,
+                PRIMARY KEY (customerID, productID),
+                FOREIGN KEY (customerID) REFERENCES LoginTable(id) ON DELETE CASCADE,
                 FOREIGN KEY (productID) REFERENCES ProductTable(id) ON DELETE CASCADE
             )
             

@@ -99,8 +99,5 @@ public class ProductCardPane extends VBox
 
         // Hide the "remove" button if there are none in the basket
         btnRemove.setDisable(callback.getBasketQuantity(product) == 0);
-
     }
-
-
 }
