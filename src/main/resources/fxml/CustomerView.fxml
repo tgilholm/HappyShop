@@ -65,14 +65,10 @@
     <HBox alignment="TOP_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="0">
         <Button fx:id="btnAccount" text="Account"
                 onAction="#accountClicked">
-
-
         </Button>
 
         <Button text="Cart" fx:id="btnCart"
                 onAction="#cartClicked">
-
-
         </Button>
     </HBox>
 
@@ -84,7 +80,7 @@
 
     <!-- Shows a larger image and more detailed information about each item -->
     <!-- Selected Item Information-->
-    <VBox GridPane.columnIndex="01" GridPane.rowIndex="2" style="-fx-background-color: white; -fx-padding: 10;"
+    <VBox GridPane.columnIndex="1" GridPane.rowIndex="2" style="-fx-background-color: white; -fx-padding: 10;"
           spacing="15">
 
         <!-- Product Image -->
