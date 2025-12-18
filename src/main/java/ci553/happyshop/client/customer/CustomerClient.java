@@ -1,6 +1,5 @@
 package ci553.happyshop.client.customer;
 
-import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.data.repository.BasketRepository;
 import ci553.happyshop.data.repository.CategoryRepository;
 import ci553.happyshop.data.repository.ProductRepository;
@@ -25,14 +24,23 @@ public class CustomerClient extends Application
 		launch(args);
 	}
 
-	/**
-	 * Injects dependencies into the MVC and launches the customer view
-	 */
 	@Override
 	public void start(Stage window)
 	{
+		startCustomerClient(window);
+
+		//RemoveProductNotifier removeProductNotifier = new RemoveProductNotifier();
+		//removeProductNotifier.cusView = cusView;
+		//cusModel.removeProductNotifier = removeProductNotifier;
+	}
+
+	/**
+	 * Gets repository instances and injects dependencies into the Model, View, and Controller
+	 * @param window the <code>Stage</code> object to run
+	 */
+	public static void startCustomerClient(Stage window)
+	{
 		logger.info("Launching CustomerClient");
-		// Starts the view, model and controller for the customer client and connects to the database read/writer
 
 		// Get instances of the repositories needed
 		ProductRepository productRepository = RepositoryFactory.getProductRepository();
@@ -43,9 +51,5 @@ public class CustomerClient extends Application
 		CustomerController cusController = new CustomerController(cusModel);
 		CustomerView cusView = new CustomerView(cusController);
 		cusView.start(window);
-
-		//RemoveProductNotifier removeProductNotifier = new RemoveProductNotifier();
-		//removeProductNotifier.cusView = cusView;
-		//cusModel.removeProductNotifier = removeProductNotifier;
 	}
 }

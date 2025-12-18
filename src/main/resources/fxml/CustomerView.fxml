@@ -67,8 +67,8 @@
                 onAction="#accountClicked">
         </Button>
 
-        <Button text="Cart" fx:id="btnCart"
-                onAction="#cartClicked">
+        <Button text="Basket" fx:id="btnBasket"
+                onAction="#basketClicked">
         </Button>
     </HBox>
 

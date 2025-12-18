@@ -45,10 +45,7 @@ public class CustomerController
     private ComboBox<String> cbCategories;
 
     @FXML
-    private Button btnAccount;
-
-    @FXML
-    private Button btnCart;
+    private Button btnAccount, btnBasket;
 
     @FXML
     private TilePane tpProducts;
@@ -63,7 +60,7 @@ public class CustomerController
      * <pre>
      *     - Initializes the View elements
      *     - Sets the ListView cell factory
-     *     - Binds the Model productList to the View and loads all products
+     *     - Binds Model data to View elements
      * </pre>
      */
     @FXML
@@ -218,8 +215,8 @@ public class CustomerController
         System.out.println("Account button clicked");
     }
 
-    public void cartClicked()
+    public void basketClicked()
     {
-        System.out.println("Cart button clicked");
+        System.out.println("Basket button clicked");
     }
 }

@@ -12,8 +12,6 @@ import ci553.happyshop.client.OpenWindows;
  *
  * TODO add option to go back to login screen
  *
- * @author Thomas Gilholm, University of Brighton
- * @version 1.0
  */
 public class LoginModel
 {
@@ -52,7 +50,7 @@ public class LoginModel
 		if (databaseRW.checkLoginDetails(username, password))
 		{
 			// Handle what happens when the user is logged in successfully
-			System.out.println(String.format("Logging in... username: %s, password: %s", username, password));
+			System.out.printf("Logging in... username: %s, password: %s%n", username, password);
 
 			// Invoke the startCustomerClient() and close the LoginPopup and LoginView
 			//openWindows.startCustomerClient();
@@ -60,7 +58,7 @@ public class LoginModel
 			lView.hideWindow(); // Hide is used instead of close so we can return to it later
 		} else
 		{
-			System.out.print(String.format("Login failed... username: %s, password: %s", username, password));
+			System.out.printf("Login failed... username: %s, password: %s", username, password);
 		}
 	}
 
