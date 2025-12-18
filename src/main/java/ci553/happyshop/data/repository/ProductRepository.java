@@ -7,6 +7,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * Defines CRUD operations for interfacing with ProductTable
+ */
 public interface ProductRepository extends CommonRepository<Product, Long>
 {
 

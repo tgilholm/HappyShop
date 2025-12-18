@@ -87,7 +87,6 @@ public class SetDatabase
                 userID BIGINT NOT NULL,
                 productID BIGINT NOT NULL,
                 quantity INT NOT NULL DEFAULT 0,
-                dateAdded TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 PRIMARY KEY (userID, productID),
                 FOREIGN KEY (userID) REFERENCES LoginTable(id) ON DELETE CASCADE,
                 FOREIGN KEY (productID) REFERENCES ProductTable(id) ON DELETE CASCADE

@@ -94,6 +94,7 @@ public class CustomerController
         cbCategories.valueProperty().addListener((observable, oldValue, newValue) ->
         {
             cusModel.setCategoryFilter(newValue);
+            logger.info("Set category filter to {}", newValue);
         });
 
         // Add a listener to automatically search as users type
