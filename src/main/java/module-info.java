@@ -6,10 +6,12 @@ module ci553.happyshop
 	requires javafx.graphics;
 	requires javafx.base;
 	requires java.base;
+	requires java.xml;
     requires org.jetbrains.annotations;
 	requires java.desktop;
+    requires org.apache.logging.log4j;
 
-	opens ci553.happyshop to javafx.fxml;
+    opens ci553.happyshop to javafx.fxml;
 	opens ci553.happyshop.client to javafx.fxml;
     opens ci553.happyshop.utility to javafx.fxml;
 	opens ci553.happyshop.client.customer;
@@ -19,6 +21,7 @@ module ci553.happyshop
 	opens ci553.happyshop.client.emergency;
 
 	exports ci553.happyshop;
+	exports ci553.happyshop.data.repository;
 	exports ci553.happyshop.client;
 	exports ci553.happyshop.utility;
 	exports ci553.happyshop.catalogue;
