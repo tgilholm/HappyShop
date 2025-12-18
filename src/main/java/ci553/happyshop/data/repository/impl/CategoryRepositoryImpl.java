@@ -15,6 +15,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of <code>CategoryRepository</code>. Implements CRUD methods.
+ */
 public class CategoryRepositoryImpl implements CategoryRepository
 {
     private final DatabaseConnection dbConnection;

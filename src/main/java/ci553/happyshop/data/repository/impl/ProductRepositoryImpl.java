@@ -133,8 +133,8 @@ public class ProductRepositoryImpl implements ProductRepository
     @Override
     public void insert(@NotNull Product product)
     {
-        String query = "INSERT INTO ProductTable(id, name, imageName, unitPrice, stockQuantity, categoryID) "
-                + "VALUES(?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO ProductTable(name, imageName, unitPrice, stockQuantity, categoryID) "
+                + "VALUES(?, ?, ?, ?, ?)";
 
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query))
@@ -219,12 +219,11 @@ public class ProductRepositoryImpl implements ProductRepository
     private void setProductParameters(@NotNull PreparedStatement statement,
             @NotNull Product product) throws SQLException
     {
-        statement.setLong(1, product.getId());
-        statement.setString(2, product.getName());
-        statement.setString(3, product.getImageName());
-        statement.setDouble(4, product.getUnitPrice());
-        statement.setInt(5, product.getStockQuantity());
-        statement.setLong(6, product.getCategoryId());
+        statement.setString(1, product.getName());
+        statement.setString(2, product.getImageName());
+        statement.setDouble(3, product.getUnitPrice());
+        statement.setInt(4, product.getStockQuantity());
+        statement.setLong(5, product.getCategoryId());
     }
 
     /**
