@@ -84,7 +84,7 @@ public class SetDatabase
             // Date added is set to the current time
             """
             CREATE TABLE BasketTable (
-                userID BIGINT NOT NULL,
+                customerID BIGINT NOT NULL,
                 productID BIGINT NOT NULL,
                 quantity INT NOT NULL DEFAULT 0,
                 PRIMARY KEY (userID, productID),

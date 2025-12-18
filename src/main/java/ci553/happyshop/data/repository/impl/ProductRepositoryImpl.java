@@ -226,6 +226,7 @@ public class ProductRepositoryImpl implements ProductRepository
         statement.setLong(5, product.getCategoryId());
     }
 
+
     /**
      * Helper method to convert a <code>ResultSet</code> row to a <code>Product</code> object
      *
