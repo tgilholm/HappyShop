@@ -1,5 +1,6 @@
 package ci553.happyshop.client.customer;
 
+import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.catalogue.ProductWithCategory;
 import ci553.happyshop.utility.ImageHandler;
@@ -85,8 +86,11 @@ public class CustomerController
         cbCategories.getItems().add("Select Category");
         cbCategories.getSelectionModel().selectFirst();
 
-        cusModel.loadProducts();            // Load products from the database
+        cusModel.loadProducts();            // Load product list
+        cusModel.loadCategories();          // Load category list
         bindProductList();                  // Bind the product list to the view
+        refreshComboBox();
+
 
         // Add a listener on the comboBox valueProperty, extract the string and set the categoryFilter
         cbCategories.valueProperty().addListener((observable, oldValue, newValue) ->
@@ -101,10 +105,25 @@ public class CustomerController
         // Automatically refresh when the filteredList changes
         cusModel.getSearchFilteredList().addListener((ListChangeListener<ProductWithCategory>) change -> bindProductList());
 
+        // Update ComboBox when the categoryList changes
+        cusModel.getCategories().addListener((ListChangeListener<Category>) change ->
+                refreshComboBox());
+
         logger.info("Finished initializing controller");
     }
 
 
+    private void refreshComboBox()
+    {
+        // Clear comboBox
+        cbCategories.getItems().clear();
+
+        // Add new categories
+        for (Category c : cusModel.getCategories())
+        {
+            cbCategories.getItems().add(c.getName());
+        }
+    }
 
     /**
      * Refreshes the tilePane with the filtered product list. Defines the ButtonActionCallback
@@ -138,7 +157,7 @@ public class CustomerController
         };
 
         // Add each of the products as a card
-        for (ProductWithCategory productWithCategory: cusModel.getSearchFilteredList())
+        for (ProductWithCategory productWithCategory : cusModel.getSearchFilteredList())
         {
             VBox productCard = createProductCard(productWithCategory.product(), callback);
 

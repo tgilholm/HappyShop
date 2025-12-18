@@ -1,8 +1,10 @@
 package ci553.happyshop.client.customer;
 
+import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.Order;
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.catalogue.ProductWithCategory;
+import ci553.happyshop.data.repository.CategoryRepository;
 import ci553.happyshop.data.repository.ProductRepository;
 import ci553.happyshop.data.repository.RepositoryFactory;
 import ci553.happyshop.storageAccess.DatabaseRW;
@@ -31,30 +33,35 @@ public class CustomerModel
 {
     private final Logger logger = LogManager.getLogger();
 
-    // Get an instance of the ProductRepository
+    // Get repository instances
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
 
     /**
      * Constructs a new CustomerModel instance that handles data from the DB.
      *
-     * @param productRepository for interacting with the <code>Product</code> table
+     * @param productRepository  for interacting with the <code>Product</code> table
+     * @param categoryRepository for interacting with the <code>Category</code> table
      */
-    public CustomerModel(ProductRepository productRepository)
+    public CustomerModel(ProductRepository productRepository, CategoryRepository categoryRepository)
     {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
 
     private final ObservableList<ProductWithCategory> productWithCategoryList = FXCollections.observableArrayList();        // Observable product list
-    private FilteredList<ProductWithCategory> searchFilteredList;                                                // Filtered product list
-    private FilteredList<ProductWithCategory> categoryFilteredList;                                             // Product list filtered by category
+    private final ObservableList<Category> categoryList = FXCollections.observableArrayList();                              // Observable category list
+    private FilteredList<ProductWithCategory> searchFilteredList;                                                           // Filtered product list
+    private FilteredList<ProductWithCategory> categoryFilteredList;                                                         // Product list filtered by category
 
 
     private Product theProduct = null; // product found from search
     private ArrayList<Product> trolley = new ArrayList<>(); // a list of products in trolley
 
     // Four UI elements to be passed to CustomerView for display updates.
+    // todo re-use placeholder image
     private String imageName = "images/imageHolder.jpg";                // Image to show in product preview (Search Page)
     private String displayLaSearchResult = "No Product was searched yet"; // Label showing search result message (Search Page)
     private String displayTaTrolley = "";                                // Text area content showing current trolley items (Trolley Page)
@@ -64,9 +71,9 @@ public class CustomerModel
 
 
     /**
-     * Exposes an ObservableList version of the product list. If the productList changes, observers will be triggered.
+     * Exposes an <code>ObservableList</code> version of the product list.
      *
-     * @return <code>productList</code>
+     * @return a list of <code>ProductWithCategory</code> objects
      */
     public ObservableList<ProductWithCategory> getProducts()
     {
@@ -74,7 +81,17 @@ public class CustomerModel
     }
 
     /**
-     * Queries the DB to get the current list of products.
+     * Exposes an ObservableList version of the category list
+     *
+     * @return the list of <code>Category</code> objects
+     */
+    public ObservableList<Category> getCategories()
+    {
+        return categoryList;
+    }
+
+    /**
+     * Updates the <code>productWithCategoryList</code> from the <code>productRepository</code>
      */
     public void loadProducts()
     {
@@ -82,6 +99,16 @@ public class CustomerModel
         productWithCategoryList.setAll(productRepository.getAllWithCategories());
 
         logger.info("Retrieved {} products with categories from ProductTable", productWithCategoryList.size());
+    }
+
+    /**
+     * Updates the <code>categoryList</code> from the <code>productRepository</code>
+     */
+    public void loadCategories()
+    {
+        categoryList.setAll(categoryRepository.getAll());
+
+        logger.info("Retrieved {} categories from CategoryTable", categoryList.size());
     }
 
 
