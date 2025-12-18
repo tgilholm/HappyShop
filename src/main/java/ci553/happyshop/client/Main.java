@@ -126,8 +126,8 @@ public class Main extends Application
 		LoginView lView = new LoginView(new Stage()); // Launches the login window
 		LoginController lController = new LoginController();
 		LoginModel lModel = new LoginModel();
-		DatabaseRW _databaseRW = DatabaseRWFactory.createDatabaseRW();
-		lModel.databaseRW = _databaseRW;
+		//DatabaseRW _databaseRW = DatabaseRWFactory.createDatabaseRW();
+		//lModel.databaseRW = _databaseRW;
 		
 		lView.lController = lController;
 		lController.lModel = lModel;
@@ -194,13 +194,13 @@ public class Main extends Application
 		WarehouseView view = new WarehouseView();
 		WarehouseController controller = new WarehouseController();
 		WarehouseModel model = new WarehouseModel();
-		DatabaseRW databaseRW = DatabaseRWFactory.createDatabaseRW();
+		//DatabaseRW databaseRW = DatabaseRWFactory.createDatabaseRW();
 
 		// Link controller, model, and view and start view
 		view.controller = controller;
 		controller.model = model;
 		model.view = view;
-		model.databaseRW = databaseRW;
+		//model.databaseRW = databaseRW;
 		view.start(new Stage());
 
 		// create dependent views that need window info

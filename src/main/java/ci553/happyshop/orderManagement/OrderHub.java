@@ -87,9 +87,9 @@ public class OrderHub
 		Order theOrder = new Order(orderId, OrderState.Ordered, orderedDateTime, trolley);
 
 		//write order details to file for the orderId in orderedPath (ie. orders/ordered)
-		String orderDetail = theOrder.orderDetails();
+		//String orderDetail = theOrder.orderDetails();
 		Path path = orderedPath;
-		OrderFileManager.createOrderFile(path, orderId, orderDetail);
+		//OrderFileManager.createOrderFile(path, orderId, orderDetail);
 
 		orderMap.put(orderId, theOrder.getState()); //add the order to orderMap,state is Ordered initially
 		notifyOrderTrackers(); //notify OrderTrackers

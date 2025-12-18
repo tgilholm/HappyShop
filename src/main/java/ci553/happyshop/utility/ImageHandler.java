@@ -9,7 +9,7 @@ public final class ImageHandler
     private static String getImageURI(@NotNull Product product)
     {
         return StorageLocation.imageFolderPath
-                .resolve(product.getProductImageName())
+                .resolve(product.getImageName())
                 .toAbsolutePath()
                 .toUri()
                 .toString();

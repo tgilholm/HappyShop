@@ -75,17 +75,17 @@ public class Order
 		this.state = state;
 	}
 
-	/**
-	 * 	Arranges the order into a readable format containing:
-	 *  - Order metadata (ID, state, and time-stamps)
-	 *  - Product details included in the order
-	 */
-	public String orderDetails()
-	{
-		return String.format(
-				"Order ID: %s \n" + "State: %s \n" + "OrderedDateTime: %s \n" + "ProgressingDateTime: %s \n"
-						+ "CollectedDateTime: %s\n" + "Items:\n%s",
-				orderId, state, orderedDateTime, progressingDateTime, collectedDateTime,
-				ProductListFormatter.buildString(productList));
-	}
+//	/**
+//	 * 	Arranges the order into a readable format containing:
+//	 *  - Order metadata (ID, state, and time-stamps)
+//	 *  - Product details included in the order
+//	 */
+//	public String orderDetails()
+//	{
+//		return String.format(
+//				"Order ID: %s \n" + "State: %s \n" + "OrderedDateTime: %s \n" + "ProgressingDateTime: %s \n"
+//						+ "CollectedDateTime: %s\n" + "Items:\n%s",
+//				orderId, state, orderedDateTime, progressingDateTime, collectedDateTime,
+//				//ProductListFormatter.buildString(productList));
+//	}
 }

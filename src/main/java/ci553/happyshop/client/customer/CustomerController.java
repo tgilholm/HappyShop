@@ -14,6 +14,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
 
@@ -25,6 +28,7 @@ import java.net.URL;
 public class CustomerController
 {
     private final CustomerModel cusModel;
+    private final Logger logger = LogManager.getLogger();
 
     @FXML
     public TextField tfSearchBar;
@@ -71,7 +75,7 @@ public class CustomerController
             ivSearchIcon.setImage(image);
         } else
         {
-            System.err.println("Image not found: /images/search_icon.png");
+            logger.warn("Image not found: /images/search_icon.png");
         }
 
         // Set up category combobox
@@ -87,7 +91,11 @@ public class CustomerController
 
         // Automatically refresh when the filteredList changes
         cusModel.getSearchFilteredList().addListener((ListChangeListener<Product>) change -> bindProductList());
+
+        logger.info("Finished initializing controller");
     }
+
+
 
     /**
      * Refreshes the tilePane with the filtered product list. Defines the ButtonActionCallback
@@ -100,14 +108,16 @@ public class CustomerController
         ProductCardPane.ButtonActionCallback callback = new ProductCardPane.ButtonActionCallback()
         {
             @Override
-            public void onAddItem(Product product)
+            public void onAddItem(@NotNull Product product)
             {
+                logger.info("Adding {} to basket", product.getId());
                 // todo basket
             }
 
             @Override
-            public void onRemoveItem(Product product)
+            public void onRemoveItem(@NotNull Product product)
             {
+                logger.info("Removing {} from basket", product.getId());
 
             }
 
@@ -126,11 +136,11 @@ public class CustomerController
             // Add the click listener to select a product
             productCard.setOnMouseClicked(x ->
             {
+                logger.info("Product selected, id: {}", product.getId());
+
                 // Reset style to remove border on unselected cards
                 tpProducts.getChildren().forEach(node ->
-                {
-                    node.setStyle("-fx-cursor: hand");
-                });
+                        node.setStyle("-fx-cursor: hand"));
 
                 // Draw a border around the selected item
                 productCard.setStyle("-fx-border-color: lightgray; -fx-border-width: 1; -fx-cursor: hand");
@@ -145,8 +155,8 @@ public class CustomerController
     private void updateDetailPane(Product product)
     {
         ivDetailImage.setImage(ImageHandler.getImageFromProduct(product));
-        lbDetailName.setText(product.getProductDescription());
-        lbDetailID.setText("ID: " + product.getProductId());
+        lbDetailName.setText(product.getName());
+        lbDetailID.setText("ID: " + product.getId());
         lbDetailPrice.setText(String.format("£%.2f", product.getUnitPrice()));
 
         // Use the dynamic stock colour method from StockDisplayHelper

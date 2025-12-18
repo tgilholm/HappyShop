@@ -4,6 +4,8 @@ import ci553.happyshop.data.database.DatabaseConnection;
 import ci553.happyshop.data.database.DatabaseException;
 import ci553.happyshop.storageAccess.DatabaseRWFactory;
 import ci553.happyshop.utility.StorageLocation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -31,6 +33,8 @@ import java.sql.*;
 
 public class SetDatabase
 {
+    private static final Logger logger = LogManager.getLogger();
+
     // Create the database if it doesn't exist
     private static final String dbURL = DatabaseRWFactory.dbURL + ";create=true";
 
@@ -137,9 +141,6 @@ public class SetDatabase
      */
     private static void clearTables()
     {
-        System.out.println("Use better logging than this!");
-        System.out.println("Dropping all tables");
-
         // Drop tables in reverse to avoid foreign keys being null
         String[] tables = {"BasketTable", "ProductTable", "LoginTable", "CategoryTable"};
 
@@ -151,12 +152,12 @@ public class SetDatabase
                 try
                 {
                     statement.executeUpdate("DROP TABLE " + table.toUpperCase());
-                    System.out.println("Dropped table: " + table);
+                    logger.info("Dropped table {} ", table);
                 } catch (SQLException e)    // throws SQLException if the table doesn't exist
                 {
                     if ("42Y55".equals(e.getSQLState()))
                     { // 42Y55 = Table does not exist
-                        System.out.println(table + " does not exist");
+                        logger.info("{} does not exist", table);
                     }
                 }
             }
@@ -171,7 +172,6 @@ public class SetDatabase
      */
     private static void createTables()
     {
-        System.out.println("Creating tables");
 
         try (Connection connection = dbConnection.getConnection();
              Statement statement = connection.createStatement())
@@ -180,6 +180,7 @@ public class SetDatabase
             {
                 statement.executeUpdate(createTable);
             }
+            logger.info("Created tables");
 
         } catch (SQLException e)
         {
@@ -193,8 +194,6 @@ public class SetDatabase
      */
     private static void initializeTables()
     {
-        System.out.println("Populating tables");
-
         try (Connection connection = dbConnection.getConnection())
         {
             try (Statement statement = connection.createStatement())
@@ -207,6 +206,7 @@ public class SetDatabase
                     statement.addBatch(sql);    // Add to the statement
                 }
                 statement.executeBatch();       // Execute the statements
+                logger.info("Populated category table");
                 statement.clearBatch();         // Reset the statement
 
                 // Insert users
@@ -215,6 +215,7 @@ public class SetDatabase
                     statement.addBatch(sql);
                 }
                 statement.executeBatch();
+                logger.info("Populated user table");
                 statement.clearBatch();
 
                 // Insert products
@@ -223,15 +224,14 @@ public class SetDatabase
                     statement.addBatch(sql);
                 }
                 statement.executeBatch();
+                logger.info("Populated product table");
                 statement.clearBatch();
                 connection.commit(); // Commit the transaction if everything was successful
-
-                System.out.println("Table and data initialized successfully.");
 
             } catch (SQLException e)
             {
                 connection.rollback(); // Roll back the connection if there was an error
-                throw new DatabaseException("Failed to add transactions, rolling back", e);
+                logger.error("Failed to populate tables, rolling back {}", e.getMessage());
             }
         } catch (SQLException e)
         {
@@ -244,7 +244,6 @@ public class SetDatabase
     {
         if (Files.exists(folder))
         {
-
             try
             {
                 Files.walkFileTree(folder, new SimpleFileVisitor<>()
@@ -257,14 +256,15 @@ public class SetDatabase
                         return FileVisitResult.CONTINUE;
                     }
                 });
-                System.out.println("Deleted files in folder: " + folder);
+
+                logger.info("Deleted files in folder {}", folder);
             } catch (IOException e)
             {
                 throw new DatabaseException("Failed to delete files", e);
             }
         } else
         {
-            System.out.println("Folder " + folder + " does not exist");
+            logger.info("Folder {} does not exist", folder);
         }
     }
 
@@ -302,7 +302,7 @@ public class SetDatabase
                 }
             }
 
-            System.out.println("Copied files from: " + source + " → " + destination);
+            logger.info("Copied all files from {} to {}", source, destination);
         } catch (IOException e)
         {
             throw new DatabaseException("Failed to copy files from " + source + " to " + destination);

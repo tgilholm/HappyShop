@@ -72,54 +72,54 @@ public class WarehouseModel
 		updateView(UpdateForAction.BtnSearch);
 	}
 
-	void doDelete() throws SQLException, IOException
-	{
-		System.out.println("delete gets called in model");
-		Product pro = view.obrLvProducts.getSelectionModel().getSelectedItem();
-		if (pro != null)
-		{
-			theSelectedPro = pro;
-			productList.remove(theSelectedPro); //remove the product from product List
+//	void doDelete() throws SQLException, IOException
+//	{
+//		System.out.println("delete gets called in model");
+//		Product pro = view.obrLvProducts.getSelectionModel().getSelectedItem();
+//		if (pro != null)
+//		{
+//			theSelectedPro = pro;
+//			productList.remove(theSelectedPro); //remove the product from product List
+//
+//			//update databse: delete the product from database
+//			databaseRW.deleteProduct(theSelectedPro.getProductId());
+//
+//			//delete the image from imageFolder "images/"
+//			String imageName = theSelectedPro.getProductImageName(); //eg 0011.jpg;
+//			ImageFileManager.deleteImageFile(StorageLocation.imageFolder, imageName);
+//
+//			updateView(UpdateForAction.BtnDelete);
+//			theSelectedPro = null;
+//		} else
+//		{
+//			System.out.println("No product was selected");
+//		}
+//	}
 
-			//update databse: delete the product from database
-			databaseRW.deleteProduct(theSelectedPro.getProductId());
-
-			//delete the image from imageFolder "images/"
-			String imageName = theSelectedPro.getProductImageName(); //eg 0011.jpg;
-			ImageFileManager.deleteImageFile(StorageLocation.imageFolder, imageName);
-
-			updateView(UpdateForAction.BtnDelete);
-			theSelectedPro = null;
-		} else
-		{
-			System.out.println("No product was selected");
-		}
-	}
-
-	void doEdit()
-	{
-		System.out.println("Edit gets called in model");
-		Product pro = view.obrLvProducts.getSelectionModel().getSelectedItem();
-		if (pro != null)
-		{
-			theSelectedPro = pro;
-			displayIdEdit = theSelectedPro.getProductId();
-			displayPriceEdit = String.format("%.2f", theSelectedPro.getUnitPrice());
-			displayStockEdit = String.valueOf(theSelectedPro.getStockQuantity());
-			displayDescriptionEdit = theSelectedPro.getProductDescription();
-
-			String relativeImageUri = StorageLocation.imageFolder + theSelectedPro.getProductImageName();
-			Path imageFullPath = Paths.get(relativeImageUri).toAbsolutePath();
-			displayImageUrlEdit = imageFullPath.toUri().toString();//build the full path Uri
-
-			System.out.println("get new pro image name: " + displayImageUrlEdit);
-			updateView(UpdateForAction.BtnEdit);
-		} else
-		{
-			System.out.println("No product was selected");
-		}
-
-	}
+//	void doEdit()
+//	{
+//		System.out.println("Edit gets called in model");
+//		Product pro = view.obrLvProducts.getSelectionModel().getSelectedItem();
+//		if (pro != null)
+//		{
+//			theSelectedPro = pro;
+//			displayIdEdit = theSelectedPro.getProductId();
+//			displayPriceEdit = String.format("%.2f", theSelectedPro.getUnitPrice());
+//			displayStockEdit = String.valueOf(theSelectedPro.getStockQuantity());
+//			displayDescriptionEdit = theSelectedPro.getProductDescription();
+//
+//			String relativeImageUri = StorageLocation.imageFolder + theSelectedPro.getProductImageName();
+//			Path imageFullPath = Paths.get(relativeImageUri).toAbsolutePath();
+//			displayImageUrlEdit = imageFullPath.toUri().toString();//build the full path Uri
+//
+//			System.out.println("get new pro image name: " + displayImageUrlEdit);
+//			updateView(UpdateForAction.BtnEdit);
+//		} else
+//		{
+//			System.out.println("No product was selected");
+//		}
+//
+//	}
 
 	void doCancel()
 	{
@@ -135,59 +135,59 @@ public class WarehouseModel
 		}
 	}
 
-	void doSummit() throws SQLException, IOException
-	{
-		if (view.theProFormMode.equals("EDIT"))
-		{
-			doSubmitEdit();
-		}
-		if (view.theProFormMode.equals("NEW"))
-		{
-			doSubmitNew();
-		}
-	}
+//	void doSummit() throws SQLException, IOException
+//	{
+//		if (view.theProFormMode.equals("EDIT"))
+//		{
+//			doSubmitEdit();
+//		}
+//		if (view.theProFormMode.equals("NEW"))
+//		{
+//			doSubmitNew();
+//		}
+//	}
 
-	private void doSubmitEdit() throws IOException, SQLException
-	{
-		System.out.println("ok edit is called");
-		if (theSelectedPro != null)
-		{
-			String id = theSelectedPro.getProductId();
-			System.out.println("theSelectedPro " + id); //debug purpose
-			String imageName = theSelectedPro.getProductImageName();
-
-			String textPrice = view.tfPriceEdit.getText().trim();
-			String textStock = view.tfStockEdit.getText().trim();
-			String description = view.taDescriptionEdit.getText().trim();
-
-			if (view.isUserSelectedImageEdit == true)
-			{  //if the user changed image
-				ImageFileManager.deleteImageFile(StorageLocation.imageFolder, imageName); //delete the old image
-				//copy the user selected image to project image folder
-				//we use productId as image name, but we need to get its extension from the user selected image
-				String newImageNameWithExtension = ImageFileManager.copyFileToDestination(view.userSelectedImageUriEdit,
-						StorageLocation.imageFolder, id);
-				imageName = newImageNameWithExtension;
-			}
-
-			if (validateInputEditChild(textPrice, textStock, description) == false)
-			{
-				updateView(UpdateForAction.ShowInputErrorMsg);
-			} else
-			{
-				double price = Double.parseDouble(textPrice);
-				int stock = Integer.parseInt(textStock);
-				//update datbase
-				databaseRW.updateProduct(id, description, price, imageName, stock);
-
-				updateView(UpdateForAction.BtnSummitEdit);
-				theSelectedPro = null;
-			}
-		} else
-		{
-			System.out.println("No Product Selected");
-		}
-	}
+//	private void doSubmitEdit() throws IOException, SQLException
+//	{
+//		System.out.println("ok edit is called");
+//		if (theSelectedPro != null)
+//		{
+//			String id = theSelectedPro.getProductId();
+//			System.out.println("theSelectedPro " + id); //debug purpose
+//			String imageName = theSelectedPro.getProductImageName();
+//
+//			String textPrice = view.tfPriceEdit.getText().trim();
+//			String textStock = view.tfStockEdit.getText().trim();
+//			String description = view.taDescriptionEdit.getText().trim();
+//
+//			if (view.isUserSelectedImageEdit == true)
+//			{  //if the user changed image
+//				ImageFileManager.deleteImageFile(StorageLocation.imageFolder, imageName); //delete the old image
+//				//copy the user selected image to project image folder
+//				//we use productId as image name, but we need to get its extension from the user selected image
+//				String newImageNameWithExtension = ImageFileManager.copyFileToDestination(view.userSelectedImageUriEdit,
+//						StorageLocation.imageFolder, id);
+//				imageName = newImageNameWithExtension;
+//			}
+//
+//			if (validateInputEditChild(textPrice, textStock, description) == false)
+//			{
+//				updateView(UpdateForAction.ShowInputErrorMsg);
+//			} else
+//			{
+//				double price = Double.parseDouble(textPrice);
+//				int stock = Integer.parseInt(textStock);
+//				//update datbase
+//				databaseRW.updateProduct(id, description, price, imageName, stock);
+//
+//				updateView(UpdateForAction.BtnSummitEdit);
+//				theSelectedPro = null;
+//			}
+//		} else
+//		{
+//			System.out.println("No Product Selected");
+//		}
+//	}
 
 	void doChangeStockBy(String addOrSub) throws SQLException
 	{
@@ -404,7 +404,7 @@ public class WarehouseModel
 			break;
 		case UpdateForAction.BtnDelete:
 			view.updateObservableProductList(productList); //update search page in view
-			showManageStockHistory(ManageProductType.Deleted);
+			//showManageStockHistory(ManageProductType.Deleted);
 			view.resetEditChild();
 			alertSimulator.closeAlertSimulatorWindow();//close AlertSimulatorWindow if exists
 			break;
@@ -420,7 +420,7 @@ public class WarehouseModel
 			break;
 
 		case UpdateForAction.BtnSummitEdit:
-			showManageStockHistory(ManageProductType.Edited);
+			//showManageStockHistory(ManageProductType.Edited);
 			view.resetEditChild();
 			alertSimulator.closeAlertSimulatorWindow();//close AlertSimulatorWindow if exists
 			break;
@@ -431,7 +431,7 @@ public class WarehouseModel
 			break;
 
 		case UpdateForAction.BtnSummitNew:
-			showManageStockHistory(ManageProductType.New);
+			//showManageStockHistory(ManageProductType.New);
 			view.resetNewProChild();
 			alertSimulator.closeAlertSimulatorWindow();//close AlertSimulatorWindow if exists
 			break;
@@ -441,24 +441,24 @@ public class WarehouseModel
 		}
 	}
 
-	private void showManageStockHistory(ManageProductType type)
-	{
-		String dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-		String record = "";
-		switch (type)
-		{
-		case ManageProductType.Edited:
-			record = theSelectedPro.getProductId() + " edited successfully, " + dateTime;
-			break;
-		case ManageProductType.Deleted:
-			record = theSelectedPro.getProductId() + " deleted successfully, " + dateTime;
-			break;
-		case ManageProductType.New:
-			record = theNewProId + " added to database successfully, " + dateTime;
-		}
-		if (!record.equals(""))
-			displayManageHistory.add(record);
-		historyWindow.showManageHistory(displayManageHistory);
-	}
+//	private void showManageStockHistory(ManageProductType type)
+//	{
+//		String dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+//		String record = "";
+//		switch (type)
+//		{
+//		case ManageProductType.Edited:
+//			record = theSelectedPro.getProductId() + " edited successfully, " + dateTime;
+//			break;
+//		case ManageProductType.Deleted:
+//			record = theSelectedPro.getProductId() + " deleted successfully, " + dateTime;
+//			break;
+//		case ManageProductType.New:
+//			record = theNewProId + " added to database successfully, " + dateTime;
+//		}
+//		if (!record.equals(""))
+//			displayManageHistory.add(record);
+//		historyWindow.showManageHistory(displayManageHistory);
+//	}
 
 }

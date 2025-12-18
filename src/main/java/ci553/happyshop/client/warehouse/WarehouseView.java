@@ -225,23 +225,23 @@ public class WarehouseView
                     setGraphic(null);
                     System.out.println("setCellFactory - empty item");
                 } else {
-                    String imageName = product.getProductImageName(); // Get image name (e.g. "0001.jpg")
-                    String relativeImageUrl = StorageLocation.imageFolder + imageName;
+                    //String imageName = product.getProductImageName(); // Get image name (e.g. "0001.jpg")
+                    //String relativeImageUrl = StorageLocation.imageFolder + imageName;
                     // Get the full absolute path to the image
-                    Path imageFullPath = Paths.get(relativeImageUrl).toAbsolutePath();
-                    String imageFullUri = imageFullPath.toUri().toString();// Build the full image Uri
+                    //Path imageFullPath = Paths.get(relativeImageUrl).toAbsolutePath();
+                    //String imageFullUri = imageFullPath.toUri().toString();// Build the full image Uri
 
                     ImageView ivPro;
                     try {
-                        ivPro = new ImageView(new Image(imageFullUri, 50, 45, true, true)); // Attempt to load the product image
+                        //ivPro = new ImageView(new Image(imageFullUri, 50, 45, true, true)); // Attempt to load the product image
                     } catch (Exception e) {
                         // If loading fails, use a default image directly from the resources folder
                         ivPro = new ImageView(new Image("images/imageHolder.jpg", 50, 45, true, true)); // Directly load from resources
                     }
 
                     Label laProToString = new Label(product.toString()); // Create a label for product details
-                    HBox hbox = new HBox(10, ivPro, laProToString); // Put ImageView and label in a horizontal layout
-                    setGraphic(hbox);  // Set the whole row content
+                    //HBox hbox = new HBox(10, ivPro, laProToString); // Put ImageView and label in a horizontal layout
+                    //setGraphic(hbox);  // Set the whole row content
                 }
             }
         });

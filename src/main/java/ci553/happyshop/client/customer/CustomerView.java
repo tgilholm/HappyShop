@@ -8,6 +8,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,6 +26,7 @@ import java.net.URL;
 
 public class CustomerView
 {
+    private final Logger logger = LogManager.getLogger();
     private final CustomerController cusController;
 
     public CustomerView(CustomerController cusController)
@@ -32,7 +36,7 @@ public class CustomerView
 
     // Holds a reference to this CustomerView window for future access and
     // management
-    // (e.g., positioning the removeProductNotifier when needed).
+    // (e.g. positioning the removeProductNotifier when needed).
     private Stage viewWindow;
 
 
@@ -56,6 +60,7 @@ public class CustomerView
         try
         {
             gridPane = loader.load();
+            logger.info("Loaded FXML file {}", fxmlURL);
         } catch (IOException e)
         {
             throw new RuntimeException("Failed to load FXML: " + e.getMessage());
@@ -71,9 +76,10 @@ public class CustomerView
         if (resource != null)
         {
             scene.getStylesheets().add(resource.toExternalForm());
+            logger.info("Loaded CSS file {}", resource);
         } else
         {
-            throw new IllegalStateException("Failed to load CSS");
+            logger.warn("Failed to load CSS");
         }
 
         window.setScene(scene);
@@ -90,7 +96,7 @@ public class CustomerView
      * @param fxmlURL the location of the fxml file to load
      * @return an FXML loader set to the location specified by <code>fxmlURL</code>
      */
-    private FXMLLoader getFxmlLoader(URL fxmlURL)
+    private @NotNull FXMLLoader getFxmlLoader(URL fxmlURL)
     {
         FXMLLoader loader = new FXMLLoader(fxmlURL);        // Loads the FXML
 

@@ -33,12 +33,12 @@ public class WarehouseClient extends Application
 		WarehouseView view = new WarehouseView();
 		WarehouseController controller = new WarehouseController();
 		WarehouseModel model = new WarehouseModel();
-		DatabaseRW databaseRW = DatabaseRWFactory.createDatabaseRW();
+		// databaseRW = DatabaseRWFactory.createDatabaseRW();
 
 		view.controller = controller;
 		controller.model = model;
 		model.view = view;
-		model.databaseRW = databaseRW;
+		//model.databaseRW = databaseRW;
 		view.start(window);
 
 		HistoryWindow historyWindow = new HistoryWindow();

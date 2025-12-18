@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
@@ -66,13 +67,13 @@ public class ProductCardPane extends VBox
         updateProduct(product, callback);
     }
 
-    public void updateProduct(@NotNull Product product, ButtonActionCallback callback)
+    public void updateProduct(@NotNull Product product, @NotNull ButtonActionCallback callback)
     {
         // Set text fields
-        lbName.setText(product.getProductDescription());
+        lbName.setText(product.getName());
         lbPrice.setText(String.format("£%.2f", product.getUnitPrice()));
 
-        // Set product image
+        // Set Product Image
         ivImage.setImage(ImageHandler.getImageFromProduct(product));
 
         // The colour of lbStock changes depending on the quantity remaining

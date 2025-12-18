@@ -15,10 +15,10 @@ public class WarehouseController
 			model.doSearch();
 			break;
 		case "Edit":
-			model.doEdit();
+			//model.doEdit();
 			break;
 		case "Delete":
-			model.doDelete();
+			//model.doDelete();
 			break;
 		case "➕":
 			model.doChangeStockBy("add");
@@ -27,7 +27,7 @@ public class WarehouseController
 			model.doChangeStockBy("sub");
 			break;
 		case "Submit":
-			model.doSummit();
+			//model.doSummit();
 			break;
 		case "Cancel":  // clear the editChild
 			model.doCancel();
