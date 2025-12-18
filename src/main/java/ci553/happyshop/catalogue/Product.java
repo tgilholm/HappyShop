@@ -1,112 +1,99 @@
 package ci553.happyshop.catalogue;
 
-/**
- * The Product class holds information about each product:
- *
- * Fields:
- * - productId: Unique identifier for the product (e.g. 0001).
- * - description: Text description of the product.
- * - unitPrice: Price per unit
- * - orderedQuantity: Quantity requested.
- * - stockQuantity: Quantity currently available in stock.
- */
+import org.jetbrains.annotations.NotNull;
 
+/**
+ * Holds information about a product. Implements comparable to define methods for
+ * comparing products to one another.
+ */
 public class Product implements Comparable<Product>
 {
-	private String proId;
-	private String proDescription;
-	private String proImageName;
-	private double unitPrice;
-	private int orderedQuantity = 1; //The quantity of this product in the customer's order.
-	private int stockQuantity;
+    private final long id;
+    private final String name;
+    private final String imageName;
+    private final double unitPrice;
+    private final int stockQuantity;
+    private final long categoryID;
 
-	/**
-	 * Constructor used by DatabaseRW to make a product by searching ResultSet
-	 * @param id: Product ID
-	 * @param des: Description of product
-	 * @param image: Filename & file-type
-	 * @param aPrice: The price of the product
-	 * @param stockQuantity: The Quantity of the product in stock
-	 */
-	public Product(String id, String des, String image, double aPrice, int stockQuantity)
-	{
-		proId = id;
-		proDescription = des;
-		proImageName = image;
-		unitPrice = aPrice;
-		this.stockQuantity = stockQuantity;
-	}
 
-	// Getter methods
-	public String getProductId()
-	{
-		return proId;
-	}
+    /**
+     * Constructor to create a new <code>Product</code> object
+     *
+     * @param id            <code>long</code> unique product id
+     * @param name          <code>String</code> product name
+     * @param imageName     <code>String</code> image filename
+     * @param unitPrice     <code>double</code> price per product
+     * @param stockQuantity <code>int</code> number of products in stock
+     * @param categoryID    <code>long</code> category foreign key
+     */
+    public Product(long id, String name, String imageName, double unitPrice, int stockQuantity, long categoryID)
+    {
+        this.id = id;
+        this.name = name;
+        this.imageName = imageName;
+        this.unitPrice = unitPrice;
+        this.stockQuantity = stockQuantity;
+        this.categoryID = categoryID;
+    }
 
-	public String getProductDescription()
-	{
-		return proDescription;
-	}
+    // Getter methods
+    public long getId()
+    {
+        return id;
+    }
 
-	public String getProductImageName()
-	{
-		return proImageName;
-	}
+    public String getName()
+    {
+        return name;
+    }
 
-	public double getUnitPrice()
-	{
-		return unitPrice;
-	}
+    public String getImageName()
+    {
+        return imageName;
+    }
 
-	public int getOrderedQuantity()
-	{
-		return orderedQuantity;
-	}
+    public double getUnitPrice()
+    {
+        return unitPrice;
+    }
 
-	public int getStockQuantity()
-	{
-		return stockQuantity;
-	}
+    public int getStockQuantity()
+    {
+        return stockQuantity;
+    }
 
-	// Sets the quantity ordered
-	public void setOrderedQuantity(int _orderedQuantity)
-	{
-		this.orderedQuantity = _orderedQuantity;
-	}
+    public long getCategoryId()
+    {
+        return categoryID;
+    }
 
-	// Compares this product by ID with any other product
-	@Override
-	public int compareTo(Product otherProduct)
-	{
-		return this.proId.compareTo(otherProduct.proId); // Sort by proID alphabetically (ascending order);
-	}
 
-	@Override
-	// Creates a formatted string containing ID, price (2 d.p.), stock amount, and description
-	// Used in the Warehouse search page to display searched product information
-	public String toString()
-	{
-		String productInfo = String.format("Id: %s, £%.2f/uint, stock: %d \n%s", proId, unitPrice, stockQuantity,
-				proDescription);
-		return productInfo;
-	}
+    /**
+     * Compares this <code>Product</code> object with another
+     * @param otherProduct the object to be compared.
+     * @return -1 if less than the other product, 1 if greater than it, 0 if equal.
+     */
+    @Override
+    public int compareTo(@NotNull Product otherProduct)
+    {
+        if (this.getId() > otherProduct.getId())
+        {
+			return 1;       // Return 1 if greater than otherProduct
+        }
+        else if (this.getId() < otherProduct.getId())
+        {
+            return -1;      // Return -1 if less than otherProduct
+        }
+        return 0; // Return 0 if equal
+    }
 
-	/** alternative constructors retained for possible future use.
-	 *
-	public Product(String id, String des, double aPrice, int orderedQuantity, int stockQuantity) {
-	    proId = id;
-	    proDescription = des;
-	    unitPrice = aPrice;
-	    this.orderedQuantity = orderedQuantity;
-	    this.stockQuantity = stockQuantity;
-	}
-	
-	public Product(String id, String des, double aPrice, int orderedQuantity) {
-	    proId = id;
-	    proDescription = des;
-	    unitPrice = aPrice;
-	    this.orderedQuantity = orderedQuantity;
-	}
-	 */
+    @Override
+
+    public String toString()
+    {
+        return String.format("Id: %s, £%.2f/uint, stock: %d \n%s", id, unitPrice, stockQuantity,
+                name);
+    }
+
 
 }

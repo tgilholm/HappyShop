@@ -26,7 +26,7 @@ public record UIStyle()
 {
 
 	// Customer window parameters changed to fit in new elements
-	public static final int customerWinWidth = 1200;
+	public static final int customerWinWidth = 1300;
 	public static final int customerWinHeight = 600;
 	public static final int removeProNotifierWinWidth = customerWinWidth / 2 + 160;
 	public static final int removeProNotifierWinHeight = 230;
