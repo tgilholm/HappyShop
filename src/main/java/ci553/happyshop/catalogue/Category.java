@@ -22,4 +22,19 @@ public class Category
         this.name = name;
         this.description = description;
     }
+
+    public long getId()
+    {
+        return id;
+    }
+
+    public String getDescription()
+    {
+        return description;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
 }

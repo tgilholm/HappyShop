@@ -2,6 +2,7 @@ package ci553.happyshop.client.customer;
 
 import ci553.happyshop.catalogue.Order;
 import ci553.happyshop.catalogue.Product;
+import ci553.happyshop.catalogue.ProductWithCategory;
 import ci553.happyshop.data.repository.ProductRepository;
 import ci553.happyshop.data.repository.RepositoryFactory;
 import ci553.happyshop.storageAccess.DatabaseRW;
@@ -45,9 +46,9 @@ public class CustomerModel
     }
 
 
-    private final ObservableList<Product> productList = FXCollections.observableArrayList();        // Observable product list
-    private FilteredList<Product> searchFilteredList;                                                // Filtered product list
-    private FilteredList<Product> categoryFilteredList;                                             // Product list filtered by category
+    private final ObservableList<ProductWithCategory> productWithCategoryList = FXCollections.observableArrayList();        // Observable product list
+    private FilteredList<ProductWithCategory> searchFilteredList;                                                // Filtered product list
+    private FilteredList<ProductWithCategory> categoryFilteredList;                                             // Product list filtered by category
 
 
     private Product theProduct = null; // product found from search
@@ -67,9 +68,9 @@ public class CustomerModel
      *
      * @return <code>productList</code>
      */
-    public ObservableList<Product> getProducts()
+    public ObservableList<ProductWithCategory> getProducts()
     {
-        return productList;
+        return productWithCategoryList;
     }
 
     /**
@@ -78,50 +79,47 @@ public class CustomerModel
     public void loadProducts()
     {
         // Use setAll to update the productList
-        productList.setAll(productRepository.getAll());
+        productWithCategoryList.setAll(productRepository.getAllWithCategories());
 
-        logger.info("Retrieved {} products from ProductTable", productList.size());
+        logger.info("Retrieved {} products with categories from ProductTable", productWithCategoryList.size());
     }
 
 
     /**
      * Gets the list of products matching the specified category. Defaults to the base <code>productList</code>.
-     * Creates a new <code>filteredList</code> if <code>categoryFilteredList</code> doesn't already exist, returns the existing list
+     * Wraps around <code>productWithCategoryList</code> if <code>categoryFilteredList</code> doesn't already exist, returns the existing list
      * otherwise.
      *
      * @return the <code>FilteredList</code> of products matching the category filter
      */
-    public FilteredList<Product> getCategoryFilteredList()
+    public FilteredList<ProductWithCategory> getCategoryFilteredList()
     {
         // Defaults to "no category"
         if (categoryFilteredList == null)
         {
-            // productList is passed to the filteredList
-            categoryFilteredList = new FilteredList<>(productList, p -> true);
+            // Gets the
+            categoryFilteredList = new FilteredList<>(productWithCategoryList, p -> true);
         }
         return categoryFilteredList;
     }
 
     /**
      * Gets the (already filtered by category) list of products matching the search filter.
-     * Searches in product description and ID. Creates a new <code>filteredList</code> if
-     * <code>searcFilteredList</code> doesn't already exist, returns the existing list otherwise.
+     * Searches in product description and ID. Gets the list of products from <code>categoryFilteredList</code>
+     * if this list doesn't exist, otherwise returns the existing list.
      *
      * @return the <code>FilteredList</code> of products matching the filter
      */
-    public FilteredList<Product> getSearchFilteredList()
+    public FilteredList<ProductWithCategory> getSearchFilteredList()
     {
-        // Creates filteredProducts if it doesn't exist
+        // Creates searchFilteredList if it doesn't exist
         if (searchFilteredList == null)
         {
-            // categoryFilteredList is passed
-            searchFilteredList = new FilteredList<>(productList, p -> true);
+            // Wrap around the categoryFilteredList if this list doesn't exist yet
+            searchFilteredList = new FilteredList<>(getCategoryFilteredList(), p -> true);
         }
         return searchFilteredList;
     }
-
-    // todo category searching
-    //public void setCategoryFilter()
 
     /**
      * Updates the predicate of the searchFilteredList to search by product ID or description and
@@ -131,8 +129,8 @@ public class CustomerModel
      */
     public void setSearchFilter(String searchFilter)
     {
-        // Update the predicate of filteredList
-        searchFilteredList.setPredicate(product ->
+        // Update the predicate of searchFilteredList
+        searchFilteredList.setPredicate(productWithCategory ->
         {
             if (searchFilter == null)
             {
@@ -141,8 +139,31 @@ public class CustomerModel
             {
                 // Return true if the ID or description match the search filter
                 String lowercaseSearchFilter = searchFilter.toLowerCase();
-                return String.valueOf(product.getId()).contains(searchFilter)
-                        || product.getName().toLowerCase().contains(searchFilter);
+                return String.valueOf(productWithCategory.product().getId()).contains(searchFilter)
+                        || productWithCategory.product().getName().toLowerCase().contains(searchFilter);
+            }
+        });
+    }
+
+    /**
+     * Updates the predicate of the categoryFilteredList to search by categoryName and
+     * return the products that match the predicate <code>categoryFilter</code>.
+     *
+     * @param categoryFilter a <code>String</code> literal matching the category name
+     */
+    public void setCategoryFilter(String categoryFilter)
+    {
+        // Update the predicate of categoryFilteredList
+        categoryFilteredList.setPredicate(productWithCategory ->
+        {
+            if (categoryFilter == null)
+            {
+                return true;
+            } else
+            {
+                // Return true if the category name matches the search filter
+                String lowercaseFilter = categoryFilter.toLowerCase().trim();
+                return productWithCategory.category().getName().toLowerCase().equals(lowercaseFilter);
             }
         });
     }
