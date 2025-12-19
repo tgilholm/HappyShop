@@ -1,6 +1,5 @@
 package ci553.happyshop.client.customer;
 
-import ci553.happyshop.catalogue.Customer;
 import ci553.happyshop.data.repository.BasketRepository;
 import ci553.happyshop.data.repository.CategoryRepository;
 import ci553.happyshop.data.repository.ProductRepository;

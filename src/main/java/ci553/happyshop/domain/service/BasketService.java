@@ -1,6 +1,4 @@
-package ci553.happyshop.service;
-
-import ci553.happyshop.catalogue.Product;
+package ci553.happyshop.domain.service;
 
 /**
  * Declares methods shared by Models for interacting with the BasketRepository

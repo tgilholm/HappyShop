@@ -6,19 +6,18 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
- * Defines the CRUD operations to be implemented by more specific repositories.
+ * Defines base CRUD operations to be implemented by more specific repositories.
+ * Does not implement <code>getAll</code> methods.
  * @param <Type> Entity type (Product, Category, User, etc.)
  * @param <ID> Primary key type (String, int, etc.)
  */
 public interface CommonRepository<Type, ID>
 {
-
     /**
-     * Retrieve all entities of the type <code>Type</code>
-     * @return List of all entities
+     * Creates a new entity
+     * @param entity the entity to insert
      */
-    List<Type> getAll();
-
+    void insert(@NotNull Type entity);
 
     /**
      * Retrieves an entity by its ID
@@ -27,13 +26,6 @@ public interface CommonRepository<Type, ID>
      */
     @Nullable
     Type getById(@NotNull ID id);
-
-
-    /**
-     * Inserts a new entity
-     * @param entity the entity to insert
-     */
-    void insert(@NotNull Type entity);
 
 
     /**

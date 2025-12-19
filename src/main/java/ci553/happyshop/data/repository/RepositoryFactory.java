@@ -1,10 +1,6 @@
 package ci553.happyshop.data.repository;
 
 import ci553.happyshop.data.database.DatabaseConnection;
-import ci553.happyshop.data.repository.impl.AuthRepositoryImpl;
-import ci553.happyshop.data.repository.impl.BasketRepositoryImpl;
-import ci553.happyshop.data.repository.impl.CategoryRepositoryImpl;
-import ci553.happyshop.data.repository.impl.ProductRepositoryImpl;
 
 /**
  * Factory for creating singleton repository instances.
@@ -30,7 +26,7 @@ public class RepositoryFactory
     public static ProductRepository getProductRepository() {
         if (productRepository == null)
         {
-            productRepository = new ProductRepositoryImpl(dbConnection);
+            productRepository = new ProductRepository(dbConnection);
         }
         return productRepository;
     }

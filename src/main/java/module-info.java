@@ -22,6 +22,7 @@ module ci553.happyshop
 	opens ci553.happyshop.client.emergency;
 
 	exports ci553.happyshop;
+	exports ci553.happyshop.data.database;
 	exports ci553.happyshop.data.repository;
 	exports ci553.happyshop.client;
 	exports ci553.happyshop.utility;

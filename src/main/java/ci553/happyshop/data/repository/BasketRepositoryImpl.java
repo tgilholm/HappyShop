@@ -1,12 +1,9 @@
-package ci553.happyshop.data.repository.impl;
+package ci553.happyshop.data.repository;
 
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.data.database.DatabaseConnection;
 import ci553.happyshop.data.database.DatabaseException;
-import ci553.happyshop.data.repository.BasketRepository;
-import ci553.happyshop.data.repository.ProductRepository;
-import ci553.happyshop.data.repository.RepositoryFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;

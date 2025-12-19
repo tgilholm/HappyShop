@@ -1,10 +1,9 @@
-package ci553.happyshop.data.repository.impl;
+package ci553.happyshop.data.repository;
 
 
 import ci553.happyshop.catalogue.Customer;
 import ci553.happyshop.data.database.DatabaseConnection;
 import ci553.happyshop.data.database.DatabaseException;
-import ci553.happyshop.data.repository.AuthRepository;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

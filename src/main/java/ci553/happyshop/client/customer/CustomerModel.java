@@ -57,6 +57,7 @@ public class CustomerModel
 
     private String imageName = "images/imageHolder.jpg";                // Image to show in product preview (Search Page)
 
+
     // todo preview image in detail pane with placeholder image
     // todo placeholder image for image not found cases
     // todo observe quantity remaining in product cards or update manually
