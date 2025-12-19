@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.geometry.Insets?>
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      prefHeight="50.0" spacing="5">
+
+    <padding>
+        <Insets top="5" right="5" bottom="5" left="5"/>
+    </padding>
+
+    <!-- Product icon -->
+    <!-- A stackPane provides padding around the edge to force a maximum size -->
+    <StackPane minWidth="50" maxWidth="50" minHeight="50" maxHeight="50">
+        <ImageView fx:id="ivImage" fitHeight="40" fitWidth="40" preserveRatio="true"/>
+    </StackPane>
+
+    <!-- Product Info - Name displayed above category and total price-->
+    <VBox spacing="4" HBox.hgrow="ALWAYS">
+        <Label fx:id="lbName" style="-fx-font-weight: bold;"/>
+
+        <HBox spacing="8">
+            <!-- Product Category -->
+            <Label fx:id="lbCategory" style="-fx-font-weight: bold; -fx-text-fill: #666666"/>
+
+            <!-- Total Price -->
+            <Label fx:id="lbPrice"/>
+        </HBox>
+
+    </VBox>
+
+
+    <!-- Add/Remove Buttons-->
+    <HBox spacing="5" alignment="CENTER_RIGHT">
+        <Button fx:id="btnRemove" text="-" minWidth="30" maxWidth="30"/>
+        <Label fx:id="lbBasketQty" text="0" minWidth="25" alignment="CENTER"/>
+        <Button fx:id="btnAdd" text="+" minWidth="30" maxWidth="30"/>
+    </HBox>
+
+</HBox>

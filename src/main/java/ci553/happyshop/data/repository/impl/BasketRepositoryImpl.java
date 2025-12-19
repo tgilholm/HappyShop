@@ -1,6 +1,5 @@
 package ci553.happyshop.data.repository.impl;
 
-import ci553.happyshop.catalogue.BasketItem;
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.data.database.DatabaseConnection;
@@ -10,7 +9,6 @@ import ci553.happyshop.data.repository.ProductRepository;
 import ci553.happyshop.data.repository.RepositoryFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
@@ -265,22 +263,5 @@ public class BasketRepositoryImpl implements BasketRepository
         {
             throw new DatabaseException("Failed to empty basket", e);
         }
-    }
-
-
-    /**
-     * Helper method to convert a <code>ResultSet</code> row to a <code>BasketItem</code> object
-     *
-     * @param resultSet the result set to parse
-     * @return a <code>BasketItem</code> object
-     * @throws SQLException if the <code>ResultSet</code> could not be parsed
-     */
-    public BasketItem mapToBasketItem(@NotNull ResultSet resultSet) throws SQLException
-    { // customerID, productID, quantity
-        return new BasketItem(
-                resultSet.getLong(1),
-                resultSet.getLong(2),
-                resultSet.getInt(3)
-        );
     }
 }
