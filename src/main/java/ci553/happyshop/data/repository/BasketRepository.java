@@ -1,8 +1,6 @@
 package ci553.happyshop.data.repository;
 
-import ci553.happyshop.catalogue.BasketItem;
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;

@@ -26,18 +26,7 @@ public class ProductCardPane extends VBox
     @FXML
     private Button btnAdd, btnRemove;
 
-    /**
-     * Declares methods called by buttons on each card.
-     * The behaviour for each of these methods must be determined by any class using a ProductCardPane
-     */
-    public interface ButtonActionCallback
-    {
-        void onAddItem(Product product);        // Add an item to the basket
 
-        void onRemoveItem(Product product);     // Remove the item from the basket
-
-        int getBasketQuantity(Product product); // Get the amount of the item in the basket
-    }
 
     /**
      * Constructs a new <code>ProductCardPane</code> from a specified <code>Product</code> and a <code>callback</code>

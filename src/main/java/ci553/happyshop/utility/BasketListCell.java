@@ -25,9 +25,12 @@ public class BasketListCell extends ListCell<BasketItemWithDetails>
     private Button btnAdd, btnRemove;
 
     private final Node graphic;   // Graphic node for each cell
+    private final ButtonActionCallback callback;
 
-    public BasketListCell()
+    public BasketListCell(ButtonActionCallback callback)
     {
+        this.callback = callback;
+
         // Load FXMl
         try
         {

@@ -3,6 +3,7 @@ package ci553.happyshop.client.customer;
 import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
+import ci553.happyshop.utility.ButtonActionCallback;
 import ci553.happyshop.utility.ImageHandler;
 import ci553.happyshop.utility.ProductCardPane;
 import ci553.happyshop.utility.StockDisplayHelper;
@@ -132,7 +133,7 @@ public class CustomerController
         tpProducts.getChildren().clear();            // Load products from the database
 
         // Define the callback for the ProductCardPane
-        ProductCardPane.ButtonActionCallback callback = new ProductCardPane.ButtonActionCallback()
+        ButtonActionCallback callback = new ButtonActionCallback()
         {
             @Override
             public void onAddItem(@NotNull Product product)
@@ -204,7 +205,7 @@ public class CustomerController
      * @return a <code>VBox</code> containing the card layout
      */
     @Contract("_, _ -> new")
-    private @NotNull VBox createProductCard(Product product, ProductCardPane.ButtonActionCallback callback)
+    private @NotNull VBox createProductCard(Product product, ButtonActionCallback callback)
     {
         return new ProductCardPane(product, callback);
     }
