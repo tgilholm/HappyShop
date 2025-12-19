@@ -9,9 +9,9 @@ public class BasketItem
     private final BasketItemID id;      // Composite primary key
     private final int quantity;         // Amount of the item in the basket
 
-    public BasketItem(Customer customer, Product product, BasketItemID id, int quantity)
+    public BasketItem(long customerID, long productID, int quantity)
     {
-        this.id = id;
+        this.id = new BasketItemID(customerID, productID);
         this.quantity = quantity;
     }
 

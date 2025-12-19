@@ -6,6 +6,7 @@ import ci553.happyshop.client.customer.basket.BasketClient;
 import ci553.happyshop.data.repository.BasketRepository;
 import ci553.happyshop.data.repository.CategoryRepository;
 import ci553.happyshop.data.repository.ProductRepository;
+import ci553.happyshop.domain.service.BasketService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -32,7 +33,9 @@ public class CustomerModel
     // Get repository instances
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    private final BasketRepository basketRepository;
+
+    // Get service instances
+    private final BasketService basketService;
 
 
     /**
@@ -40,13 +43,13 @@ public class CustomerModel
      *
      * @param productRepository  for interacting with the <code>Product</code> table
      * @param categoryRepository for interacting with the <code>Category</code> table
-     * @param basketRepository for interacting with the <code>Basket</code> table
+     * @param basketService for interacting with the <code>Basket</code> table
      */
-    public CustomerModel(ProductRepository productRepository, CategoryRepository categoryRepository, BasketRepository basketRepository)
+    public CustomerModel(ProductRepository productRepository, CategoryRepository categoryRepository, BasketService basketService)
     {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
-        this.basketRepository = basketRepository;
+        this.basketService = basketService;
     }
 
 
@@ -191,19 +194,19 @@ public class CustomerModel
     // If in the basket, increment quantity by one
     public void addToBasket(@NotNull Product product)
     {
-        basketRepository.addOrUpdateItem(PLACEHOLDER.getId(), product.getId(), 1);
+        basketService.addOrUpdateItem(PLACEHOLDER.getId(), product.getId(), 1);
         loadProducts();     // todo currently redraws all cards if product list changes
     }
 
     public void removeFromBasket(@NotNull Product product)
     {
-        basketRepository.decreaseOrRemoveItem(PLACEHOLDER.getId(), product.getId());
+        basketService.decreaseOrRemoveItem(PLACEHOLDER.getId(), product.getId());
         loadProducts();
     }
 
     public int getBasketQuantity(@NotNull Product product)
     {
-        return basketRepository.getQuantity(PLACEHOLDER.getId(), product.getId());
+        return basketService.getQuantity(PLACEHOLDER.getId(), product.getId());
     }
 
     /**

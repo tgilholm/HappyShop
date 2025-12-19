@@ -24,6 +24,7 @@ module ci553.happyshop
 	exports ci553.happyshop;
 	exports ci553.happyshop.data.database;
 	exports ci553.happyshop.data.repository;
+	exports ci553.happyshop.domain.service;
 	exports ci553.happyshop.client;
 	exports ci553.happyshop.utility;
 	exports ci553.happyshop.catalogue;

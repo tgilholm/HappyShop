@@ -1,6 +1,7 @@
 package ci553.happyshop.data.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Designed to be used with CommonRepository. Defines one method- <code>getAll()</code>.

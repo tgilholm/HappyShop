@@ -16,7 +16,7 @@ public class RepositoryFactory
     private static ProductRepository productRepository;
     private static CategoryRepository categoryRepository;
     private static BasketRepository basketRepository;
-    private static AuthRepository authRepository;
+    private static CustomerRepository customerRepository;
 
 
     /**
@@ -38,7 +38,7 @@ public class RepositoryFactory
     public static CategoryRepository getCategoryRepository() {
         if (categoryRepository == null)
         {
-            categoryRepository = new CategoryRepositoryImpl(dbConnection);
+            categoryRepository = new CategoryRepository(dbConnection);
         }
         return categoryRepository;
     }
@@ -50,20 +50,20 @@ public class RepositoryFactory
     public static BasketRepository getBasketRepository() {
         if (basketRepository == null)
         {
-            basketRepository = new BasketRepositoryImpl(dbConnection);
+            basketRepository = new BasketRepository(dbConnection);
         }
         return basketRepository;
     }
 
     /**
-     * Checks if the <code>AuthRepository</code> already exists and if not, creates a new instance
+     * Checks if the <code>CustomerRepository</code> already exists and if not, creates a new instance
      * @return the repository instance
      */
-    public static AuthRepository getAuthRepository() {
-        if (authRepository == null)
+    public static CustomerRepository getCustomerRepository() {
+        if (customerRepository == null)
         {
-            authRepository = new AuthRepositoryImpl(dbConnection);
+            customerRepository = new CustomerRepository(dbConnection);
         }
-        return authRepository;
+        return customerRepository;
     }
 }

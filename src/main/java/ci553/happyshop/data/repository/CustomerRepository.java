@@ -14,9 +14,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Implementation of AuthRepository. Defines behaviour for each method
+ * Implements CommonRepository (but not ListableRepository as getAll methods are unneeded)
+ * Interacts with the LoginTable
  */
-public class AuthRepositoryImpl implements AuthRepository
+public class CustomerRepository implements CommonRepository<Customer, Long>
 {
     // dbConnection is used by all methods to connect to Derby
     private final DatabaseConnection dbConnection;
@@ -26,7 +27,7 @@ public class AuthRepositoryImpl implements AuthRepository
      *
      * @param dbConnection the <code>DatabaseConnection</code> object
      */
-    public AuthRepositoryImpl(DatabaseConnection dbConnection)
+    public CustomerRepository(DatabaseConnection dbConnection)
     {
         this.dbConnection = dbConnection;
     }
@@ -39,8 +40,8 @@ public class AuthRepositoryImpl implements AuthRepository
      * @param password a <code>String</code> object
      * @return a Customer or null
      */
-    @Override
-    public @Nullable Customer authenticate(@NotNull String username, @NotNull String password)
+
+    public @Nullable Customer getCustomer(@NotNull String username, @NotNull String password)
     {
         String query = "SELECT * FROM LoginTable WHERE username = ? AND password = ?";
 
@@ -71,7 +72,6 @@ public class AuthRepositoryImpl implements AuthRepository
      * @param username the <code>String</code> object to check
      * @return true if the username exists, false otherwise
      */
-    @Override
     public boolean usernameExists(@NotNull String username)
     {
         String query = "SELECT COUNT(*) FROM LoginTable WHERE username = ?"; // Get the no# of occurrences
@@ -88,29 +88,6 @@ public class AuthRepositoryImpl implements AuthRepository
         } catch (SQLException e)
         {
             throw new DatabaseException("Failed to check if customer exists with username " + username);
-        }
-    }
-
-    /**
-     * Adds a new <code>Customer</code> to the table
-     *
-     * @param customer the <code>Customer</code> object to add
-     */
-    @Override
-    public void addCustomer(@NotNull Customer customer)
-    {
-        String query = "INSERT INTO LoginTable (username, password) VALUES (?, ?)";
-
-        try (Connection connection = dbConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query))
-        {
-            statement.setString(1, customer.getUsername());
-            statement.setString(2, customer.getPassword());
-
-            statement.executeUpdate();
-        } catch (SQLException e)
-        {
-            throw new DatabaseException("Failed to add new customer with id: " + customer.getId());
         }
     }
 
@@ -155,5 +132,50 @@ public class AuthRepositoryImpl implements AuthRepository
                 resultSet.getString(2),
                 resultSet.getString(3)
         );
+    }
+
+    /**
+     * Adds a new <code>Customer</code> to the table
+     *
+     * @param customer the <code>Customer</code> object to add
+     */
+    @Override
+    public void insert(@NotNull Customer customer)
+    {
+        String query = "INSERT INTO LoginTable (username, password) VALUES (?, ?)";
+
+        try (Connection connection = dbConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query))
+        {
+            statement.setString(1, customer.getUsername());
+            statement.setString(2, customer.getPassword());
+
+            statement.executeUpdate();
+        } catch (SQLException e)
+        {
+            throw new DatabaseException("Failed to add new customer with id: " + customer.getId());
+        }
+    }
+
+    /**
+     * Updates an existing customer
+     *
+     * @param customer the customer to update
+     */
+    @Override
+    public void update(@NotNull Customer customer)
+    {
+        // todo implement
+    }
+
+    /**
+     * Delete a customer by its ID
+     *
+     * @param id The primary key of the customer
+     */
+    @Override
+    public void delete(@NotNull Long id)
+    {
+        // todo implement
     }
 }
