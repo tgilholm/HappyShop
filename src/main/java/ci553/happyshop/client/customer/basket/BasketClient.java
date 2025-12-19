@@ -1,5 +1,6 @@
 package ci553.happyshop.client.customer.basket;
 
+import ci553.happyshop.catalogue.Customer;
 import ci553.happyshop.data.repository.BasketRepository;
 import ci553.happyshop.data.repository.RepositoryFactory;
 import javafx.application.Application;
@@ -7,6 +8,13 @@ import javafx.stage.Stage;
 
 public class BasketClient extends Application
 {
+    private final Customer customer;
+
+    public BasketClient(Customer customer)
+    {
+        this.customer = customer;
+    }
+
     public static void main(String[] args)
     {
         launch(args);
@@ -30,16 +38,12 @@ public class BasketClient extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        startBasketClient(primaryStage);
-    }
-
-    public static void startBasketClient(Stage window)
-    {
         BasketRepository basketRepository = RepositoryFactory.getBasketRepository();
 
-        BasketModel model = new BasketModel(basketRepository);
+        BasketModel model = new BasketModel(basketRepository, customer);
         BasketController controller = new BasketController(model);
         BasketView view = new BasketView(controller);
-        view.start(window);
+        view.start(primaryStage);
     }
+
 }

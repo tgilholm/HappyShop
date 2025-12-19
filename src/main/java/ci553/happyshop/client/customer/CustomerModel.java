@@ -1,12 +1,15 @@
 package ci553.happyshop.client.customer;
 
 import ci553.happyshop.catalogue.*;
+import ci553.happyshop.catalogue.DTO.ProductWithCategory;
+import ci553.happyshop.client.customer.basket.BasketClient;
 import ci553.happyshop.data.repository.BasketRepository;
 import ci553.happyshop.data.repository.CategoryRepository;
 import ci553.happyshop.data.repository.ProductRepository;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -154,9 +157,8 @@ public class CustomerModel
             } else
             {
                 // Return true if the ID or description match the search filter
-                String lowercaseSearchFilter = searchFilter.toLowerCase();
                 return String.valueOf(productWithCategory.product().getId()).contains(searchFilter)
-                        || productWithCategory.product().getName().toLowerCase().contains(searchFilter);
+                        || productWithCategory.product().getName().toLowerCase().contains(searchFilter.toLowerCase());
             }
         });
     }
@@ -201,5 +203,19 @@ public class CustomerModel
     public int getBasketQuantity(@NotNull Product product)
     {
         return basketRepository.getQuantity(PLACEHOLDER.getId(), product.getId());
+    }
+
+    /**
+     * Runs the <code>start</code> method in <code>BasketClient</code>
+     */
+    public void openBasket()
+    {
+        try {
+            BasketClient basketClient = new BasketClient(PLACEHOLDER);
+            basketClient.start(new Stage());
+        } catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 }

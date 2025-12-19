@@ -1,9 +1,13 @@
 package ci553.happyshop.data.repository.impl;
 
 import ci553.happyshop.catalogue.BasketItem;
+import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
+import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.data.database.DatabaseConnection;
 import ci553.happyshop.data.database.DatabaseException;
 import ci553.happyshop.data.repository.BasketRepository;
+import ci553.happyshop.data.repository.ProductRepository;
+import ci553.happyshop.data.repository.RepositoryFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +23,7 @@ import java.util.List;
 public class BasketRepositoryImpl implements BasketRepository
 {
     private final DatabaseConnection dbConnection;
+    private final ProductRepository productRepository = RepositoryFactory.getProductRepository();
     private final Logger logger = LogManager.getLogger();
 
     public BasketRepositoryImpl(DatabaseConnection dbConnection)
@@ -28,25 +33,36 @@ public class BasketRepositoryImpl implements BasketRepository
 
 
     /**
-     * Retrieve all the <code>BasketItem</code> objects corresponding to <code>customerID</code>
+     * Retrieve all the <code>BasketItemWithDetails</code> objects corresponding to <code>customerID</code>
+     * Calls the <code>getProductByIdWithCategory</code> method in <code>ProductRepository</code>
      *
      * @param customerID the primary key of a <code>Customer</code> object
      * @return a list of <code>BasketItem</code> objects, or null
      */
     @Override
-    public @Nullable List<BasketItem> getAllItems(long customerID)
+    public @Nullable List<BasketItemWithDetails> getAllItems(long customerID)
     {
-        String query = "SELECT customerID, productID, quantity FROM BasketTable WHERE customerID = ?";
-        List<BasketItem> basketItems = new ArrayList<>();
+        // Get product and customer details, get quantity, join together tables
+        String query = "SELECT productID, quantity FROM BasketTable WHERE customerID = ?";
+        List<BasketItemWithDetails> basketItems = new ArrayList<>();
 
-        // Get a connection an execute the query
+        // Get a connection and execute the query
         try (Connection connection = dbConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery())
+             PreparedStatement statement = connection.prepareStatement(query))
         {
+            statement.setLong(1, customerID);
+            ResultSet resultSet = statement.executeQuery();
+
             while (resultSet.next())
             {
-                basketItems.add(mapToBasketItem(resultSet));
+                Long productID = resultSet.getLong(1);
+                int quantity = resultSet.getInt(2);
+
+                ProductWithCategory productWithCategory = productRepository.getByIdWithCategory(productID);
+                if (productWithCategory != null)
+                {
+                    basketItems.add(new BasketItemWithDetails(productWithCategory, quantity));
+                }
             }
 
             return basketItems;

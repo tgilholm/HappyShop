@@ -2,7 +2,7 @@ package ci553.happyshop.data.repository.impl;
 
 import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.Product;
-import ci553.happyshop.catalogue.ProductWithCategory;
+import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.data.database.DatabaseConnection;
 import ci553.happyshop.data.database.DatabaseException;
 import ci553.happyshop.data.repository.ProductRepository;
@@ -122,6 +122,38 @@ public class ProductRepositoryImpl implements ProductRepository
         } catch (SQLException e)
         {
             throw new DatabaseException("Failed to get product, id: " + id, e);
+        }
+    }
+
+    /**
+     * Gets a specific <code>Product</code> entity joined to the linked <code>Category</code>
+     *
+     * @param id the <code>Long</code> primary key of the <code>Product</code> entity to get
+     * @return a <code>ProductWithCategory</code> object
+     */
+    @Override
+    public @Nullable ProductWithCategory getByIdWithCategory(@NotNull Long id)
+    {
+        String query = """
+                SELECT p.id, p.name, p.imageName, p.unitPrice, p.stockQuantity, p.categoryID, c.id, c.name, c.description
+                FROM ProductTable p
+                JOIN CategoryTable c ON p.categoryID = c.id
+                WHERE p.id = ?
+               """;
+
+        try (Connection connection = dbConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query))
+        {
+            // Replace "?" with Long id
+            statement.setLong(1, id);
+            ResultSet results = statement.executeQuery();
+
+            // Return the product or null if not found
+            return results.next() ? mapToProductWithCategory(results) : null;
+
+        } catch (SQLException e)
+        {
+            throw new DatabaseException("Failed to get ProductWithCategory, id: " + id, e);
         }
     }
 

@@ -1,6 +1,7 @@
 package ci553.happyshop.data.repository;
 
 import ci553.happyshop.catalogue.BasketItem;
+import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,7 +19,7 @@ public interface BasketRepository
      * @return a list of <code>BasketItem</code> objects, or null
      */
     @Nullable
-    List<BasketItem> getAllItems(long customerID);
+    List<BasketItemWithDetails> getAllItems(long customerID);
 
     /**
      * Adds a new item to the <code>BasketTable</code>

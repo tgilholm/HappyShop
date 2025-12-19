@@ -1,5 +1,6 @@
 package ci553.happyshop.client.customer;
 
+import ci553.happyshop.catalogue.Customer;
 import ci553.happyshop.data.repository.BasketRepository;
 import ci553.happyshop.data.repository.CategoryRepository;
 import ci553.happyshop.data.repository.ProductRepository;
@@ -17,6 +18,7 @@ import org.apache.logging.log4j.LogManager;
 
 public class CustomerClient extends Application
 {
+
 	private static final Logger logger = LogManager.getLogger();
 
 	public static void main(String[] args)

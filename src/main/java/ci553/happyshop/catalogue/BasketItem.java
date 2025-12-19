@@ -5,16 +5,15 @@ package ci553.happyshop.catalogue;
  */
 public class BasketItem
 {
-    // Composite primary key of userID and product ID
-    private final long customerID;
-    private final long productID;
-
+    // Holds a Customer and Product object
+    private final Customer customer;
+    private final Product product;
     private int quantity;       // Amount of the item in the basket
 
-    public BasketItem(long customerID, long productID, int quantity)
+    public BasketItem(Customer customer, Product product, int quantity)
     {
-        this.customerID = customerID;
-        this.productID = productID;
+        this.customer = customer;
+        this.product = product;
         this.quantity = quantity;
     }
 }

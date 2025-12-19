@@ -2,7 +2,7 @@ package ci553.happyshop.client.customer;
 
 import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.Product;
-import ci553.happyshop.catalogue.ProductWithCategory;
+import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.utility.ImageHandler;
 import ci553.happyshop.utility.ProductCardPane;
 import ci553.happyshop.utility.StockDisplayHelper;
@@ -215,8 +215,11 @@ public class CustomerController
         System.out.println("Account button clicked");
     }
 
+    /**
+     * Opens the basket window
+     */
     public void basketClicked()
     {
-        System.out.println("Basket button clicked");
+        cusModel.openBasket();
     }
 }
