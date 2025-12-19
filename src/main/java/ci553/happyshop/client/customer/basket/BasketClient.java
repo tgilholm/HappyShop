@@ -1,8 +1,9 @@
 package ci553.happyshop.client.customer.basket;
 
 import ci553.happyshop.catalogue.Customer;
-import ci553.happyshop.data.repository.BasketRepository;
 import ci553.happyshop.data.repository.RepositoryFactory;
+import ci553.happyshop.domain.service.BasketService;
+import ci553.happyshop.domain.service.ServiceFactory;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -38,9 +39,9 @@ public class BasketClient extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        BasketRepository basketRepository = RepositoryFactory.getBasketRepository();
+        BasketService basketService = ServiceFactory.getBasketService();
 
-        BasketModel model = new BasketModel(basketRepository, customer);
+        BasketModel model = new BasketModel(basketService, customer);
         BasketController controller = new BasketController(model);
         BasketView view = new BasketView(controller);
         view.start(primaryStage);
