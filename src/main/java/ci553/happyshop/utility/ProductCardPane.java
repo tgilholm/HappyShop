@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +13,7 @@ import java.io.IOException;
 
 
 /**
- * A custom HBox subclass that loads ListCell.fxml. Handles button clicks and updates product details.
+ * A custom HBox subclass that loads ProductTileCell.fxml. Handles button clicks and updates product details.
  */
 public class ProductCardPane extends VBox
 {
@@ -27,22 +26,11 @@ public class ProductCardPane extends VBox
     @FXML
     private Button btnAdd, btnRemove;
 
-    /**
-     * Declares methods called by buttons on each card.
-     * The behaviour for each of these methods must be determined by any class using a ProductCardPane
-     */
-    public interface ButtonActionCallback
-    {
-        void onAddItem(Product product);        // Add an item to the basket
 
-        void onRemoveItem(Product product);     // Remove the item from the basket
-
-        int getBasketQuantity(Product product); // Get the amount of the item in the basket
-    }
 
     /**
      * Constructs a new <code>ProductCardPane</code> from a specified <code>Product</code> and a <code>callback</code>
-     * Loads FXML from ListCell.fxml and initializes with product data.
+     * Loads FXML from ProductTileCell.fxml and initializes with product data.
      * @param product the specific product to initialize the layout with
      * @param callback defined actions for the buttons on the layout
      */
@@ -53,14 +41,14 @@ public class ProductCardPane extends VBox
 
         try
         {
-            loader.setLocation(getClass().getResource("/fxml/ListCell.fxml"));
+            loader.setLocation(getClass().getResource("/fxml/ProductTileCell.fxml"));
             loader.setController(this);
             loader.setRoot(this);
 
             loader.load();
         } catch (IOException e)
         {
-            System.err.println("Error loading ListCell.fxml " + e);
+            System.err.println("Error loading ProductTileCell.fxml " + e);
         }
 
         // Initialise the product data
@@ -99,8 +87,5 @@ public class ProductCardPane extends VBox
 
         // Hide the "remove" button if there are none in the basket
         btnRemove.setDisable(callback.getBasketQuantity(product) == 0);
-
     }
-
-
 }

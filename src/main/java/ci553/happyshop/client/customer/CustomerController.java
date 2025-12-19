@@ -2,7 +2,8 @@ package ci553.happyshop.client.customer;
 
 import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.Product;
-import ci553.happyshop.catalogue.ProductWithCategory;
+import ci553.happyshop.catalogue.DTO.ProductWithCategory;
+import ci553.happyshop.utility.ButtonActionCallback;
 import ci553.happyshop.utility.ImageHandler;
 import ci553.happyshop.utility.ProductCardPane;
 import ci553.happyshop.utility.StockDisplayHelper;
@@ -45,10 +46,7 @@ public class CustomerController
     private ComboBox<String> cbCategories;
 
     @FXML
-    private Button btnAccount;
-
-    @FXML
-    private Button btnCart;
+    private Button btnAccount, btnBasket;
 
     @FXML
     private TilePane tpProducts;
@@ -63,7 +61,7 @@ public class CustomerController
      * <pre>
      *     - Initializes the View elements
      *     - Sets the ListView cell factory
-     *     - Binds the Model productList to the View and loads all products
+     *     - Binds Model data to View elements
      * </pre>
      */
     @FXML
@@ -94,6 +92,7 @@ public class CustomerController
         cbCategories.valueProperty().addListener((observable, oldValue, newValue) ->
         {
             cusModel.setCategoryFilter(newValue);
+            logger.info("Set category filter to {}", newValue);
         });
 
         // Add a listener to automatically search as users type
@@ -134,26 +133,26 @@ public class CustomerController
         tpProducts.getChildren().clear();            // Load products from the database
 
         // Define the callback for the ProductCardPane
-        ProductCardPane.ButtonActionCallback callback = new ProductCardPane.ButtonActionCallback()
+        ButtonActionCallback callback = new ButtonActionCallback()
         {
             @Override
             public void onAddItem(@NotNull Product product)
             {
                 logger.info("Adding {} to basket", product.getId());
-                // todo basket
+                cusModel.addToBasket(product);
             }
 
             @Override
             public void onRemoveItem(@NotNull Product product)
             {
                 logger.info("Removing {} from basket", product.getId());
-
+                cusModel.removeFromBasket(product);
             }
 
             @Override
             public int getBasketQuantity(Product product)
             {
-                return 0;
+                return cusModel.getBasketQuantity(product);
             }
         };
 
@@ -206,7 +205,7 @@ public class CustomerController
      * @return a <code>VBox</code> containing the card layout
      */
     @Contract("_, _ -> new")
-    private @NotNull VBox createProductCard(Product product, ProductCardPane.ButtonActionCallback callback)
+    private @NotNull VBox createProductCard(Product product, ButtonActionCallback callback)
     {
         return new ProductCardPane(product, callback);
     }
@@ -217,8 +216,11 @@ public class CustomerController
         System.out.println("Account button clicked");
     }
 
-    public void cartClicked()
+    /**
+     * Opens the basket window
+     */
+    public void basketClicked()
     {
-        System.out.println("Cart button clicked");
+        cusModel.openBasket();
     }
 }

@@ -1,6 +1,7 @@
 package ci553.happyshop.client.customer;
 
-import ci553.happyshop.catalogue.Category;
+import ci553.happyshop.catalogue.Customer;
+import ci553.happyshop.data.repository.BasketRepository;
 import ci553.happyshop.data.repository.CategoryRepository;
 import ci553.happyshop.data.repository.ProductRepository;
 import ci553.happyshop.data.repository.RepositoryFactory;
@@ -17,6 +18,7 @@ import org.apache.logging.log4j.LogManager;
 
 public class CustomerClient extends Application
 {
+
 	private static final Logger logger = LogManager.getLogger();
 
 	public static void main(String[] args)
@@ -24,26 +26,32 @@ public class CustomerClient extends Application
 		launch(args);
 	}
 
-	/**
-	 * Injects dependencies into the MVC and launches the customer view
-	 */
 	@Override
 	public void start(Stage window)
 	{
-		logger.info("Launching CustomerClient");
-		// Starts the view, model and controller for the customer client and connects to the database read/writer
-
-		// Get instances of the repositories needed
-		ProductRepository productRepository = RepositoryFactory.getProductRepository();
-		CategoryRepository categoryRepository = RepositoryFactory.getCategoryRepository();
-
-		CustomerModel cusModel = new CustomerModel(productRepository, categoryRepository);
-		CustomerController cusController = new CustomerController(cusModel);
-		CustomerView cusView = new CustomerView(cusController);
-		cusView.start(window);
+		startCustomerClient(window);
 
 		//RemoveProductNotifier removeProductNotifier = new RemoveProductNotifier();
 		//removeProductNotifier.cusView = cusView;
 		//cusModel.removeProductNotifier = removeProductNotifier;
+	}
+
+	/**
+	 * Gets repository instances and injects dependencies into the Model, View, and Controller
+	 * @param window the <code>Stage</code> object to run
+	 */
+	public static void startCustomerClient(Stage window)
+	{
+		logger.info("Launching CustomerClient");
+
+		// Get instances of the repositories needed
+		ProductRepository productRepository = RepositoryFactory.getProductRepository();
+		CategoryRepository categoryRepository = RepositoryFactory.getCategoryRepository();
+		BasketRepository basketRepository = RepositoryFactory.getBasketRepository();
+
+		CustomerModel cusModel = new CustomerModel(productRepository, categoryRepository, basketRepository);
+		CustomerController cusController = new CustomerController(cusModel);
+		CustomerView cusView = new CustomerView(cusController);
+		cusView.start(window);
 	}
 }

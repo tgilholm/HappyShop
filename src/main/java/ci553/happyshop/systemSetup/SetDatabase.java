@@ -84,12 +84,11 @@ public class SetDatabase
             // Date added is set to the current time
             """
             CREATE TABLE BasketTable (
-                userID BIGINT NOT NULL,
+                customerID BIGINT NOT NULL,
                 productID BIGINT NOT NULL,
                 quantity INT NOT NULL DEFAULT 0,
-                dateAdded TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                PRIMARY KEY (userID, productID),
-                FOREIGN KEY (userID) REFERENCES LoginTable(id) ON DELETE CASCADE,
+                PRIMARY KEY (customerID, productID),
+                FOREIGN KEY (customerID) REFERENCES LoginTable(id) ON DELETE CASCADE,
                 FOREIGN KEY (productID) REFERENCES ProductTable(id) ON DELETE CASCADE
             )
             
