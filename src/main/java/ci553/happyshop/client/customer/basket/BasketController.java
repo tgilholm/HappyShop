@@ -39,29 +39,29 @@ public class BasketController
     {
         model.loadBasketItems();
 
-        // Define callback behaviour
-        ButtonActionCallback callback = new ButtonActionCallback()
-        {
-            @Override
-            public void onAddItem(@NotNull Product product)
-            {
-                logger.info("Adding {} to basket", product.getId());
-                model.addToBasket(product);
-            }
-
-            @Override
-            public void onRemoveItem(@NotNull Product product)
-            {
-                logger.info("Removing {} from basket", product.getId());
-                cusModel.removeFromBasket(product);
-            }
-
-            @Override
-            public int getBasketQuantity(Product product)
-            {
-                return cusModel.getBasketQuantity(product);
-            }
-        };
+//        // Define callback behaviour
+//        ButtonActionCallback callback = new ButtonActionCallback()
+//        {
+//            @Override
+//            public void onAddItem(@NotNull Product product)
+//            {
+//                logger.info("Adding {} to basket", product.getId());
+//                model.addToBasket(product);
+//            }
+//
+//            @Override
+//            public void onRemoveItem(@NotNull Product product)
+//            {
+//                logger.info("Removing {} from basket", product.getId());
+//                cusModel.removeFromBasket(product);
+//            }
+//
+//            @Override
+//            public int getBasketQuantity(Product product)
+//            {
+//                return cusModel.getBasketQuantity(product);
+//            }
+//        };
 
         // Set the cellFactory of the ListView
         lvBasketList.setCellFactory(param -> new BasketListCell(new ButtonActionCallback()

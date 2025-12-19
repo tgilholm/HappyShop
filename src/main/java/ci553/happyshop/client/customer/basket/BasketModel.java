@@ -12,16 +12,14 @@ import org.apache.logging.log4j.Logger;
 public class BasketModel
 {
     private final BasketRepository basketRepository;
-    private final CustomerModel customerModel;
     private static final Logger logger = LogManager.getLogger();
     private final Customer customer;        // The ID of the customer accessing the basket
     private final ObservableList<BasketItemWithDetails> basketItems = FXCollections.observableArrayList();
 
-    public BasketModel(BasketRepository basketRepository, Customer customer, CustomerModel customerModel)
+    public BasketModel(BasketRepository basketRepository, Customer customer)
     {
         this.basketRepository = basketRepository;
         this.customer = customer;
-        this.customerModel = customerModel; // Reference of CustomerModel for editing basket
     }
 
     public ObservableList<BasketItemWithDetails> getBasketItems()

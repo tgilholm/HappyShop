@@ -5,6 +5,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+// todo refactor to plain CRUD
+
+
 /**
  * Defines operations for interfacing with <code>BasketTable</code>. This does not implement <code>CommonRepository</code>
  * because the <code>BasketItem</code> object has a composite primary key.
