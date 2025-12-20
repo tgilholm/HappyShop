@@ -93,7 +93,7 @@ public class CustomerModel
         // Use setAll to update the productList
         productWithCategoryList.setAll(productRepository.getAllWithCategories());
 
-        logger.info("Retrieved {} products with categories from ProductTable", productWithCategoryList.size());
+        logger.debug("Retrieved {} products with categories from ProductTable", productWithCategoryList.size());
     }
 
     /**
@@ -103,7 +103,7 @@ public class CustomerModel
     {
         categoryList.setAll(categoryRepository.getAll());
 
-        logger.info("Retrieved {} categories from CategoryTable", categoryList.size());
+        logger.debug("Retrieved {} categories from CategoryTable", categoryList.size());
     }
 
 

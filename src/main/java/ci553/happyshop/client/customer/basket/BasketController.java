@@ -74,12 +74,10 @@ public class BasketController
         lvBasketList.setCellFactory(param -> new BasketListCell(callback));
         // Clear the ListView and load the list of basket items into it
         lvBasketList.setItems(model.getBasketItems());
-        logger.info("List view set with {} items ", lvBasketList.getItems().size());
+        logger.debug("List view set with {} items ", lvBasketList.getItems().size());
 
         // Add a listener to automatically recalculate the "grand total" when the list changes
         model.getBasketItems().addListener((ListChangeListener<BasketItemWithDetails>) change -> updateTotal());
-
-
 
         // Hides this window and automatically re-opens the customer window
         btnBack.setOnAction(x ->
@@ -87,6 +85,8 @@ public class BasketController
             Stage stage = (Stage) btnBack.getScene().getWindow();
             model.goBack(stage);
         });
+
+        updateTotal();
     }
 
 

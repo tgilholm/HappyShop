@@ -37,7 +37,7 @@ public class BasketModel
     public void loadBasketItems()
     {
         basketItems.setAll(basketService.getAll(customer.getId()));
-        logger.info("Loaded {} items into basket", basketItems.size());
+        logger.debug("Loaded {} items into basket", basketItems.size());
     }
 
     public void addToBasket(@NotNull Product product)
