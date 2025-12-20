@@ -6,6 +6,7 @@ import ci553.happyshop.domain.service.BasketService;
 import ci553.happyshop.domain.service.ServiceFactory;
 import ci553.happyshop.utility.BasketListCell;
 import ci553.happyshop.utility.ButtonActionCallback;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -23,13 +24,13 @@ public class BasketController
     private final BasketModel model;
 
     @FXML
-    Button btnBack;
+    public Button btnBack;
 
     @FXML
-    Label lbCusName;
+    public Label lbCusName, lbBasketTotal;;
 
     @FXML
-    ListView<BasketItemWithDetails> lvBasketList;
+    public ListView<BasketItemWithDetails> lvBasketList;
 
     // TODO get list of basket items
     // TODO convert basket items to displayable format
@@ -74,6 +75,9 @@ public class BasketController
         // Clear the ListView and load the list of basket items into it
         lvBasketList.setItems(model.getBasketItems());
         logger.info("List view set with {} items ", lvBasketList.getItems().size());
+
+        // Add a listener to automatically recalculate the "grand total" when the list changes
+        model.getBasketItems().addListener((ListChangeListener<BasketItemWithDetails>) change -> updateTotal());
 
 
         // Hides this window and automatically re-opens the customer window

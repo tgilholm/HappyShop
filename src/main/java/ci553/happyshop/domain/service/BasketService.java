@@ -38,11 +38,24 @@ public interface BasketService
     int getQuantity(long customerID, long productID);
 
     /**
+     * Gets the total price of all the BasketItems linked to this customerID
+     * @param customerID the primary key of a <code>Customer</code> object
+     * @return a <code>double</code> total price
+     */
+    double getBasketTotalPrice(long customerID);
+
+    /**
      * Removes all items connected to <code>customerID</code>
      *
      * @param customerID the primary key of a <code>Customer</code> object
      */
     void emptyBasket(long customerID);
 
+    /**
+     * Gets a list of <code>BasketItem</code> objects with product and category details attached
+     *
+     * @param customerID the primary key of a <code>Customer</code> object
+     * @return a list of <code>BasketItem</code> objects, or null
+     */
     @Nullable List<BasketItemWithDetails> getAll(long customerID);
 }

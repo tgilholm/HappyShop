@@ -17,13 +17,13 @@ import java.io.IOException;
 public class BasketListCell extends ListCell<BasketItemWithDetails>
 {
     @FXML
-    private Label lbName, lbCategory, lbPrice, lbBasketQty;
+    public Label lbName, lbCategory, lbPrice, lbBasketQty;
 
     @FXML
-    private ImageView ivImage;
+    public ImageView ivImage;
 
     @FXML
-    private Button btnAdd, btnRemove;
+    public Button btnAdd, btnRemove;
 
     private final Node graphic;   // Graphic node for each cell
     private final ButtonActionCallback callback;
@@ -69,7 +69,7 @@ public class BasketListCell extends ListCell<BasketItemWithDetails>
             lbName.setText(product.getName());
             lbCategory.setText(category.getName());
 
-            setBasketQty(product, callback.getBasketQuantity(product));              // Calculate basket quantity
+            setBasketQty(callback.getBasketQuantity(product));              // Calculate basket quantity
 
             // Update quantity from callback
             setTotalPrice(product, callback.getBasketQuantity(product));   // Recalculate total
@@ -81,7 +81,7 @@ public class BasketListCell extends ListCell<BasketItemWithDetails>
                 int newQty = callback.getBasketQuantity(product);
 
                 // Update quantity & total price
-                setBasketQty(product, newQty);
+                setBasketQty(newQty);
                 setTotalPrice(product, newQty); // Recalculate total
             });
 
@@ -94,14 +94,14 @@ public class BasketListCell extends ListCell<BasketItemWithDetails>
                 // Check if there are any remaining before setting labels
                 if (newQty != 0)
                 {
-                    setBasketQty(product, newQty);
+                    setBasketQty(newQty);
 
                     // Update quantity & total price
                     setTotalPrice(product, newQty); // Recalculate total
                 }
                 else {
                     setTotalPrice(product, 0);
-                    setBasketQty(product, 0);
+                    setBasketQty(0);
 
                 }
                 btnRemove.setDisable(callback.getBasketQuantity(product) == 0);
@@ -124,9 +124,8 @@ public class BasketListCell extends ListCell<BasketItemWithDetails>
 
     /**
      * Helper method to update the quantity of a product in the basket
-     * @param product the product to update
      */
-    private void setBasketQty(@NotNull Product product, int quantity)
+    private void setBasketQty(int quantity)
     {
         lbBasketQty.setText(String.valueOf(quantity));
     }
