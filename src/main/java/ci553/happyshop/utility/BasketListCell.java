@@ -10,24 +10,26 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.ImageView;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
 public class BasketListCell extends ListCell<BasketItemWithDetails>
 {
     @FXML
-    private Label lbName, lbCategory, lbPrice, lbBasketQty;
+    public Label lbName, lbCategory, lbPrice, lbBasketQty;
 
     @FXML
-    private ImageView ivImage;
+    public ImageView ivImage;
 
     @FXML
-    private Button btnAdd, btnRemove;
+    public Button btnAdd, btnRemove;
 
     private final Node graphic;   // Graphic node for each cell
     private final ButtonActionCallback callback;
 
-    public BasketListCell(ButtonActionCallback callback)
+
+    public BasketListCell(@NotNull ButtonActionCallback callback)
     {
         this.callback = callback;
 
@@ -45,6 +47,7 @@ public class BasketListCell extends ListCell<BasketItemWithDetails>
         }
     }
 
+
     @Override
     protected void updateItem(BasketItemWithDetails item, boolean empty)
     {
@@ -52,23 +55,64 @@ public class BasketListCell extends ListCell<BasketItemWithDetails>
 
         if (empty || item == null)
         {
+            // clear everything for reused cells
             setGraphic(null);
+            setText(null);
+            if (lbName != null) lbName.setText("");
+            if (lbCategory != null) lbCategory.setText("");
+            if (lbPrice != null) lbPrice.setText("");
+            if (lbBasketQty != null) lbBasketQty.setText("");
+            if (ivImage != null) ivImage.setImage(null);
+            if (btnAdd != null) btnAdd.setOnAction(null);
+            if (btnRemove != null)
+            {
+                btnRemove.setOnAction(null);
+                btnRemove.setDisable(true);
+            }
         } else
         {
             // Extract values from DTO
             Product product = item.productWithCategory().product();
             Category category = item.productWithCategory().category();
-            int quantity = item.quantity();
+            int qty = item.quantity();
 
             setGraphic(graphic);
-
-            // Set product image
             ivImage.setImage(ImageHandler.getImageFromProduct(product));
-
-            // Set labels
             lbName.setText(product.getName());
             lbCategory.setText(category.getName());
-            lbPrice.setText("Total: £" + product.getUnitPrice() * quantity); // total price
+
+            setBasketQty(qty);              // Calculate basket quantity
+            setTotalPrice(product, qty);   // Calculate total
+
+
+            // Set button actions
+            btnAdd.setOnAction(x ->callback.onRemoveItem(product));
+
+            // Set button actions
+            btnRemove.setOnAction(x -> callback.onRemoveItem(product));
+
+            // Hide the "remove" button if there are none in the basket
+            btnRemove.setDisable(callback.getBasketQuantity(product) == 0);
         }
+    }
+
+
+    /**
+     * Helper method to update the total cost of a basket item
+     *
+     * @param product the product to update from
+     */
+    private void setTotalPrice(@NotNull Product product, int quantity)
+    {
+        lbPrice.setText(String.format("Total: £%.00f", (product.getUnitPrice() * quantity)));
+    }
+
+
+    /**
+     * Helper method to update the quantity of a product in the basket
+     */
+    private void setBasketQty(int quantity)
+    {
+        lbBasketQty.setText(String.valueOf(quantity));
     }
 }

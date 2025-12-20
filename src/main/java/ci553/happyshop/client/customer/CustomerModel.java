@@ -3,7 +3,6 @@ package ci553.happyshop.client.customer;
 import ci553.happyshop.catalogue.*;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.client.customer.basket.BasketClient;
-import ci553.happyshop.data.repository.BasketRepository;
 import ci553.happyshop.data.repository.CategoryRepository;
 import ci553.happyshop.data.repository.ProductRepository;
 import ci553.happyshop.domain.service.BasketService;
@@ -94,7 +93,7 @@ public class CustomerModel
         // Use setAll to update the productList
         productWithCategoryList.setAll(productRepository.getAllWithCategories());
 
-        logger.info("Retrieved {} products with categories from ProductTable", productWithCategoryList.size());
+        logger.debug("Retrieved {} products with categories from ProductTable", productWithCategoryList.size());
     }
 
     /**
@@ -104,7 +103,7 @@ public class CustomerModel
     {
         categoryList.setAll(categoryRepository.getAll());
 
-        logger.info("Retrieved {} categories from CategoryTable", categoryList.size());
+        logger.debug("Retrieved {} categories from CategoryTable", categoryList.size());
     }
 
 
@@ -195,7 +194,7 @@ public class CustomerModel
     public void addToBasket(@NotNull Product product)
     {
         basketService.addOrUpdateItem(PLACEHOLDER.getId(), product.getId(), 1);
-        loadProducts();     // todo currently redraws all cards if product list changes
+        loadProducts(); // List has changed, update card data
     }
 
     public void removeFromBasket(@NotNull Product product)
@@ -210,13 +209,30 @@ public class CustomerModel
     }
 
     /**
-     * Runs the <code>start</code> method in <code>BasketClient</code>
+     * Runs the <code>start</code> method in <code>BasketClient</code>, hides this view
      */
-    public void openBasket()
+    public void openBasket(Stage stage)
     {
         try {
             BasketClient basketClient = new BasketClient(PLACEHOLDER);
-            basketClient.start(new Stage());
+            stage.hide();   // Hide the customer view
+
+            // Create a new stage for the basket client
+            Stage basket = new Stage();
+            basket.setOnHidden(event ->
+            {
+                stage.show();
+                loadProducts(); // Load the product list if the basket changed anything
+            }); // Re-open the customer view when the basket close
+            basket.setOnCloseRequest(event ->
+            {
+                stage.show();
+                loadProducts();
+            });
+
+            // Start the basket
+            basketClient.start(basket);
+
         } catch (Exception e)
         {
             throw new RuntimeException(e);

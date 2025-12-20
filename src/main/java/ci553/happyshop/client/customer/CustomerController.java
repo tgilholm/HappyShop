@@ -17,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Contract;
@@ -217,10 +218,13 @@ public class CustomerController
     }
 
     /**
-     * Opens the basket window
+     * Opens the basket window, hides CustomerView
      */
     public void basketClicked()
     {
-        cusModel.openBasket();
+        // Get the open stage
+        Stage stage = (Stage) btnBasket.getScene().getWindow();
+        cusModel.openBasket(stage);
+
     }
 }

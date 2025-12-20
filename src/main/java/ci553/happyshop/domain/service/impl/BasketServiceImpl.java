@@ -3,6 +3,7 @@ package ci553.happyshop.domain.service.impl;
 import ci553.happyshop.catalogue.BasketItem;
 import ci553.happyshop.catalogue.BasketItemID;
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
+import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.data.repository.BasketRepository;
 import ci553.happyshop.data.repository.ProductRepository;
 import ci553.happyshop.data.repository.RepositoryFactory;
@@ -18,16 +19,8 @@ import java.util.stream.Collectors;
 /**
  * Implements methods from <code>BasketService</code>
  */
-public class BasketServiceImpl implements BasketService
+public class BasketServiceImpl extends BasketService
 {
-    // Get repository instances
-    private final BasketRepository basketRepository = RepositoryFactory.getBasketRepository();
-    private final ProductRepository productRepository = RepositoryFactory.getProductRepository();
-
-    // Logger
-    private static final Logger logger = LogManager.getLogger();
-
-
     /**
      * Decrements the number of items by if the quantity is greater than 1, deletes it completely otherwise.
      * This avoids items with <code>quantity = 0</code> in the basket
@@ -50,6 +43,8 @@ public class BasketServiceImpl implements BasketService
             logger.info("Quantity <= 1, deleting item. ProductID: {}", productID);
             basketRepository.delete(new BasketItemID(customerID, productID));
         }
+
+        notifyChanged();
     }
 
 
@@ -77,6 +72,8 @@ public class BasketServiceImpl implements BasketService
             logger.info("Product with id: {} doesn't exist in basket. Adding new item", productID);
             basketRepository.insert(new BasketItem(customerID, productID, quantity));
         }
+
+        notifyChanged();
     }
 
 
@@ -91,19 +88,48 @@ public class BasketServiceImpl implements BasketService
     @Override
     public int getQuantity(long customerID, long productID)
     {
-        BasketItem basketItem = basketRepository.getById(new BasketItemID(customerID, productID));
+        // Get the list of basket items and get the quantity from it
+        List<BasketItem> items = basketRepository.getAll();
 
-        // Null check
-        if (basketItem != null)
-        {
-            return basketItem.getQuantity();
-        } else
-        {
-            logger.error("BasketItem {} {} was null", customerID, productID);
-            return 0;
-        }
-
+        // Searches the list for the matching item. If found, gets the quantity. Otherwise, returns 0
+        return items.stream()
+                .filter(item -> item.getId().customerID() == customerID && item.getId().productID() == productID)
+                .findFirst()
+                .map(BasketItem::getQuantity)
+                .orElseGet(() ->
+                {
+                    logger.debug("BasketItem {} {} not found ", customerID, productID);
+                    return 0;
+                });
     }
+
+
+    /**
+     * Gets the total price of all the BasketItems linked to this customerID
+     *
+     * @param customerID the primary key of a <code>Customer</code> object
+     * @return a <code>double</code> total price
+     */
+    @Override
+    public double getBasketTotalPrice(long customerID)
+    {
+        // Get only the items matching the customerID
+        List<BasketItem> items = getAllByCustomerID(customerID);
+
+        /*
+        Gets all items matching customer ID, invokes getTotalPriceByID on each BasketItem then uses mapToDouble to
+        sum up the total prices into a double
+        */
+
+        return items.stream()
+                .mapToDouble(item ->
+                {
+                    // For each basket item retrieve the product's unit price and multiply by quantity
+                    return getTotalPriceByID(item.getId().customerID(), item.getId().productID());
+                })
+                .sum();
+    }
+
 
     /**
      * Removes all items connected to <code>customerID</code>
@@ -114,11 +140,12 @@ public class BasketServiceImpl implements BasketService
     public void emptyBasket(long customerID)
     {
         basketRepository.deleteAllByID(customerID);
+        notifyChanged();
     }
 
 
     /**
-     * Gets a list of <code>BasketItem</code> objects with product and category details attached
+     * Gets a list of <code>BasketItemWithDetails</code> objects with product and category details attached
      *
      * @param customerID the primary key of a <code>Customer</code> object
      * @return a list of <code>BasketItem</code> objects, or null
@@ -126,7 +153,8 @@ public class BasketServiceImpl implements BasketService
     @Override
     public @Nullable List<BasketItemWithDetails> getAll(long customerID)
     {
-        List<BasketItem> filteredList = getByCustomerID(basketRepository.getAll(), customerID);
+        // Get only the items matching the customerID
+        List<BasketItem> filteredList = getAllByCustomerID(customerID);
 
         /*
         Returns a new list of BasketItemWithDetails objects. Equivalent of a for-each that gets the ProductWithCategory from
@@ -139,6 +167,7 @@ public class BasketServiceImpl implements BasketService
                 .collect(Collectors.toList());
     }
 
+
     /**
      * Helper method to update the quantity of a basket item
      *
@@ -149,6 +178,7 @@ public class BasketServiceImpl implements BasketService
     private void updateQuantity(long customerID, long productID, int newQuantity)
     {
         basketRepository.update(new BasketItem(customerID, productID, newQuantity));
+        notifyChanged();
     }
 
 
@@ -156,12 +186,12 @@ public class BasketServiceImpl implements BasketService
      * Helper method to get only the <code>BasketItems</code> from a list where each item's <code>BasketItemID</code>
      * has a <code>customerID</code> matching the parameter
      *
-     * @param items      a list of <code>BasketItem</code> objects
      * @param customerID the primary key of a <code>Customer</code> object
      * @return a filtered list of <code>BasketItem</code> objects
      */
-    private List<BasketItem> getByCustomerID(@NotNull List<BasketItem> items, long customerID)
+    private List<BasketItem> getAllByCustomerID(long customerID)
     {
+        List<BasketItem> items = basketRepository.getAll();
         // Returns a new list of elements matching the customer ID
         return items.stream()
                 .filter(item -> item.getId().customerID() == customerID)
@@ -169,4 +199,33 @@ public class BasketServiceImpl implements BasketService
     }
 
 
+    /**
+     * Helper method to calculate the total price of a BasketItem
+     *
+     * @param customerID the primary key of a <code>Customer</code> object
+     * @param productID  the primary key of a <code>Product</code> object
+     * @return an <code>double</code> value of the total price
+     */
+    private double getTotalPriceByID(long customerID, long productID)
+    {
+        int quantity = getQuantity(customerID, productID);        // Get the quantity from the basket item
+
+        if (quantity == 0)        // If the item isn't in the basket, return 0
+        {
+            logger.debug("Price requested for missing BasketItem {} {}", customerID, productID);
+            return 0;
+        }
+
+        // Extract the unit price & multiply it by quantity
+        // Multiply unit price by quantity to get the total price for this BasketItem
+        ProductWithCategory productWithCategory = productRepository.getByIdWithCategory(productID);
+        if (productWithCategory != null)
+        {
+            return productWithCategory.product().getUnitPrice() * quantity;
+        } else
+        {
+            logger.debug("Unable to calculate total price");
+            return 0;
+        }
+    }
 }

@@ -33,6 +33,14 @@
 
     </ListView>
 
+    <!-- Basket total -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <Label alignment="CENTER_RIGHT" fx:id="lbBasketTotal" text="Total: "/>
+    </HBox>
+
+
     <!-- Buttons -->
     <HBox >
 
