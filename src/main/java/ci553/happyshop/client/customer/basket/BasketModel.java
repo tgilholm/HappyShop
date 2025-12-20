@@ -4,8 +4,6 @@ import ci553.happyshop.catalogue.Customer;
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.domain.service.BasketService;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.stage.Stage;
@@ -20,6 +18,13 @@ public class BasketModel
     private final Customer customer;        // The ID of the customer accessing the basket
     private final ObservableList<BasketItemWithDetails> basketItems = FXCollections.observableArrayList();
 
+
+    /**
+     * Constructs a new BasketModel
+     *
+     * @param basketService for handling business logic
+     * @param customer      the currently logged-in customer
+     */
     public BasketModel(@NotNull BasketService basketService, Customer customer)
     {
         this.basketService = basketService;
@@ -29,31 +34,40 @@ public class BasketModel
         basketService.basketChanged().addListener((observable, oldValue, newValue) -> loadBasketItems());
     }
 
+
     public ObservableList<BasketItemWithDetails> getBasketItems()
     {
         return basketItems;
     }
 
+
+    /**
+     * Reloads the basket observable with a complete refresh
+     */
     public void loadBasketItems()
     {
         basketItems.setAll(basketService.getAll(customer.getId()));
         logger.debug("Loaded {} items into basket", basketItems.size());
     }
 
+
     public void addToBasket(@NotNull Product product)
     {
         basketService.addOrUpdateItem(customer.getId(), product.getId(), 1);
     }
+
 
     public void removeFromBasket(@NotNull Product product)
     {
         basketService.decreaseOrRemoveItem(customer.getId(), product.getId());
     }
 
+
     public int getBasketQuantity(@NotNull Product product)
     {
         return basketService.getQuantity(customer.getId(), product.getId());
     }
+
 
     // Hides the Basket view
     public void goBack(@NotNull Stage stage)
@@ -65,5 +79,10 @@ public class BasketModel
     public double getBasketTotal()
     {
         return basketService.getBasketTotalPrice(customer.getId());
+    }
+
+
+    public void clearBasket()
+    {
     }
 }
