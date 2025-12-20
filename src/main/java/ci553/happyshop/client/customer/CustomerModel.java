@@ -219,8 +219,16 @@ public class CustomerModel
 
             // Create a new stage for the basket client
             Stage basket = new Stage();
-            basket.setOnHidden(event -> stage.show()); // Re-open the customer view when the basket close
-            basket.setOnCloseRequest(event -> stage.show());
+            basket.setOnHidden(event ->
+            {
+                stage.show();
+                loadProducts(); // Load the product list if the basket changed anything
+            }); // Re-open the customer view when the basket close
+            basket.setOnCloseRequest(event ->
+            {
+                stage.show();
+                loadProducts();
+            });
 
             // Start the basket
             basketClient.start(basket);

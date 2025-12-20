@@ -19,15 +19,8 @@ import java.util.stream.Collectors;
 /**
  * Implements methods from <code>BasketService</code>
  */
-public class BasketServiceImpl implements BasketService
+public class BasketServiceImpl extends BasketService
 {
-    // Get repository instances
-    private final BasketRepository basketRepository = RepositoryFactory.getBasketRepository();
-    private final ProductRepository productRepository = RepositoryFactory.getProductRepository();
-
-    private static final Logger logger = LogManager.getLogger();
-
-
     /**
      * Decrements the number of items by if the quantity is greater than 1, deletes it completely otherwise.
      * This avoids items with <code>quantity = 0</code> in the basket
@@ -50,6 +43,8 @@ public class BasketServiceImpl implements BasketService
             logger.info("Quantity <= 1, deleting item. ProductID: {}", productID);
             basketRepository.delete(new BasketItemID(customerID, productID));
         }
+
+        notifyChanged();
     }
 
 
@@ -77,6 +72,8 @@ public class BasketServiceImpl implements BasketService
             logger.info("Product with id: {} doesn't exist in basket. Adding new item", productID);
             basketRepository.insert(new BasketItem(customerID, productID, quantity));
         }
+
+        notifyChanged();
     }
 
 
@@ -143,6 +140,7 @@ public class BasketServiceImpl implements BasketService
     public void emptyBasket(long customerID)
     {
         basketRepository.deleteAllByID(customerID);
+        notifyChanged();
     }
 
 
@@ -180,6 +178,7 @@ public class BasketServiceImpl implements BasketService
     private void updateQuantity(long customerID, long productID, int newQuantity)
     {
         basketRepository.update(new BasketItem(customerID, productID, newQuantity));
+        notifyChanged();
     }
 
 
@@ -207,7 +206,7 @@ public class BasketServiceImpl implements BasketService
      * @param productID  the primary key of a <code>Product</code> object
      * @return an <code>double</code> value of the total price
      */
-    public double getTotalPriceByID(long customerID, long productID)
+    private double getTotalPriceByID(long customerID, long productID)
     {
         int quantity = getQuantity(customerID, productID);        // Get the quantity from the basket item
 

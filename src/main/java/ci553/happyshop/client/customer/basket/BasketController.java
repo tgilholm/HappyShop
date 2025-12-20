@@ -80,11 +80,21 @@ public class BasketController
         model.getBasketItems().addListener((ListChangeListener<BasketItemWithDetails>) change -> updateTotal());
 
 
+
         // Hides this window and automatically re-opens the customer window
         btnBack.setOnAction(x ->
         {
             Stage stage = (Stage) btnBack.getScene().getWindow();
             model.goBack(stage);
         });
+    }
+
+
+    /**
+     * Updates the total
+     */
+    private void updateTotal()
+    {
+        lbBasketTotal.setText(String.format("Total: £%.00f", model.getBasketTotal()));
     }
 }

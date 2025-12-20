@@ -53,7 +53,16 @@ public class BasketListCell extends ListCell<BasketItemWithDetails>
 
         if (empty || item == null)
         {
+            // clear everything for reused cells
             setGraphic(null);
+            setText(null);
+            if (lbName != null) lbName.setText("");
+            if (lbCategory != null) lbCategory.setText("");
+            if (lbPrice != null) lbPrice.setText("");
+            if (lbBasketQty != null) lbBasketQty.setText("");
+            if (ivImage != null) ivImage.setImage(null);
+            if (btnAdd != null) btnAdd.setOnAction(null);
+            if (btnRemove != null) { btnRemove.setOnAction(null); btnRemove.setDisable(true); }
         } else
         {
             // Extract values from DTO

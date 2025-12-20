@@ -4,6 +4,8 @@ import ci553.happyshop.catalogue.Customer;
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.domain.service.BasketService;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.stage.Stage;
@@ -18,10 +20,13 @@ public class BasketModel
     private final Customer customer;        // The ID of the customer accessing the basket
     private final ObservableList<BasketItemWithDetails> basketItems = FXCollections.observableArrayList();
 
-    public BasketModel(BasketService basketService, Customer customer)
+    public BasketModel(@NotNull BasketService basketService, Customer customer)
     {
         this.basketService = basketService;
         this.customer = customer;
+
+        // Observe the changeCounter in BasketService
+        basketService.basketChanged().addListener((observable, oldValue, newValue) -> loadBasketItems());
     }
 
     public ObservableList<BasketItemWithDetails> getBasketItems()
@@ -38,13 +43,11 @@ public class BasketModel
     public void addToBasket(@NotNull Product product)
     {
         basketService.addOrUpdateItem(customer.getId(), product.getId(), 1);
-        loadBasketItems();  // Refresh basket list
     }
 
     public void removeFromBasket(@NotNull Product product)
     {
         basketService.decreaseOrRemoveItem(customer.getId(), product.getId());
-        loadBasketItems(); // Refresh basket list
     }
 
     public int getBasketQuantity(@NotNull Product product)
@@ -55,6 +58,12 @@ public class BasketModel
     // Hides the Basket view
     public void goBack(@NotNull Stage stage)
     {
-        stage.hide();
+        stage.close();
+    }
+
+
+    public double getBasketTotal()
+    {
+        return basketService.getBasketTotalPrice(customer.getId());
     }
 }
