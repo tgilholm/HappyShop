@@ -209,13 +209,22 @@ public class CustomerModel
     }
 
     /**
-     * Runs the <code>start</code> method in <code>BasketClient</code>
+     * Runs the <code>start</code> method in <code>BasketClient</code>, hides this view
      */
-    public void openBasket()
+    public void openBasket(Stage stage)
     {
         try {
             BasketClient basketClient = new BasketClient(PLACEHOLDER);
-            basketClient.start(new Stage());
+            stage.hide();   // Hide the customer view
+
+            // Create a new stage for the basket client
+            Stage basket = new Stage();
+            basket.setOnHidden(event -> stage.show()); // Re-open the customer view when the basket close
+            basket.setOnCloseRequest(event -> stage.show());
+
+            // Start the basket
+            basketClient.start(basket);
+
         } catch (Exception e)
         {
             throw new RuntimeException(e);

@@ -6,6 +6,7 @@ import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.domain.service.BasketService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -49,5 +50,11 @@ public class BasketModel
     public int getBasketQuantity(@NotNull Product product)
     {
         return basketService.getQuantity(customer.getId(), product.getId());
+    }
+
+    // Hides the Basket view
+    public void goBack(@NotNull Stage stage)
+    {
+        stage.hide();
     }
 }

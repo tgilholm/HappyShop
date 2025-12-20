@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -75,9 +76,11 @@ public class BasketController
         logger.info("List view set with {} items ", lvBasketList.getItems().size());
 
 
+        // Hides this window and automatically re-opens the customer window
         btnBack.setOnAction(x ->
         {
-            model.goBack();
+            Stage stage = (Stage) btnBack.getScene().getWindow();
+            model.goBack(stage);
         });
     }
 }
