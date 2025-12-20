@@ -217,10 +217,11 @@ public class CustomerController
     }
 
     /**
-     * Opens the basket window
+     * Opens the basket window, hides CustomerView
      */
     public void basketClicked()
     {
         cusModel.openBasket();
+
     }
 }

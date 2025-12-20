@@ -3,7 +3,6 @@ package ci553.happyshop.client.customer;
 import ci553.happyshop.catalogue.*;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.client.customer.basket.BasketClient;
-import ci553.happyshop.data.repository.BasketRepository;
 import ci553.happyshop.data.repository.CategoryRepository;
 import ci553.happyshop.data.repository.ProductRepository;
 import ci553.happyshop.domain.service.BasketService;
@@ -195,7 +194,7 @@ public class CustomerModel
     public void addToBasket(@NotNull Product product)
     {
         basketService.addOrUpdateItem(PLACEHOLDER.getId(), product.getId(), 1);
-        loadProducts();     // todo currently redraws all cards if product list changes
+        loadProducts(); // List has changed, update card data
     }
 
     public void removeFromBasket(@NotNull Product product)

@@ -2,11 +2,13 @@ package ci553.happyshop.client.customer.basket;
 
 import ci553.happyshop.catalogue.Customer;
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
+import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.domain.service.BasketService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 public class BasketModel
 {
@@ -30,5 +32,22 @@ public class BasketModel
     {
         basketItems.setAll(basketService.getAll(customer.getId()));
         logger.info("Loaded {} items into basket", basketItems.size());
+    }
+
+    public void addToBasket(@NotNull Product product)
+    {
+        basketService.addOrUpdateItem(customer.getId(), product.getId(), 1);
+        loadBasketItems();  // Refresh basket list
+    }
+
+    public void removeFromBasket(@NotNull Product product)
+    {
+        basketService.decreaseOrRemoveItem(customer.getId(), product.getId());
+        loadBasketItems(); // Refresh basket list
+    }
+
+    public int getBasketQuantity(@NotNull Product product)
+    {
+        return basketService.getQuantity(customer.getId(), product.getId());
     }
 }

@@ -91,18 +91,18 @@ public class BasketServiceImpl implements BasketService
     @Override
     public int getQuantity(long customerID, long productID)
     {
-        BasketItem basketItem = basketRepository.getById(new BasketItemID(customerID, productID));
+        // Get the list of basket items and get the quantity from it
+        List<BasketItem> items = basketRepository.getAll();
 
-        // Null check
-        if (basketItem != null)
-        {
-            return basketItem.getQuantity();
-        } else
-        {
-            logger.error("BasketItem {} {} was null", customerID, productID);
-            return 0;
-        }
-
+        // Searches the list for the matching item. If found, gets the quantity. Otherwise, returns 0
+        return items.stream()
+                .filter(item -> item.getId().customerID() == customerID && item.getId().productID() == productID)
+                .findFirst()
+                .map(BasketItem::getQuantity)
+                .orElseGet(() -> {
+                    logger.debug("BasketItem {} {} not found ", customerID, productID);
+                    return 0;
+                });
     }
 
     /**
