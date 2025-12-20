@@ -2,8 +2,6 @@ package ci553.happyshop.client.customer.basket;
 
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
 import ci553.happyshop.catalogue.Product;
-import ci553.happyshop.domain.service.BasketService;
-import ci553.happyshop.domain.service.ServiceFactory;
 import ci553.happyshop.utility.BasketListCell;
 import ci553.happyshop.utility.ButtonActionCallback;
 import javafx.collections.ListChangeListener;
@@ -24,7 +22,7 @@ public class BasketController
     private final BasketModel model;
 
     @FXML
-    public Button btnBack;
+    public Button btnBack, btnCheckout, btnCancel;
 
     @FXML
     public Label lbCusName, lbBasketTotal;;
@@ -32,14 +30,16 @@ public class BasketController
     @FXML
     public ListView<BasketItemWithDetails> lvBasketList;
 
-    // TODO get list of basket items
-    // TODO convert basket items to displayable format
 
     public BasketController(BasketModel model)
     {
         this.model = model;
     }
 
+
+    /**
+     * Initializes elements after the View has finished loading
+     */
     @FXML
     public void initialize()
     {
@@ -47,6 +47,8 @@ public class BasketController
 
         // Define callback behaviour
         // todo base model and reusable code
+        // todo abstract class that models extend
+
         ButtonActionCallback callback = new ButtonActionCallback()
         {
             @Override
@@ -70,21 +72,12 @@ public class BasketController
             }
         };
 
-        // Set the cellFactory of the ListView
+        // Use custom ListCell
         lvBasketList.setCellFactory(param -> new BasketListCell(callback));
-        // Clear the ListView and load the list of basket items into it
-        lvBasketList.setItems(model.getBasketItems());
-        logger.debug("List view set with {} items ", lvBasketList.getItems().size());
+        lvBasketList.setItems(model.getBasketItems());        // Clear the ListView and load the list of basket items into it
 
         // Add a listener to automatically recalculate the "grand total" when the list changes
         model.getBasketItems().addListener((ListChangeListener<BasketItemWithDetails>) change -> updateTotal());
-
-        // Hides this window and automatically re-opens the customer window
-        btnBack.setOnAction(x ->
-        {
-            Stage stage = (Stage) btnBack.getScene().getWindow();
-            model.goBack(stage);
-        });
 
         updateTotal();
     }
@@ -96,5 +89,35 @@ public class BasketController
     private void updateTotal()
     {
         lbBasketTotal.setText(String.format("Total: £%.00f", model.getBasketTotal()));
+    }
+
+
+    /**
+     * Closes this window and returns to the customer view
+     */
+    public void goBack()
+    {
+        Stage stage = (Stage) btnBack.getScene().getWindow();
+        model.goBack(stage);
+    }
+
+
+    // todo open alert window with brief "receipt" & have option for downloading as file
+    // todo decrease stock of all in basket
+    // todo low stock handling, if basket exceeds total stock etc, alert window
+    // todo create custom AlertWindow class for messages to users
+    public void checkout()
+    {
+
+    }
+
+
+    /**
+     * Clears the basket
+     */
+    // todo "are you sure"
+    public void cancel()
+    {
+        model.clearBasket();
     }
 }
