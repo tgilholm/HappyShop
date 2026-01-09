@@ -2,10 +2,10 @@ package ci553.happyshop.data.repository;
 
 import ci553.happyshop.catalogue.BasketItem;
 import ci553.happyshop.catalogue.BasketItemID;
-import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
-import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.data.database.DatabaseConnection;
 import ci553.happyshop.data.database.DatabaseException;
+import ci553.happyshop.data.repository.types.CommonRepository;
+import ci553.happyshop.data.repository.types.ListableRepository;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

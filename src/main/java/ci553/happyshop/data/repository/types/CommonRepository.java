@@ -1,9 +1,7 @@
-package ci553.happyshop.data.repository;
+package ci553.happyshop.data.repository.types;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 /**
  * Defines base CRUD operations to be implemented by more specific repositories.

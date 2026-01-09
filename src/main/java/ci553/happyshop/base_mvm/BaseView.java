@@ -16,8 +16,8 @@ import java.net.URL;
 /**
  * Class from which Views derive shared behaviour. Handles loading FXML/CSS, connects to a controller, and sets the title.
  *
- * @param <C> a class <code>C</code> extending <code>BaseController</code>
- * @param <P> a root JavaFX element extending from the base class <code>Parent</code>
+ * @param <C> a controller <code>C</code> extending <code>BaseController</code>
+ * @param <P> a root JavaFX element extending base class <code>Parent</code>
  */
 public class BaseView<C extends BaseController<? extends BaseModel>, P extends Parent>
 {
