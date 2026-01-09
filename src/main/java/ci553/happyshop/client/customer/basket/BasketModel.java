@@ -1,6 +1,6 @@
 package ci553.happyshop.client.customer.basket;
 
-import ci553.happyshop.base_mvm.AbstractModel;
+import ci553.happyshop.base_mvm.BaseModel;
 import ci553.happyshop.catalogue.Customer;
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
 import ci553.happyshop.catalogue.Product;
@@ -10,7 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
-public class BasketModel extends AbstractModel
+public class BasketModel extends BaseModel
 {
     private final BasketService basketService;
     private final Customer customer;        // The ID of the customer accessing the basket
@@ -28,11 +28,16 @@ public class BasketModel extends AbstractModel
         this.basketService = basketService;
         this.customer = customer;
 
-        // Observe the changeCounter in BasketService
+        // Observe the changeCounter in BasketService and automatically reload the basket
         basketService.basketChanged().addListener((observable, oldValue, newValue) -> loadBasketItems());
     }
 
 
+     /**
+     * Exposes an <code>ObservableList</code> version of the basket items
+     *
+     * @return a list of <code>BasketItemWithDetails</code> objects
+     */
     public ObservableList<BasketItemWithDetails> getBasketItems()
     {
         return basketItems;
@@ -40,7 +45,7 @@ public class BasketModel extends AbstractModel
 
 
     /**
-     * Reloads the basket observable with a complete refresh
+     * Reloads the basket observable list with a complete refresh
      */
     public void loadBasketItems()
     {
@@ -48,38 +53,61 @@ public class BasketModel extends AbstractModel
         logger.debug("Loaded {} items into basket", basketItems.size());
     }
 
-
+    /**
+     * Delegates to basketService to add or update the quantity of an item
+     *
+     * @param product the <code>Product</code> object to update
+     */
     public void addToBasket(@NotNull Product product)
     {
         basketService.addOrUpdateItem(customer.id(), product.getId(), 1);
     }
 
-
+    /**
+     * Delegates to basketService to remove or decrease the quantity of an item
+     *
+     * @param product the <code>Product</code> object to update
+     */
     public void removeFromBasket(@NotNull Product product)
     {
         basketService.decreaseOrRemoveItem(customer.id(), product.getId());
     }
 
-
+    /**
+     * Delegates to basketService to get the quantity of a product
+     *
+     * @param product the <code>Product</code> object from which the quantity is extracted.
+     * @return an int value of the quantity
+     */
     public int getBasketQuantity(@NotNull Product product)
     {
         return basketService.getQuantity(customer.id(), product.getId());
     }
 
 
-    // Hides the Basket view
+    /**
+     * Hides the view
+     * @param stage the <code>Stage</code> to hide
+     */
     public void goBack(@NotNull Stage stage)
     {
         stage.close();
     }
 
 
+    /**
+     * Delegates to basketService to get the quantity of the entire basket
+     * @return a double of the total price
+     */
     public double getBasketTotal()
     {
         return basketService.getBasketTotalPrice(customer.id());
     }
 
 
+    /**
+     * Delegates to basketService to clear the entire basket
+     */
     public void clearBasket()
     {
     }

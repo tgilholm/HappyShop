@@ -1,10 +1,12 @@
 package ci553.happyshop.client.customer.basket;
 
+import ci553.happyshop.base_mvm.BaseView;
 import ci553.happyshop.catalogue.Customer;
 import ci553.happyshop.data.repository.RepositoryFactory;
 import ci553.happyshop.domain.service.BasketService;
 import ci553.happyshop.domain.service.ServiceFactory;
 import javafx.application.Application;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class BasketClient extends Application
@@ -43,7 +45,7 @@ public class BasketClient extends Application
 
         BasketModel model = new BasketModel(basketService, customer);
         BasketController controller = new BasketController(model);
-        BasketView view = new BasketView(controller);
+        BaseView<BasketController, VBox> view = new BaseView<>(controller, "/fxml/BasketView.fxml", null, "Basket Client");
         view.start(primaryStage);
     }
 

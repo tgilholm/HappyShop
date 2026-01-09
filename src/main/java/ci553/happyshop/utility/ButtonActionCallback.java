@@ -17,9 +17,8 @@ public class ButtonActionCallback
 
     // Define functions provided by classes using this callback
     // This allows interchangeability between models and code reuse.
-    // Consumers take a parameter and return nothing
+    // Consumers take a parameter and return nothing.
     // Functions take a parameter and return a result
-
     private final Consumer<Product> onAdd;  // Represents a "void" function
     private final Consumer<Product> onRemove;
     private final Function<Product, Integer> getQty;    // Represents a function with an Integer return type
@@ -50,8 +49,8 @@ public class ButtonActionCallback
     }
 
     /**
-     * Executes the <code>onAdd</code> <code>Consumer</code> on a specified <code>Product</code>
-     * @param product the <code>Product</code> object to add
+     * Executes the <code>onRemove</code> <code>Consumer</code> on a specified <code>Product</code>
+     * @param product the <code>Product</code> object to remove
      */
     void onRemoveItem(@NotNull Product product)
     {
@@ -59,6 +58,12 @@ public class ButtonActionCallback
         onRemove.accept(product);
     }
 
+
+    /**
+     * Executes the <code>getQty</code> <code>Function</code> on a specified <code>Product</code>
+     * @param product the <code>Product</code> object from which the quantity is extracted.
+     * @return an int value of the quantity
+     */
     int getBasketQuantity(@NotNull Product product)
     {
         logger.debug("Getting qty for {}", product);

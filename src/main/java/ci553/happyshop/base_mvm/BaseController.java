@@ -6,15 +6,15 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Abstract Class from which Controllers derive shared behaviour.
- * Avoids repeated declaration of loggers. Connects to a model extending AbstractModel
+ * Avoids repeated declaration of loggers. Connects to a model extending BaseModel
  */
-public abstract class AbstractController<M extends AbstractModel>
+public abstract class BaseController<M extends BaseModel>
 {
     protected final Logger logger = LogManager.getLogger();
     protected final M model;
 
 
-    protected AbstractController(M model)
+    protected BaseController(M model)
     {
         this.model = model;
     }

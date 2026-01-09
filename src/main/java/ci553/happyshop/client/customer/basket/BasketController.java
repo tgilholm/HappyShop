@@ -1,7 +1,7 @@
 package ci553.happyshop.client.customer.basket;
 
+import ci553.happyshop.base_mvm.BaseController;
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
-import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.utility.BasketListCell;
 import ci553.happyshop.utility.ButtonActionCallback;
 import javafx.collections.ListChangeListener;
@@ -10,16 +10,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
 
-import java.security.Provider;
-
-public class BasketController
+public class BasketController extends BaseController<BasketModel>
 {
-    private final Logger logger = LogManager.getLogger();
-    private final BasketModel model;
 
     @FXML
     public Button btnBack, btnCheckout, btnCancel;
@@ -33,7 +26,7 @@ public class BasketController
 
     public BasketController(BasketModel model)
     {
-        this.model = model;
+        super(model);
     }
 
 

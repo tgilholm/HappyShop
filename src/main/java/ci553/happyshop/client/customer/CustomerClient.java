@@ -1,12 +1,13 @@
 package ci553.happyshop.client.customer;
 
-import ci553.happyshop.data.repository.BasketRepository;
+import ci553.happyshop.base_mvm.BaseView;
 import ci553.happyshop.data.repository.CategoryRepository;
 import ci553.happyshop.data.repository.ProductRepository;
 import ci553.happyshop.data.repository.RepositoryFactory;
 import ci553.happyshop.domain.service.BasketService;
 import ci553.happyshop.domain.service.ServiceFactory;
 import javafx.application.Application;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import org.apache.logging.log4j.Logger;
@@ -21,6 +22,8 @@ public class CustomerClient extends Application
 {
 
 	private static final Logger logger = LogManager.getLogger();
+	private static final String customerFXML = "/fxml/CustomerView.fxml";
+	private static final String customerCSS = "/css/styles.css";
 
 	public static void main(String[] args)
 	{
@@ -52,7 +55,7 @@ public class CustomerClient extends Application
 
 		CustomerModel cusModel = new CustomerModel(productRepository, categoryRepository, basketService);
 		CustomerController cusController = new CustomerController(cusModel);
-		CustomerView cusView = new CustomerView(cusController);
+		BaseView<CustomerController, GridPane> cusView = new BaseView<>(cusController, customerFXML, customerCSS, "Customer Client");
 		cusView.start(window);
 	}
 }

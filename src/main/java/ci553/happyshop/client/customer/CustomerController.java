@@ -1,9 +1,10 @@
 package ci553.happyshop.client.customer;
 
-import ci553.happyshop.base_mvm.AbstractController;
+import ci553.happyshop.base_mvm.BaseController;
 import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
+import ci553.happyshop.client.customer.basket.BasketClient;
 import ci553.happyshop.utility.ButtonActionCallback;
 import ci553.happyshop.utility.ImageHandler;
 import ci553.happyshop.utility.ProductCardPane;
@@ -28,7 +29,7 @@ import java.net.URL;
  * Controller class for the customer client.
  * Initializes FXML elements and binds the Model to the View
  */
-public class CustomerController extends AbstractController<CustomerModel>
+public class CustomerController extends BaseController<CustomerModel>
 {
 
     @FXML
@@ -198,13 +199,37 @@ public class CustomerController extends AbstractController<CustomerModel>
     }
 
     /**
-     * Opens the basket window, hides CustomerView
+     * Runs the <code>start</code> method in <code>BasketClient</code>, hides this view
      */
     public void basketClicked()
     {
-        // Get the open stage
+        // Get the current stage
         Stage stage = (Stage) btnBasket.getScene().getWindow();
-        model.openBasket(stage);
 
+        try {
+            // Get the current customer from the model
+            BasketClient basketClient = new BasketClient(model.getCurrentCustomer());
+            stage.hide();   // Hide the customer view
+
+            // Create a new stage for the basket client
+            Stage basket = new Stage();
+            basket.setOnHidden(event ->
+            {
+                stage.show();
+                model.loadProducts(); // Load the product list if the basket changed anything
+            }); // Re-open the customer view when the basket close
+            basket.setOnCloseRequest(event ->
+            {
+                stage.show();
+                model.loadProducts();
+            });
+
+            // Start the basket
+            basketClient.start(basket);
+
+        } catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 }
