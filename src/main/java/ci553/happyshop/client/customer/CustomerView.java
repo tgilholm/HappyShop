@@ -1,5 +1,6 @@
 package ci553.happyshop.client.customer;
 
+import ci553.happyshop.base_mvm.AbstractView;
 import ci553.happyshop.utility.UIStyle;
 import ci553.happyshop.utility.WinPosManager;
 import ci553.happyshop.utility.WindowBounds;
@@ -8,8 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -23,15 +22,12 @@ import java.net.URL;
  * Page depending on the current context. Only one of these is shown at a time.
  */
 
-
-public class CustomerView
+public class CustomerView extends AbstractView<CustomerController>
 {
-    private final Logger logger = LogManager.getLogger();
-    private final CustomerController cusController;
 
-    public CustomerView(CustomerController cusController)
+    public CustomerView(CustomerController controller)
     {
-        this.cusController = cusController;
+        super(controller);
     }
 
     // Holds a reference to this CustomerView window for future access and
@@ -107,7 +103,7 @@ public class CustomerView
         {
             if (controllerFactory == CustomerController.class)
             {
-                return cusController;
+                return controller;
             }
 
             try

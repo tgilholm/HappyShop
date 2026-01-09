@@ -1,5 +1,6 @@
 package ci553.happyshop.client.customer;
 
+import ci553.happyshop.base_mvm.AbstractModel;
 import ci553.happyshop.catalogue.*;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.client.customer.basket.BasketClient;
@@ -10,8 +11,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -20,14 +19,12 @@ import org.jetbrains.annotations.NotNull;
  * User search is facilitated by a double-filtered list (Search list -> Category list -> underlying product list).
  * Interfaces with DB with repositories.
  */
-public class CustomerModel
+public class CustomerModel extends AbstractModel
 {
     // TODO GET CURRENTLY LOGGED IN USER
     // This is a mockup of a logged in user that will be used to test basket methods
     Customer PLACEHOLDER = new Customer(1, "PLACEHOLDER", "PLACEHOLDER");
 
-
-    private final Logger logger = LogManager.getLogger();
 
     // Get repository instances
     private final ProductRepository productRepository;
@@ -57,7 +54,7 @@ public class CustomerModel
     private FilteredList<ProductWithCategory> searchFilteredList;                                                           // Filtered product list
     private FilteredList<ProductWithCategory> categoryFilteredList;                                                         // Product list filtered by category
 
-    private String imageName = "images/imageHolder.jpg";                // Image to show in product preview (Search Page)
+    private final String imageName = "images/imageHolder.jpg";                // Image to show in product preview (Search Page)
 
 
     // todo preview image in detail pane with placeholder image
@@ -193,19 +190,19 @@ public class CustomerModel
     // If in the basket, increment quantity by one
     public void addToBasket(@NotNull Product product)
     {
-        basketService.addOrUpdateItem(PLACEHOLDER.getId(), product.getId(), 1);
+        basketService.addOrUpdateItem(PLACEHOLDER.id(), product.getId(), 1);
         loadProducts(); // List has changed, update card data
     }
 
     public void removeFromBasket(@NotNull Product product)
     {
-        basketService.decreaseOrRemoveItem(PLACEHOLDER.getId(), product.getId());
+        basketService.decreaseOrRemoveItem(PLACEHOLDER.id(), product.getId());
         loadProducts();
     }
 
     public int getBasketQuantity(@NotNull Product product)
     {
-        return basketService.getQuantity(PLACEHOLDER.getId(), product.getId());
+        return basketService.getQuantity(PLACEHOLDER.id(), product.getId());
     }
 
     /**

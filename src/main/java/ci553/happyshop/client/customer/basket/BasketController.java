@@ -46,31 +46,11 @@ public class BasketController
         model.loadBasketItems();
 
         // Define callback behaviour
-        // todo base model and reusable code
-        // todo abstract class that models extend
-
-        ButtonActionCallback callback = new ButtonActionCallback()
-        {
-            @Override
-            public void onAddItem(@NotNull Product product)
-            {
-                logger.info("Adding {} to basket", product.getId());
-                model.addToBasket(product);
-            }
-
-            @Override
-            public void onRemoveItem(@NotNull Product product)
-            {
-                logger.info("Removing {} from basket", product.getId());
-                model.removeFromBasket(product);
-            }
-
-            @Override
-            public int getBasketQuantity(Product product)
-            {
-                return model.getBasketQuantity(product);
-            }
-        };
+        ButtonActionCallback callback = new ButtonActionCallback(
+                model::addToBasket,             // add product to the basket
+                model::removeFromBasket,        // remove product from the basket
+                model::getBasketQuantity        // get the basket quantity
+        );
 
         // Use custom ListCell
         lvBasketList.setCellFactory(param -> new BasketListCell(callback));

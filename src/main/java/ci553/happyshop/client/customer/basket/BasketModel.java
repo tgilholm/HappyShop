@@ -1,5 +1,6 @@
 package ci553.happyshop.client.customer.basket;
 
+import ci553.happyshop.base_mvm.AbstractModel;
 import ci553.happyshop.catalogue.Customer;
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
 import ci553.happyshop.catalogue.Product;
@@ -7,14 +8,11 @@ import ci553.happyshop.domain.service.BasketService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-public class BasketModel
+public class BasketModel extends AbstractModel
 {
     private final BasketService basketService;
-    private static final Logger logger = LogManager.getLogger();
     private final Customer customer;        // The ID of the customer accessing the basket
     private final ObservableList<BasketItemWithDetails> basketItems = FXCollections.observableArrayList();
 
@@ -46,26 +44,26 @@ public class BasketModel
      */
     public void loadBasketItems()
     {
-        basketItems.setAll(basketService.getAll(customer.getId()));
+        basketItems.setAll(basketService.getAll(customer.id()));
         logger.debug("Loaded {} items into basket", basketItems.size());
     }
 
 
     public void addToBasket(@NotNull Product product)
     {
-        basketService.addOrUpdateItem(customer.getId(), product.getId(), 1);
+        basketService.addOrUpdateItem(customer.id(), product.getId(), 1);
     }
 
 
     public void removeFromBasket(@NotNull Product product)
     {
-        basketService.decreaseOrRemoveItem(customer.getId(), product.getId());
+        basketService.decreaseOrRemoveItem(customer.id(), product.getId());
     }
 
 
     public int getBasketQuantity(@NotNull Product product)
     {
-        return basketService.getQuantity(customer.getId(), product.getId());
+        return basketService.getQuantity(customer.id(), product.getId());
     }
 
 
@@ -78,7 +76,7 @@ public class BasketModel
 
     public double getBasketTotal()
     {
-        return basketService.getBasketTotalPrice(customer.getId());
+        return basketService.getBasketTotalPrice(customer.id());
     }
 
 

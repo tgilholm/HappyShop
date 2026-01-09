@@ -147,13 +147,13 @@ public class CustomerRepository implements CommonRepository<Customer, Long>
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query))
         {
-            statement.setString(1, customer.getUsername());
-            statement.setString(2, customer.getPassword());
+            statement.setString(1, customer.username());
+            statement.setString(2, customer.password());
 
             statement.executeUpdate();
         } catch (SQLException e)
         {
-            throw new DatabaseException("Failed to add new customer with id: " + customer.getId());
+            throw new DatabaseException("Failed to add new customer with id: " + customer.id());
         }
     }
 

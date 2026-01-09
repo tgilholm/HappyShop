@@ -1,5 +1,6 @@
 package ci553.happyshop.client.customer;
 
+import ci553.happyshop.base_mvm.AbstractController;
 import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
@@ -18,8 +19,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,10 +28,8 @@ import java.net.URL;
  * Controller class for the customer client.
  * Initializes FXML elements and binds the Model to the View
  */
-public class CustomerController
+public class CustomerController extends AbstractController<CustomerModel>
 {
-    private final CustomerModel cusModel;
-    private final Logger logger = LogManager.getLogger();
 
     @FXML
     public TextField tfSearchBar;
@@ -52,9 +49,9 @@ public class CustomerController
     @FXML
     private TilePane tpProducts;
 
-    public CustomerController(CustomerModel cusModel)
+    public CustomerController(CustomerModel model)
     {
-        this.cusModel = cusModel;
+        super(model);
     }
 
     /**
@@ -83,8 +80,8 @@ public class CustomerController
         cbCategories.getItems().add("Select Category");
         cbCategories.getSelectionModel().selectFirst();
 
-        cusModel.loadProducts();            // Load product list
-        cusModel.loadCategories();          // Load category list
+        model.loadProducts();            // Load product list
+        model.loadCategories();          // Load category list
         bindProductList();                  // Bind the product list to the view
         refreshComboBox();
 
@@ -92,19 +89,19 @@ public class CustomerController
         // Add a listener on the comboBox valueProperty, extract the string and set the categoryFilter
         cbCategories.valueProperty().addListener((observable, oldValue, newValue) ->
         {
-            cusModel.setCategoryFilter(newValue);
+            model.setCategoryFilter(newValue);
             logger.info("Set category filter to {}", newValue);
         });
 
         // Add a listener to automatically search as users type
         tfSearchBar.textProperty().addListener((observable, oldValue, newValue) ->
-                cusModel.setSearchFilter(newValue));
+                model.setSearchFilter(newValue));
 
         // Automatically refresh when the filteredList changes
-        cusModel.getSearchFilteredList().addListener((ListChangeListener<ProductWithCategory>) change -> bindProductList());
+        model.getSearchFilteredList().addListener((ListChangeListener<ProductWithCategory>) change -> bindProductList());
 
         // Update ComboBox when the categoryList changes
-        cusModel.getCategories().addListener((ListChangeListener<Category>) change ->
+        model.getCategories().addListener((ListChangeListener<Category>) change ->
                 refreshComboBox());
 
         logger.info("Finished initializing controller");
@@ -120,7 +117,7 @@ public class CustomerController
         cbCategories.getItems().clear();
 
         // Add new categories
-        for (Category c : cusModel.getCategories())
+        for (Category c : model.getCategories())
         {
             cbCategories.getItems().add(c.getName());
         }
@@ -133,32 +130,15 @@ public class CustomerController
     {
         tpProducts.getChildren().clear();            // Load products from the database
 
-        // Define the callback for the ProductCardPane
-        ButtonActionCallback callback = new ButtonActionCallback()
-        {
-            @Override
-            public void onAddItem(@NotNull Product product)
-            {
-                logger.info("Adding {} to basket", product.getId());
-                cusModel.addToBasket(product);
-            }
-
-            @Override
-            public void onRemoveItem(@NotNull Product product)
-            {
-                logger.info("Removing {} from basket", product.getId());
-                cusModel.removeFromBasket(product);
-            }
-
-            @Override
-            public int getBasketQuantity(Product product)
-            {
-                return cusModel.getBasketQuantity(product);
-            }
-        };
+        // Provide the methods to the callback
+        ButtonActionCallback callback = new ButtonActionCallback(
+                model::addToBasket,             // add product to the basket
+                model::removeFromBasket,        // remove product from the basket
+                model::getBasketQuantity        // get the basket quantity
+        );
 
         // Add each of the products as a card
-        for (ProductWithCategory productWithCategory : cusModel.getSearchFilteredList())
+        for (ProductWithCategory productWithCategory : model.getSearchFilteredList())
         {
             VBox productCard = createProductCard(productWithCategory.product(), callback);
 
@@ -224,7 +204,7 @@ public class CustomerController
     {
         // Get the open stage
         Stage stage = (Stage) btnBasket.getScene().getWindow();
-        cusModel.openBasket(stage);
+        model.openBasket(stage);
 
     }
 }
