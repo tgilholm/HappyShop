@@ -8,8 +8,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Product implements Comparable<Product>
 {
-    private final long id;
-    private String name;
+    private final long id;      // Only ID is final (unchangeable)
+    private String name;        // Name, price, qty, etc. can be changed
     private String imageName;
     private double unitPrice;
     private int stockQuantity;
@@ -36,36 +36,43 @@ public class Product implements Comparable<Product>
         this.categoryID = categoryID;
     }
 
+
     // Getter methods
     public long getId()
     {
         return id;
     }
 
+
     public String getName()
     {
         return name;
     }
+
 
     public String getImageName()
     {
         return imageName;
     }
 
+
     public double getUnitPrice()
     {
         return unitPrice;
     }
+
 
     public int getStockQuantity()
     {
         return stockQuantity;
     }
 
+
     public long getCategoryId()
     {
         return categoryID;
     }
+
 
     // Setter methods
     public void setStockQuantity(int stockQuantity)
@@ -73,9 +80,33 @@ public class Product implements Comparable<Product>
         this.stockQuantity = stockQuantity;
     }
 
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+
+    public void setImageName(String imageName)
+    {
+        this.imageName = imageName;
+    }
+
+
+    public void setCategoryID(long categoryID)
+    {
+        this.categoryID = categoryID;
+    }
+
+
+    public void setUnitPrice(double unitPrice)
+    {
+        this.unitPrice = unitPrice;
+    }
+
 
     /**
      * Compares this <code>Product</code> object with another
+     *
      * @param otherProduct the object to be compared.
      * @return -1 if less than the other product, 1 if greater than it, 0 if equal.
      */
@@ -84,14 +115,14 @@ public class Product implements Comparable<Product>
     {
         if (this.getId() > otherProduct.getId())
         {
-			return 1;       // Return 1 if greater than otherProduct
-        }
-        else if (this.getId() < otherProduct.getId())
+            return 1;       // Return 1 if greater than otherProduct
+        } else if (this.getId() < otherProduct.getId())
         {
             return -1;      // Return -1 if less than otherProduct
         }
         return 0; // Return 0 if equal
     }
+
 
     @Override
 
