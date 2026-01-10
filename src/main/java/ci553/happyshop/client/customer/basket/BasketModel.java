@@ -10,6 +10,9 @@ import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Model for the Basket MVC. Connects to the basketService to get basket details.
+ */
 public class BasketModel extends BaseModel
 {
     private final BasketService basketService;
@@ -33,7 +36,7 @@ public class BasketModel extends BaseModel
     }
 
 
-     /**
+    /**
      * Exposes an <code>ObservableList</code> version of the basket items
      *
      * @return a list of <code>BasketItemWithDetails</code> objects
@@ -53,6 +56,7 @@ public class BasketModel extends BaseModel
         logger.debug("Loaded {} items into basket", basketItems.size());
     }
 
+
     /**
      * Delegates to basketService to add or update the quantity of an item
      *
@@ -63,6 +67,7 @@ public class BasketModel extends BaseModel
         basketService.addOrUpdateItem(customer.id(), product.getId(), 1);
     }
 
+
     /**
      * Delegates to basketService to remove or decrease the quantity of an item
      *
@@ -72,6 +77,7 @@ public class BasketModel extends BaseModel
     {
         basketService.decreaseOrRemoveItem(customer.id(), product.getId());
     }
+
 
     /**
      * Delegates to basketService to get the quantity of a product
@@ -87,6 +93,7 @@ public class BasketModel extends BaseModel
 
     /**
      * Hides the view
+     *
      * @param stage the <code>Stage</code> to hide
      */
     public void goBack(@NotNull Stage stage)
@@ -97,6 +104,7 @@ public class BasketModel extends BaseModel
 
     /**
      * Delegates to basketService to get the quantity of the entire basket
+     *
      * @return a double of the total price
      */
     public double getBasketTotal()
@@ -110,5 +118,15 @@ public class BasketModel extends BaseModel
      */
     public void clearBasket()
     {
+        basketService.clearBasket(customer.id());
+    }
+
+
+    /**
+     * Delegates to basketService to reduce stocks of all purchased items and
+     */
+    public void checkoutBasket()
+    {
+        basketService.checkoutBasket(customer.id());
     }
 }

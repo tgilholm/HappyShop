@@ -1,5 +1,6 @@
 package ci553.happyshop.base_mvm;
 
+import ci553.happyshop.utility.FileHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -59,29 +60,6 @@ public class BaseView<C extends BaseController<? extends BaseModel>, P extends P
 
 
     /**
-     * Attempts to parse a <code>String</code> into a <code>URL</code> object
-     *
-     * @param stringURL the location of a file
-     * @return t
-     */
-    @Nullable
-    private URL parseURL(String stringURL)
-    {
-        logger.debug("Parsing string {} to URL", stringURL);
-        URL url = getClass().getResource(stringURL);
-
-        if (url == null)
-        {
-            logger.error("File not found at location {}, Ensure that locations have preceding backslashes: /fxml/FXMLFile.fxml or /css/CSSFile.css", stringURL);
-            return null;
-        } else
-        {
-            return url;
-        }
-    }
-
-
-    /**
      * Creates an FXML loader from a URL and binds the controller to it. <br>
      * Note- a constructor MUST be defined in the FXML file.
      *
@@ -91,7 +69,7 @@ public class BaseView<C extends BaseController<? extends BaseModel>, P extends P
     {
         logger.debug("Attempting to create FXMLLoader from FXML");
 
-        URL fxmlLocation = parseURL(FXML_URL);
+        URL fxmlLocation = FileHandler.parseURL(FXML_URL);
         if (fxmlLocation == null)
         {
             logger.error("Failed to load FXML");
@@ -149,7 +127,7 @@ public class BaseView<C extends BaseController<? extends BaseModel>, P extends P
             logger.debug("No CSS file provided, aborting loadCSS()");
         } else
         {
-            URL cssLocation = parseURL(CSS_URL);
+            URL cssLocation = FileHandler.parseURL(CSS_URL);
             if (cssLocation == null)
             {
                 logger.warn("Failed to load CSS file");

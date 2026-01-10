@@ -4,13 +4,20 @@ import ci553.happyshop.base_mvm.BaseController;
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
 import ci553.happyshop.utility.BasketListCell;
 import ci553.happyshop.utility.ButtonActionCallback;
+import ci553.happyshop.utility.alerts.AlertFactory;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
+import java.util.Optional;
+
+/**
+ * Controller for the basket MVC. Connects to the model & binds data to FXML view elements
+ */
 public class BasketController extends BaseController<BasketModel>
 {
 
@@ -18,7 +25,7 @@ public class BasketController extends BaseController<BasketModel>
     public Button btnBack, btnCheckout, btnCancel;
 
     @FXML
-    public Label lbCusName, lbBasketTotal;;
+    public Label lbCusName, lbBasketTotal;
 
     @FXML
     public ListView<BasketItemWithDetails> lvBasketList;
@@ -57,7 +64,7 @@ public class BasketController extends BaseController<BasketModel>
 
 
     /**
-     * Updates the total
+     * Updates the total displayed in the basket total label
      */
     private void updateTotal()
     {
@@ -75,22 +82,67 @@ public class BasketController extends BaseController<BasketModel>
     }
 
 
-    // todo open alert window with brief "receipt" & have option for downloading as file
     // todo decrease stock of all in basket
     // todo low stock handling, if basket exceeds total stock etc, alert window
-    // todo create custom AlertWindow class for messages to users
+
+
+    /**
+     * Requests user confirmation. Once received, either does nothing or delegates to the Model
+     * to decrease stock of all purchased items and displays a receipt.
+     */
     public void checkout()
     {
+        // Update the list
+        model.loadBasketItems();
+
+        // Confirm the checkout
+        Optional<ButtonType> result = AlertFactory.confirmation(
+                "Checkout",
+                "Checkout",
+                "Are you sure you want to checkout your basket");
+
+        result.ifPresent(buttonPressed ->
+        {
+            if (buttonPressed.getButtonData().isCancelButton())
+            {
+                // Cancel checkout
+                logger.info("User cancelled checkout");
+            } else
+            {
+                logger.info("Checking out items");
+
+                // Display the receipt
+                AlertFactory.receipt(model.getBasketItems(), model.getBasketTotal()).showAndWait();
+
+                // Tell the model to purchase all basket items and clear basket
+            }
+        });
 
     }
 
 
     /**
-     * Clears the basket
+     * Requests user confirmation. Once received, either does nothing or delegates to the Model
+     * to remove all items from a user's basket
      */
-    // todo "are you sure"
     public void cancel()
     {
-        model.clearBasket();
+        // Display a confirmation alert
+        Optional<ButtonType> result = AlertFactory.confirmation(
+                "Reset",
+                "Reset Basket?",
+                "Are you sure you want to reset your entire basket? This will remove all items");
+
+        result.ifPresent(buttonType ->
+        {
+            if (buttonType.getButtonData().isCancelButton())
+            {
+                logger.info("User cancelled reset basket");
+            } else
+            {
+                logger.info("Resetting basket");
+                model.clearBasket();
+            }
+        });
     }
 }

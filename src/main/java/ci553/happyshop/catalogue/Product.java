@@ -9,11 +9,11 @@ import org.jetbrains.annotations.NotNull;
 public class Product implements Comparable<Product>
 {
     private final long id;
-    private final String name;
-    private final String imageName;
-    private final double unitPrice;
-    private final int stockQuantity;
-    private final long categoryID;
+    private String name;
+    private String imageName;
+    private double unitPrice;
+    private int stockQuantity;
+    private long categoryID;
 
 
     /**
@@ -65,6 +65,12 @@ public class Product implements Comparable<Product>
     public long getCategoryId()
     {
         return categoryID;
+    }
+
+    // Setter methods
+    public void setStockQuantity(int stockQuantity)
+    {
+        this.stockQuantity = stockQuantity;
     }
 
 

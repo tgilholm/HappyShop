@@ -4,6 +4,7 @@ import ci553.happyshop.catalogue.BasketItem;
 import ci553.happyshop.catalogue.BasketItemID;
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
+import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.data.repository.BasketRepository;
 import ci553.happyshop.data.repository.ProductRepository;
 import ci553.happyshop.data.repository.RepositoryFactory;
@@ -130,19 +131,17 @@ public class BasketServiceImpl extends BasketService
                 .sum();
     }
 
-
     /**
-     * Removes all items connected to <code>customerID</code>
+     * Clears all the basket items connected to a specified <code>customerID</code>
      *
      * @param customerID the primary key of a <code>Customer</code> object
      */
     @Override
-    public void emptyBasket(long customerID)
+    public void clearBasket(long customerID)
     {
         basketRepository.deleteAllByID(customerID);
         notifyChanged();
     }
-
 
     /**
      * Gets a list of <code>BasketItemWithDetails</code> objects with product and category details attached
@@ -165,6 +164,41 @@ public class BasketServiceImpl extends BasketService
                         productRepository.getByIdWithCategory(item.getId().productID()),
                         item.getQuantity()))
                 .collect(Collectors.toList());
+    }
+
+
+    /**
+     * Reduces stock of all items in the basket of a specified <code>customerID</code>,
+     * then clears their basket
+     *
+     * @param customerID the primary key of a <code>Customer</code> object
+     */
+    @Override
+    public void checkoutBasket(long customerID)
+    {
+        // Get the items matching the customer id
+        List<BasketItem> basketItems = getAllByCustomerID(customerID);
+
+        // Reduce the stock of each of the items via the productRepository
+        for (BasketItem item : basketItems)
+        {
+            // Get the product
+            Product product = productRepository.getById(item.getId().productID());
+
+            if (product == null)
+            {
+                logger.warn("Failed to get product with id: {}", item.getId().productID());
+            }
+            else {
+                // Get the current quantity
+                int quantity = product.getStockQuantity();
+
+
+                // Reduce the quantity by the specified amount, using math.max to prevent negative values
+                productRepository.update(product);
+            }
+
+        }
     }
 
 
