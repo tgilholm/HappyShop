@@ -86,7 +86,7 @@ public class BasketListCell extends ListCell<BasketItemWithDetails>
 
 
             // Set button actions
-            btnAdd.setOnAction(x ->callback.onRemoveItem(product));
+            btnAdd.setOnAction(x ->callback.onAddItem(product));
 
             // Set button actions
             btnRemove.setOnAction(x -> callback.onRemoveItem(product));

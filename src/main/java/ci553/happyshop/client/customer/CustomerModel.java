@@ -1,17 +1,14 @@
 package ci553.happyshop.client.customer;
 
+import ci553.happyshop.base_mvm.BaseModel;
 import ci553.happyshop.catalogue.*;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
-import ci553.happyshop.client.customer.basket.BasketClient;
 import ci553.happyshop.data.repository.CategoryRepository;
 import ci553.happyshop.data.repository.ProductRepository;
 import ci553.happyshop.domain.service.BasketService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -20,14 +17,12 @@ import org.jetbrains.annotations.NotNull;
  * User search is facilitated by a double-filtered list (Search list -> Category list -> underlying product list).
  * Interfaces with DB with repositories.
  */
-public class CustomerModel
+public class CustomerModel extends BaseModel
 {
     // TODO GET CURRENTLY LOGGED IN USER
     // This is a mockup of a logged in user that will be used to test basket methods
-    Customer PLACEHOLDER = new Customer(1, "PLACEHOLDER", "PLACEHOLDER");
+    private final Customer currentCustomer = new Customer(1, "PLACEHOLDER", "PLACEHOLDER");
 
-
-    private final Logger logger = LogManager.getLogger();
 
     // Get repository instances
     private final ProductRepository productRepository;
@@ -42,13 +37,17 @@ public class CustomerModel
      *
      * @param productRepository  for interacting with the <code>Product</code> table
      * @param categoryRepository for interacting with the <code>Category</code> table
-     * @param basketService for interacting with the <code>Basket</code> table
+     * @param basketService      for interacting with the <code>Basket</code> table
      */
-    public CustomerModel(ProductRepository productRepository, CategoryRepository categoryRepository, BasketService basketService)
+    public CustomerModel(ProductRepository productRepository, CategoryRepository categoryRepository,
+            @NotNull BasketService basketService)
     {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.basketService = basketService;
+
+        // Observe the changeCounter in BasketService and automatically reload the product list
+        basketService.basketChanged().addListener((observable, oldValue, newValue) -> loadProducts());
     }
 
 
@@ -57,7 +56,7 @@ public class CustomerModel
     private FilteredList<ProductWithCategory> searchFilteredList;                                                           // Filtered product list
     private FilteredList<ProductWithCategory> categoryFilteredList;                                                         // Product list filtered by category
 
-    private String imageName = "images/imageHolder.jpg";                // Image to show in product preview (Search Page)
+    private final String imageName = "images/imageHolder.jpg";                // Image to show in product preview (Search Page)
 
 
     // todo preview image in detail pane with placeholder image
@@ -75,6 +74,7 @@ public class CustomerModel
         return productWithCategoryList;
     }
 
+
     /**
      * Exposes an ObservableList version of the category list
      *
@@ -84,6 +84,7 @@ public class CustomerModel
     {
         return categoryList;
     }
+
 
     /**
      * Updates the <code>productWithCategoryList</code> from the <code>productRepository</code>
@@ -95,6 +96,7 @@ public class CustomerModel
 
         logger.debug("Retrieved {} products with categories from ProductTable", productWithCategoryList.size());
     }
+
 
     /**
      * Updates the <code>categoryList</code> from the <code>productRepository</code>
@@ -125,6 +127,7 @@ public class CustomerModel
         return categoryFilteredList;
     }
 
+
     /**
      * Gets the (already filtered by category) list of products matching the search filter.
      * Searches in product description and ID. Gets the list of products from <code>categoryFilteredList</code>
@@ -142,6 +145,7 @@ public class CustomerModel
         }
         return searchFilteredList;
     }
+
 
     /**
      * Updates the predicate of the searchFilteredList to search by product ID or description and
@@ -166,6 +170,7 @@ public class CustomerModel
         });
     }
 
+
     /**
      * Updates the predicate of the categoryFilteredList to search by categoryName and
      * return the products that match the predicate <code>categoryFilter</code>.
@@ -189,53 +194,49 @@ public class CustomerModel
         });
     }
 
-    // Check basket- if not already in the basket, add it
-    // If in the basket, increment quantity by one
+
+    /**
+     * Delegates to basketService to add or update the quantity of an item
+     *
+     * @param product the <code>Product</code> object to update
+     */
     public void addToBasket(@NotNull Product product)
     {
-        basketService.addOrUpdateItem(PLACEHOLDER.getId(), product.getId(), 1);
+        basketService.addOrUpdateItem(currentCustomer.id(), product.getId(), 1);
         loadProducts(); // List has changed, update card data
     }
 
+
+    /**
+     * Delegates to basketService to remove or decrease the quantity of an item
+     *
+     * @param product the <code>Product</code> object to update
+     */
     public void removeFromBasket(@NotNull Product product)
     {
-        basketService.decreaseOrRemoveItem(PLACEHOLDER.getId(), product.getId());
+        basketService.decreaseOrRemoveItem(currentCustomer.id(), product.getId());
         loadProducts();
     }
 
-    public int getBasketQuantity(@NotNull Product product)
-    {
-        return basketService.getQuantity(PLACEHOLDER.getId(), product.getId());
-    }
 
     /**
-     * Runs the <code>start</code> method in <code>BasketClient</code>, hides this view
+     * Delegates to basketService to get the quantity of a product
+     *
+     * @param product the <code>Product</code> object from which the quantity is extracted.
+     * @return an int value of the quantity
      */
-    public void openBasket(Stage stage)
+    public int getBasketQuantity(@NotNull Product product)
     {
-        try {
-            BasketClient basketClient = new BasketClient(PLACEHOLDER);
-            stage.hide();   // Hide the customer view
+        return basketService.getQuantity(currentCustomer.id(), product.getId());
+    }
 
-            // Create a new stage for the basket client
-            Stage basket = new Stage();
-            basket.setOnHidden(event ->
-            {
-                stage.show();
-                loadProducts(); // Load the product list if the basket changed anything
-            }); // Re-open the customer view when the basket close
-            basket.setOnCloseRequest(event ->
-            {
-                stage.show();
-                loadProducts();
-            });
 
-            // Start the basket
-            basketClient.start(basket);
-
-        } catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
+    /**
+     * Gets the currently logged-in <code>Customer</code>
+     * @return a <code>Customer</code> object
+     */
+    public Customer getCurrentCustomer()
+    {
+        return currentCustomer;
     }
 }

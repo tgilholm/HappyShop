@@ -6,8 +6,10 @@ import ci553.happyshop.data.database.DatabaseConnection;
  * Factory for creating singleton repository instances.
  * Avoids creating many small factory classes by centralizing repository creation
  */
-public class RepositoryFactory
+public final class RepositoryFactory
 {
+    private RepositoryFactory() {} // Final class, no instantiation
+
     // Re-use the same URL and DatabaseConnection in all factories
     private static final String DB_URL = "jdbc:derby:happyShopDB";
     private static final DatabaseConnection dbConnection = new DatabaseConnection(DB_URL);

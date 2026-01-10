@@ -7,8 +7,10 @@ import ci553.happyshop.domain.service.impl.BasketServiceImpl;
  * between the data and presentation layer. Avoids creating many small factory classes by centralizing service creation.
  * Abstracts business logic from the presentation layer and simplifies the data layer.
  */
-public class ServiceFactory
+public final class ServiceFactory
 {
+    private ServiceFactory() {}     // Final class, no instantiation
+
     // Create singleton service instances
     private static BasketService basketService;
 

@@ -4,6 +4,7 @@ package ci553.happyshop.data.repository;
 import ci553.happyshop.catalogue.Customer;
 import ci553.happyshop.data.database.DatabaseConnection;
 import ci553.happyshop.data.database.DatabaseException;
+import ci553.happyshop.data.repository.types.CommonRepository;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -147,13 +148,13 @@ public class CustomerRepository implements CommonRepository<Customer, Long>
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query))
         {
-            statement.setString(1, customer.getUsername());
-            statement.setString(2, customer.getPassword());
+            statement.setString(1, customer.username());
+            statement.setString(2, customer.password());
 
             statement.executeUpdate();
         } catch (SQLException e)
         {
-            throw new DatabaseException("Failed to add new customer with id: " + customer.getId());
+            throw new DatabaseException("Failed to add new customer with id: " + customer.id());
         }
     }
 

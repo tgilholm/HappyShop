@@ -40,12 +40,14 @@ public abstract class BasketService
 
     /**
      * Exposes an observable form of the change counter
+     *
      * @return an immutable form of the counter
      */
     public ReadOnlyIntegerProperty basketChanged()
     {
         return changeProperty;
     }
+
 
     /**
      * Decrements the number of items by if the quantity is greater than 1, deletes it completely otherwise.
@@ -76,17 +78,12 @@ public abstract class BasketService
 
     /**
      * Gets the total price of all the BasketItems linked to this customerID
+     *
      * @param customerID the primary key of a <code>Customer</code> object
      * @return a <code>double</code> total price
      */
     public abstract double getBasketTotalPrice(long customerID);
 
-    /**
-     * Removes all items connected to <code>customerID</code>
-     *
-     * @param customerID the primary key of a <code>Customer</code> object
-     */
-    public abstract void emptyBasket(long customerID);
 
     /**
      * Gets a list of <code>BasketItem</code> objects with product and category details attached
@@ -96,4 +93,20 @@ public abstract class BasketService
      */
     @Nullable
     public abstract List<BasketItemWithDetails> getAll(long customerID);
+
+
+    /**
+     * Clears all the basket items connected to a specified <code>customerID</code>
+     *
+     * @param customerID the primary key of a <code>Customer</code> object
+     */
+    public abstract void clearBasket(long customerID);
+
+
+    /**
+     * Reduces stock of all items in the basket of a specified <code>customerID</code>,
+     * then clears their basket
+     * @param customerID the primary key of a <code>Customer</code> object
+     */
+    public abstract void checkoutBasket(long customerID);
 }

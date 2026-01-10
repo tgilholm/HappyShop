@@ -15,6 +15,7 @@ module ci553.happyshop
 	opens ci553.happyshop.client to javafx.fxml;
 	opens ci553.happyshop.client.customer.basket to javafx.fxml;
     opens ci553.happyshop.utility to javafx.fxml;
+	opens ci553.happyshop.base_mvm to javafx.fxml;
 	opens ci553.happyshop.client.customer;
 	opens ci553.happyshop.client.picker;
 	opens ci553.happyshop.client.orderTracker;
@@ -35,5 +36,6 @@ module ci553.happyshop
 	exports ci553.happyshop.systemSetup;
     exports ci553.happyshop.storageAccess;
 	exports ci553.happyshop.catalogue.DTO;
+	exports ci553.happyshop.data.repository.types;
 
 }
