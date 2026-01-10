@@ -114,7 +114,8 @@ public class BasketController extends BaseController<BasketModel>
                 // Display the receipt
                 AlertFactory.receipt(model.getBasketItems(), model.getBasketTotal()).showAndWait();
 
-                // Tell the model to purchase all basket items and clear basket
+                // Tell the model to purchase all basket items and clear the basket
+                model.checkoutBasket();
             }
         });
 

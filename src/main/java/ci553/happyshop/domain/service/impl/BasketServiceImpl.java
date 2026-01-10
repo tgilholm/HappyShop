@@ -34,14 +34,15 @@ public class BasketServiceImpl extends BasketService
     {
         int currentQuantity = getQuantity(customerID, productID);
 
+        logger.info("Removing product with id: {} from basket", productID);
         if (currentQuantity > 1)
         {   // If there still are items remaining after decrementing, update with quantity -1
-            logger.info("Quantity in basket: {}, decrementing quantity by 1. ProductID: {}", currentQuantity, productID);
+            logger.debug("Quantity in basket: {}, decrementing quantity by 1. ProductID: {}", currentQuantity, productID);
             updateQuantity(customerID, productID, currentQuantity - 1);
         } else
         {
             // If decrementing would result in quantity = 0, remove the item altogether
-            logger.info("Quantity <= 1, deleting item. ProductID: {}", productID);
+            logger.debug("Quantity <= 1, deleting item. ProductID: {}", productID);
             basketRepository.delete(new BasketItemID(customerID, productID));
         }
 
@@ -62,15 +63,17 @@ public class BasketServiceImpl extends BasketService
         // Get the current quantity of the item (if it doesn't yet exist, getQuantity returns 0)
         int currentQuantity = getQuantity(customerID, productID);
 
+        logger.info("Adding product with id: {} to basket", productID);
+
         if (currentQuantity > 0)
         {
             // If it exists, update it
-            logger.info("Product with id: {} already exists in basket with quantity {}. Updating quantity.", productID, currentQuantity);
+            logger.debug("Product with id: {} already exists in basket with quantity {}. Updating quantity.", productID, currentQuantity);
             updateQuantity(customerID, productID, quantity + currentQuantity);
         } else
         {
             // If it doesn't exist, create it
-            logger.info("Product with id: {} doesn't exist in basket. Adding new item", productID);
+            logger.debug("Product with id: {} doesn't exist in basket. Adding new item", productID);
             basketRepository.insert(new BasketItem(customerID, productID, quantity));
         }
 
@@ -189,16 +192,25 @@ public class BasketServiceImpl extends BasketService
             {
                 logger.warn("Failed to get product with id: {}", item.getId().productID());
             }
-            else {
+            else
+            {
                 // Get the current quantity
                 int quantity = product.getStockQuantity();
 
-
                 // Reduce the quantity by the specified amount, using math.max to prevent negative values
+                product.setStockQuantity(Math.max(0, quantity - item.getQuantity()));   // If qty - ordered qty < 0, then set to 0 instead of a negative
+
+                logger.debug("Purchased {} of {}", item.getQuantity(), product);
+
+                // Dispatch the update
                 productRepository.update(product);
             }
-
         }
+
+        notifyChanged();
+
+        // Clear the basket
+        clearBasket(customerID);
     }
 
 
