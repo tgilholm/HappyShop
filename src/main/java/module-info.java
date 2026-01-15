@@ -33,6 +33,7 @@ module ci553.happyshop
 	exports ci553.happyshop.client.customer.basket;
 	exports ci553.happyshop.client.orderTracker;
 	exports ci553.happyshop.client.emergency;
+	exports ci553.happyshop.client.login;
 	exports ci553.happyshop.systemSetup;
     exports ci553.happyshop.storageAccess;
 	exports ci553.happyshop.catalogue.DTO;

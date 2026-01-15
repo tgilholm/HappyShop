@@ -20,7 +20,6 @@ import org.apache.logging.log4j.LogManager;
 
 public class CustomerClient extends Application
 {
-
 	private static final Logger logger = LogManager.getLogger();
 	private static final String customerFXML = "/fxml/CustomerView.fxml";
 	private static final String customerCSS = "/css/styles.css";
@@ -41,19 +40,14 @@ public class CustomerClient extends Application
 	}
 
 	/**
-	 * Gets repository instances and injects dependencies into the Model, View, and Controller
+	 * injects dependencies into the Model, View, and Controller
 	 * @param window the <code>Stage</code> object to run
 	 */
 	public static void startCustomerClient(Stage window)
 	{
 		logger.info("Launching CustomerClient");
 
-		// Get instances of the services needed
-		ProductRepository productRepository = RepositoryFactory.getProductRepository();
-		CategoryRepository categoryRepository = RepositoryFactory.getCategoryRepository();
-		BasketService basketService = ServiceFactory.getBasketService();
-
-		CustomerModel cusModel = new CustomerModel(productRepository, categoryRepository, basketService);
+		CustomerModel cusModel = new CustomerModel();
 		CustomerController cusController = new CustomerController(cusModel);
 		BaseView<CustomerController, GridPane> cusView = new BaseView<>(cusController, customerFXML, customerCSS, "Customer Client");
 		cusView.start(window);

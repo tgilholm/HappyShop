@@ -1,11 +1,10 @@
-package ci553.happyshop.login;
+package ci553.happyshop.client.login;
 
 import java.io.IOException;
 
 import ci553.happyshop.utility.UIStyle;
 import ci553.happyshop.utility.WindowBounds;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -25,7 +24,7 @@ import javafx.stage.Stage;
 public class LoginPopup
 {
 	// Connects to the loginView
-	public LoginView View;
+	//public LoginView View;
 
 	// Connects to the loginModel
 	public LoginModel Model;
@@ -41,12 +40,12 @@ public class LoginPopup
 	protected PasswordField txtPassword; // Use a PasswordField to protect user privacy
 	protected Button btnLogin;
 
-	public LoginPopup(LoginView v, LoginModel m)
-	{
-		View = v;
-		Model = m;
-		window = new Stage();
-	}
+//	public LoginPopup(LoginView v, LoginModel m)
+//	{
+//		View = v;
+//		Model = m;
+//		window = new Stage();
+//	}
 
 	protected void createScene()
 	{
@@ -98,9 +97,9 @@ public class LoginPopup
 		window.setScene(scene);
 
 		// Open the loginPopup on top of the Login window
-		WindowBounds bounds = View.getWindowBounds();
-		window.setX(bounds.x + bounds.width / 2);
-		window.setY(bounds.y + bounds.height / 2);
+		//WindowBounds bounds = View.getWindowBounds();
+//		window.setX(bounds.x + bounds.width / 2);
+//		window.setY(bounds.y + bounds.height / 2);
 		window.show();
 
 	}

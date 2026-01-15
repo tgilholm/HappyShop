@@ -1,26 +1,16 @@
-package ci553.happyshop.client.customer.basket;
+package ci553.happyshop.client.login;
 
 import ci553.happyshop.base_mvm.BaseView;
-import ci553.happyshop.catalogue.Customer;
-import ci553.happyshop.data.repository.RepositoryFactory;
-import ci553.happyshop.domain.service.BasketService;
-import ci553.happyshop.domain.service.ServiceFactory;
 import javafx.application.Application;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class BasketClient extends Application
+/**
+ * Class to link together the Login MVC and launch the login system.
+ */
+public class LoginClient extends Application
 {
-    private final Customer customer;
-
-    private static final String basketFXML = "/fxml/BasketView.fxml";
-    //private static final String basketCSS = "/css/styles.css";
-
-    public BasketClient(Customer customer)
-    {
-        this.customer = customer;
-    }
-
     public static void main(String[] args)
     {
         launch(args);
@@ -44,11 +34,10 @@ public class BasketClient extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-
-        BasketModel model = new BasketModel(customer);
-        BasketController controller = new BasketController(model);
-        BaseView<BasketController, VBox> view = new BaseView<>(controller, basketFXML, null, "Basket Client");
+        // Link together Model, View, Controller
+        LoginModel model = new LoginModel();
+        LoginController controller = new LoginController(model);
+        BaseView<LoginController, HBox> view = new BaseView<>(controller, "/fxml/LoginView.fxml", null, "Login Client");
         view.start(primaryStage);
     }
-
 }

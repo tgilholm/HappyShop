@@ -109,4 +109,5 @@ public abstract class BasketService
      * @param customerID the primary key of a <code>Customer</code> object
      */
     public abstract void checkoutBasket(long customerID);
+
 }

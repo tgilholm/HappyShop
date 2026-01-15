@@ -5,7 +5,10 @@ import ci553.happyshop.catalogue.*;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.data.repository.CategoryRepository;
 import ci553.happyshop.data.repository.ProductRepository;
+import ci553.happyshop.data.repository.RepositoryFactory;
 import ci553.happyshop.domain.service.BasketService;
+import ci553.happyshop.domain.service.ProductService;
+import ci553.happyshop.domain.service.ServiceFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -23,29 +26,20 @@ public class CustomerModel extends BaseModel
     // This is a mockup of a logged in user that will be used to test basket methods
     private final Customer currentCustomer = new Customer(1, "PLACEHOLDER", "PLACEHOLDER");
 
-
     // Get repository instances
-    private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository = RepositoryFactory.getProductRepository();
+    private final CategoryRepository categoryRepository = RepositoryFactory.getCategoryRepository();
 
     // Get service instances
-    private final BasketService basketService;
+    private final BasketService basketService = ServiceFactory.getBasketService();
+    private final ProductService productService = ServiceFactory.getProductService();
 
 
     /**
      * Constructs a new CustomerModel instance that handles data from the DB.
-     *
-     * @param productRepository  for interacting with the <code>Product</code> table
-     * @param categoryRepository for interacting with the <code>Category</code> table
-     * @param basketService      for interacting with the <code>Basket</code> table
      */
-    public CustomerModel(ProductRepository productRepository, CategoryRepository categoryRepository,
-            @NotNull BasketService basketService)
+    public CustomerModel()
     {
-        this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
-        this.basketService = basketService;
-
         // Observe the changeCounter in BasketService and automatically reload the product list
         basketService.basketChanged().addListener((observable, oldValue, newValue) -> loadProducts());
     }
@@ -238,5 +232,11 @@ public class CustomerModel extends BaseModel
     public Customer getCurrentCustomer()
     {
         return currentCustomer;
+    }
+
+
+    public Integer getStockQuantity(@NotNull Product product)
+    {
+        return productService.getStockQuantity(product.getId());
     }
 }

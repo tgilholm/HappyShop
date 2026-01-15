@@ -41,6 +41,7 @@ public class BasketController extends BaseController<BasketModel>
      * Initializes elements after the View has finished loading
      */
     @FXML
+    @Override
     public void initialize()
     {
         model.loadBasketItems();
@@ -49,7 +50,8 @@ public class BasketController extends BaseController<BasketModel>
         ButtonActionCallback callback = new ButtonActionCallback(
                 model::addToBasket,             // add product to the basket
                 model::removeFromBasket,        // remove product from the basket
-                model::getBasketQuantity        // get the basket quantity
+                model::getBasketQuantity,       // get the basket quantity
+                model::getStockQuantity         // get the product's stock quantity
         );
 
         // Use custom ListCell
@@ -86,6 +88,7 @@ public class BasketController extends BaseController<BasketModel>
     // todo low stock handling, if basket exceeds total stock etc, alert window
 
 
+    // todo move to model
     /**
      * Requests user confirmation. Once received, either does nothing or delegates to the Model
      * to decrease stock of all purchased items and displays a receipt.

@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 
 
 /**
@@ -47,15 +48,21 @@ public class BaseView<C extends BaseController<? extends BaseModel>, P extends P
      */
     public void start(@NotNull Stage window)
     {
-        // Load the root element
-        P root = loadFXML();
-        Scene scene = new Scene(root);
+        try {
+            // Load the root element
+            P root = loadFXML();
+            Scene scene = new Scene(root);
 
-        // Load the CSS if present
-        loadCSS(scene);
-        window.setScene(scene);
-        window.setTitle(title);
-        window.show();        // Start the window
+            // Load the CSS if present
+            loadCSS(scene);
+            window.setScene(scene);
+            window.setTitle(title);
+            window.show();        // Start the window
+        } catch (Exception e)
+        {
+            logger.error("Failed to start window", e);
+        }
+
     }
 
 
@@ -105,14 +112,15 @@ public class BaseView<C extends BaseController<? extends BaseModel>, P extends P
      *
      * @return an object of type <code>P</code>, where "P" is the type parameter for the root object
      */
-    private P loadFXML()
+    private @Nullable P loadFXML()
     {
         try
         {
             return getFxmlLoader().load();
         } catch (IOException e)
         {
-            throw new RuntimeException("Failed to load FXML: " + e);
+            logger.error("Failed to load FXML", e);
+            return null;
         }
     }
 

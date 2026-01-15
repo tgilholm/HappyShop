@@ -5,6 +5,8 @@ import ci553.happyshop.catalogue.Customer;
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.domain.service.BasketService;
+import ci553.happyshop.domain.service.ProductService;
+import ci553.happyshop.domain.service.ServiceFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.stage.Stage;
@@ -15,7 +17,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BasketModel extends BaseModel
 {
-    private final BasketService basketService;
+    private final BasketService basketService = ServiceFactory.getBasketService();
+    private final ProductService productService = ServiceFactory.getProductService();
     private final Customer customer;        // The ID of the customer accessing the basket
     private final ObservableList<BasketItemWithDetails> basketItems = FXCollections.observableArrayList();
 
@@ -23,12 +26,10 @@ public class BasketModel extends BaseModel
     /**
      * Constructs a new BasketModel
      *
-     * @param basketService for handling business logic
      * @param customer      the currently logged-in customer
      */
-    public BasketModel(@NotNull BasketService basketService, Customer customer)
+    public BasketModel(Customer customer)
     {
-        this.basketService = basketService;
         this.customer = customer;
 
         // Observe the changeCounter in BasketService and automatically reload the basket
@@ -128,5 +129,16 @@ public class BasketModel extends BaseModel
     public void checkoutBasket()
     {
         basketService.checkoutBasket(customer.id());
+    }
+
+
+    /**
+     * Gets the stock quantity of the specified product
+     * @param product a <code>Product</code> object
+     * @return the quantity in stock, as an int.
+     */
+    public int getStockQuantity(@NotNull Product product)
+    {
+        return productService.getStockQuantity(product.getId());
     }
 }
