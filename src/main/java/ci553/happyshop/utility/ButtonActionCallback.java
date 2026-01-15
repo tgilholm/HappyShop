@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -22,24 +23,29 @@ public class ButtonActionCallback
     private final Consumer<Product> onAdd;  // Represents a "void" function
     private final Consumer<Product> onRemove;
     private final Function<Product, Integer> getQty;    // Represents a function with an Integer return type
+    private final Function<Product, Integer> getStockQty;
 
 
     /**
      * Constructs a ButtonActionCallback with the provided functions determining
-     * @param onAdd a <code>Consumer</code> method determining "add item" behaviour for a specified <code>Product</code>
+     *
+     * @param onAdd    a <code>Consumer</code> method determining "add item" behaviour for a specified <code>Product</code>
      * @param onRemove a <code>Consumer</code> method determining "remove item" behaviour for a specified <code>Product</code>
-     * @param getQty a <code>Function</code> that gets the quantity of a specified <code>Product</code>
+     * @param getQty   a <code>Function</code> that gets the quantity of a specified <code>Product</code>
      */
-    public ButtonActionCallback(Consumer<Product> onAdd, Consumer<Product> onRemove, Function<Product, Integer> getQty)
+    public ButtonActionCallback(Consumer<Product> onAdd, Consumer<Product> onRemove, Function<Product, Integer> getQty,
+            Function<Product, Integer> getStockQty)
     {
         this.onAdd = onAdd;
         this.onRemove = onRemove;
         this.getQty = getQty;
+        this.getStockQty = getStockQty;
     }
 
 
     /**
      * Executes the <code>onAdd</code> <code>Consumer</code> on a specified <code>Product</code>
+     *
      * @param product the <code>Product</code> object to add
      */
     public void onAddItem(@NotNull Product product)
@@ -48,8 +54,10 @@ public class ButtonActionCallback
         onAdd.accept(product);  // "accepts" or carries out the method
     }
 
+
     /**
      * Executes the <code>onRemove</code> <code>Consumer</code> on a specified <code>Product</code>
+     *
      * @param product the <code>Product</code> object to remove
      */
     void onRemoveItem(@NotNull Product product)
@@ -61,6 +69,7 @@ public class ButtonActionCallback
 
     /**
      * Executes the <code>getQty</code> <code>Function</code> on a specified <code>Product</code>
+     *
      * @param product the <code>Product</code> object from which the quantity is extracted.
      * @return an int value of the quantity
      */
@@ -68,5 +77,12 @@ public class ButtonActionCallback
     {
         logger.debug("Getting qty for {}", product);
         return getQty.apply(product); // "applies" or gets the result from the method
+    }
+
+
+    int getStockQuantity(@NotNull Product product)
+    {
+        logger.debug("Getting stock quantity for {}", product);
+        return getStockQty.apply(product);
     }
 }

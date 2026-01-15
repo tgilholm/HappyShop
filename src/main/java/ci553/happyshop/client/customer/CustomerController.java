@@ -133,9 +133,10 @@ public class CustomerController extends BaseController<CustomerModel>
 
         // Provide the methods to the callback
         ButtonActionCallback callback = new ButtonActionCallback(
-                model::addToBasket,             // add product to the basket
-                model::removeFromBasket,        // remove product from the basket
-                model::getBasketQuantity        // get the basket quantity
+                model::addToBasket,                     // add product to the basket
+                model::removeFromBasket,                // remove product from the basket
+                model::getBasketQuantity,               // get the basket quantity
+                model::getStockQuantity                 // Get quantity in stock
         );
 
         // Add each of the products as a card
@@ -208,7 +209,7 @@ public class CustomerController extends BaseController<CustomerModel>
 
         try {
             // Get the current customer from the model
-            BasketClient basketClient = new BasketClient(model.getCurrentCustomer());
+            BasketClient basketClient = new BasketClient(model.getCurrentUser());
             stage.hide();   // Hide the customer view
 
             // Create a new stage for the basket client

@@ -1,52 +1,16 @@
 package ci553.happyshop.domain.service;
 
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
-import ci553.happyshop.data.repository.BasketRepository;
-import ci553.happyshop.data.repository.ProductRepository;
-import ci553.happyshop.data.repository.RepositoryFactory;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 /**
- * Business logic methods for processing data before accessing the data layer. Defined as an <code>abstract</code>
- * class to define repositories, logging, and data change flags and keep implementations clean
+ * Business logic methods for processing data before accessing the data layer.
  */
-public abstract class BasketService
+public interface BasketService
 {
-    // Get repository instances
-    protected final BasketRepository basketRepository = RepositoryFactory.getBasketRepository();
-    protected final ProductRepository productRepository = RepositoryFactory.getProductRepository();
-    protected final IntegerProperty changeProperty = new SimpleIntegerProperty(0); // Used for updating lists on changes
-
-    protected static final Logger logger = LogManager.getLogger();
-
-
-    /**
-     * Updates the <code>changeProperty</code>. Use whenever the underlying data has changed to trigger
-     * all observers waiting to update internal lists
-     */
-    protected void notifyChanged()
-    {
-        changeProperty.set(changeProperty.getValue() + 1);
-        logger.debug("notifyChanged() invoked");
-    }
-
-
-    /**
-     * Exposes an observable form of the change counter
-     *
-     * @return an immutable form of the counter
-     */
-    public ReadOnlyIntegerProperty basketChanged()
-    {
-        return changeProperty;
-    }
 
 
     /**
@@ -56,7 +20,7 @@ public abstract class BasketService
      * @param customerID the primary key of a <code>Customer</code> object
      * @param productID  the primary key of a <code>Product</code> object
      */
-    public abstract void decreaseOrRemoveItem(long customerID, long productID);
+    void decreaseOrRemoveItem(long customerID, long productID);
 
     /**
      * Add a new item to the <code>BasketTable</code> or update its quantity if it already exists
@@ -65,7 +29,7 @@ public abstract class BasketService
      * @param productID  the primary key of a <code>Product</code> object
      * @param quantity   the number of items to add
      */
-    public abstract void addOrUpdateItem(long customerID, long productID, int quantity);
+    void addOrUpdateItem(long customerID, long productID, int quantity);
 
     /**
      * Returns the quantity of an item in the <code>BasketTable</code>
@@ -74,7 +38,7 @@ public abstract class BasketService
      * @param productID  the primary key of a <code>Product</code> object
      * @return an <code>int</code> value of the quantity
      */
-    public abstract int getQuantity(long customerID, long productID);
+    int getQuantity(long customerID, long productID);
 
     /**
      * Gets the total price of all the BasketItems linked to this customerID
@@ -82,7 +46,7 @@ public abstract class BasketService
      * @param customerID the primary key of a <code>Customer</code> object
      * @return a <code>double</code> total price
      */
-    public abstract double getBasketTotalPrice(long customerID);
+    double getBasketTotalPrice(long customerID);
 
 
     /**
@@ -92,7 +56,7 @@ public abstract class BasketService
      * @return a list of <code>BasketItem</code> objects, or null
      */
     @Nullable
-    public abstract List<BasketItemWithDetails> getAll(long customerID);
+    List<BasketItemWithDetails> getAll(long customerID);
 
 
     /**
@@ -100,13 +64,21 @@ public abstract class BasketService
      *
      * @param customerID the primary key of a <code>Customer</code> object
      */
-    public abstract void clearBasket(long customerID);
+    void clearBasket(long customerID);
 
 
     /**
      * Reduces stock of all items in the basket of a specified <code>customerID</code>,
      * then clears their basket
+     *
      * @param customerID the primary key of a <code>Customer</code> object
      */
-    public abstract void checkoutBasket(long customerID);
+    void checkoutBasket(long customerID);
+
+    /**
+     * Exposes an observable form of the change counter
+     *
+     * @return an immutable form of the counter
+     */
+    ReadOnlyIntegerProperty basketChanged();
 }

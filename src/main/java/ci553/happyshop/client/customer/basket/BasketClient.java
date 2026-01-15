@@ -1,9 +1,10 @@
 package ci553.happyshop.client.customer.basket;
 
 import ci553.happyshop.base_mvm.BaseView;
-import ci553.happyshop.catalogue.Customer;
+import ci553.happyshop.catalogue.User;
 import ci553.happyshop.data.repository.RepositoryFactory;
 import ci553.happyshop.domain.service.BasketService;
+import ci553.happyshop.domain.service.ProductService;
 import ci553.happyshop.domain.service.ServiceFactory;
 import javafx.application.Application;
 import javafx.scene.layout.VBox;
@@ -11,11 +12,14 @@ import javafx.stage.Stage;
 
 public class BasketClient extends Application
 {
-    private final Customer customer;
+    private final User user;
 
-    public BasketClient(Customer customer)
+    private static final String basketFXML = "/fxml/BasketView.fxml";
+    //private static final String basketCSS = "/css/styles.css";
+
+    public BasketClient(User user)
     {
-        this.customer = customer;
+        this.user = user;
     }
 
     public static void main(String[] args)
@@ -41,11 +45,13 @@ public class BasketClient extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
+        // Get service instances & inject in constructor
         BasketService basketService = ServiceFactory.getBasketService();
+        ProductService productService = ServiceFactory.getProductService();
 
-        BasketModel model = new BasketModel(basketService, customer);
+        BasketModel model = new BasketModel(user, basketService, productService);
         BasketController controller = new BasketController(model);
-        BaseView<BasketController, VBox> view = new BaseView<>(controller, "/fxml/BasketView.fxml", null, "Basket Client");
+        BaseView<BasketController, VBox> view = new BaseView<>(controller, basketFXML, null, "Basket Client");
         view.start(primaryStage);
     }
 

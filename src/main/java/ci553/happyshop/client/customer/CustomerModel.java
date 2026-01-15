@@ -3,9 +3,9 @@ package ci553.happyshop.client.customer;
 import ci553.happyshop.base_mvm.BaseModel;
 import ci553.happyshop.catalogue.*;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
-import ci553.happyshop.data.repository.CategoryRepository;
-import ci553.happyshop.data.repository.ProductRepository;
 import ci553.happyshop.domain.service.BasketService;
+import ci553.happyshop.domain.service.CategoryService;
+import ci553.happyshop.domain.service.ProductService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -19,44 +19,40 @@ import org.jetbrains.annotations.NotNull;
  */
 public class CustomerModel extends BaseModel
 {
-    // TODO GET CURRENTLY LOGGED IN USER
-    // This is a mockup of a logged in user that will be used to test basket methods
-    private final Customer currentCustomer = new Customer(1, "PLACEHOLDER", "PLACEHOLDER");
-
-
-    // Get repository instances
-    private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
-
-    // Get service instances
+    private final User currentUser;   // The user logged in to the system
     private final BasketService basketService;
+    private final ProductService productService;
+    private final CategoryService categoryService;
+
+    private final ObservableList<ProductWithCategory> productWithCategoryList = FXCollections.observableArrayList();
+    private final ObservableList<Category> categoryList = FXCollections.observableArrayList();
+    private FilteredList<ProductWithCategory> searchFilteredList;
+    private FilteredList<ProductWithCategory> categoryFilteredList;
+
+    //private final String imageName = "images/imageHolder.jpg"; // Image to show in product preview (Search Page)
 
 
     /**
-     * Constructs a new CustomerModel instance that handles data from the DB.
+     * Constructs a new CustomerModel instance that handles data from the DB. Injects services via
+     * dependency injection in constructor
      *
-     * @param productRepository  for interacting with the <code>Product</code> table
-     * @param categoryRepository for interacting with the <code>Category</code> table
-     * @param basketService      for interacting with the <code>Basket</code> table
+     * @param basketService  a <code>BasketService</code> instance
+     * @param productService a <code>ProductService</code> instance
+     * @param user           the currently logged-in user
      */
-    public CustomerModel(ProductRepository productRepository, CategoryRepository categoryRepository,
-            @NotNull BasketService basketService)
+    public CustomerModel(User user, @NotNull BasketService basketService, @NotNull ProductService productService,
+            CategoryService categoryService)
     {
-        this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
+        this.currentUser = user;
         this.basketService = basketService;
+        this.productService = productService;
+        this.categoryService = categoryService;
 
         // Observe the changeCounter in BasketService and automatically reload the product list
         basketService.basketChanged().addListener((observable, oldValue, newValue) -> loadProducts());
     }
 
 
-    private final ObservableList<ProductWithCategory> productWithCategoryList = FXCollections.observableArrayList();        // Observable product list
-    private final ObservableList<Category> categoryList = FXCollections.observableArrayList();                              // Observable category list
-    private FilteredList<ProductWithCategory> searchFilteredList;                                                           // Filtered product list
-    private FilteredList<ProductWithCategory> categoryFilteredList;                                                         // Product list filtered by category
-
-    private final String imageName = "images/imageHolder.jpg";                // Image to show in product preview (Search Page)
 
 
     // todo preview image in detail pane with placeholder image
@@ -92,7 +88,7 @@ public class CustomerModel extends BaseModel
     public void loadProducts()
     {
         // Use setAll to update the productList
-        productWithCategoryList.setAll(productRepository.getAllWithCategories());
+        productWithCategoryList.setAll(productService.getAllWithCategories());
 
         logger.debug("Retrieved {} products with categories from ProductTable", productWithCategoryList.size());
     }
@@ -103,7 +99,7 @@ public class CustomerModel extends BaseModel
      */
     public void loadCategories()
     {
-        categoryList.setAll(categoryRepository.getAll());
+        categoryList.setAll(categoryService.getAll());
 
         logger.debug("Retrieved {} categories from CategoryTable", categoryList.size());
     }
@@ -155,8 +151,8 @@ public class CustomerModel extends BaseModel
      */
     public void setSearchFilter(String searchFilter)
     {
-        // Update the predicate of searchFilteredList
-        searchFilteredList.setPredicate(productWithCategory ->
+        // Get the list before filtering-avoids null lists
+        getSearchFilteredList().setPredicate(productWithCategory ->
         {
             if (searchFilter == null)
             {
@@ -179,8 +175,8 @@ public class CustomerModel extends BaseModel
      */
     public void setCategoryFilter(String categoryFilter)
     {
-        // Update the predicate of categoryFilteredList
-        categoryFilteredList.setPredicate(productWithCategory ->
+        // Get the list before filtering-avoids null lists
+        getSearchFilteredList().setPredicate(productWithCategory ->
         {
             if (categoryFilter == null)
             {
@@ -202,7 +198,7 @@ public class CustomerModel extends BaseModel
      */
     public void addToBasket(@NotNull Product product)
     {
-        basketService.addOrUpdateItem(currentCustomer.id(), product.getId(), 1);
+        basketService.addOrUpdateItem(currentUser.id(), product.getId(), 1);
         loadProducts(); // List has changed, update card data
     }
 
@@ -214,7 +210,7 @@ public class CustomerModel extends BaseModel
      */
     public void removeFromBasket(@NotNull Product product)
     {
-        basketService.decreaseOrRemoveItem(currentCustomer.id(), product.getId());
+        basketService.decreaseOrRemoveItem(currentUser.id(), product.getId());
         loadProducts();
     }
 
@@ -227,16 +223,23 @@ public class CustomerModel extends BaseModel
      */
     public int getBasketQuantity(@NotNull Product product)
     {
-        return basketService.getQuantity(currentCustomer.id(), product.getId());
+        return basketService.getQuantity(currentUser.id(), product.getId());
     }
 
 
     /**
-     * Gets the currently logged-in <code>Customer</code>
-     * @return a <code>Customer</code> object
+     * Gets the currently logged-in <code>User</code>
+     *
+     * @return a <code>User</code> object
      */
-    public Customer getCurrentCustomer()
+    public User getCurrentUser()
     {
-        return currentCustomer;
+        return currentUser;
+    }
+
+
+    public Integer getStockQuantity(@NotNull Product product)
+    {
+        return productService.getStockQuantity(product.getId());
     }
 }

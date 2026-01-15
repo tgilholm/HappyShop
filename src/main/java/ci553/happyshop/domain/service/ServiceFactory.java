@@ -1,6 +1,9 @@
 package ci553.happyshop.domain.service;
 
 import ci553.happyshop.domain.service.impl.BasketServiceImpl;
+import ci553.happyshop.domain.service.impl.CategoryServiceImpl;
+import ci553.happyshop.domain.service.impl.UserServiceImpl;
+import ci553.happyshop.domain.service.impl.ProductServiceImpl;
 
 /**
  * Factory for creating singleton service instances. Services act as the business layer, mediating
@@ -9,14 +12,21 @@ import ci553.happyshop.domain.service.impl.BasketServiceImpl;
  */
 public final class ServiceFactory
 {
-    private ServiceFactory() {}     // Final class, no instantiation
+    private ServiceFactory()
+    {
+    }     // Final class, no instantiation
+
 
     // Create singleton service instances
     private static BasketService basketService;
+    private static ProductService productService;
+    private static UserService userService;
+    private static CategoryService categoryService;
 
 
     /**
      * Checks if the basket service already exists and if not, creates a new instance
+     *
      * @return the service instance
      */
     public static BasketService getBasketService()
@@ -26,5 +36,44 @@ public final class ServiceFactory
             basketService = new BasketServiceImpl();
         }
         return basketService;
+    }
+
+
+    /**
+     * Checks if the product service already exists and if not, creates a new instance
+     *
+     * @return the service instance
+     */
+    public static ProductService getProductService()
+    {
+        if (productService == null)
+        {
+            productService = new ProductServiceImpl();
+        }
+        return productService;
+    }
+
+
+    /**
+     * Checks if the login service already exists and if not, creates a new instance
+     * @return the service instance
+     */
+    public static UserService getLoginService()
+    {
+        if (userService == null)
+        {
+            userService = new UserServiceImpl();
+        }
+        return userService;
+    }
+
+
+    public static CategoryService getCategoryService()
+    {
+        if (categoryService == null)
+        {
+            categoryService = new CategoryServiceImpl();
+        }
+        return categoryService;
     }
 }

@@ -19,7 +19,6 @@ import java.util.List;
 public class BasketRepository implements CommonRepository<BasketItem, BasketItemID>, ListableRepository<BasketItem>
 {
     private final DatabaseConnection dbConnection;
-    private final ProductRepository productRepository = RepositoryFactory.getProductRepository();
 
     public BasketRepository(DatabaseConnection dbConnection)
     {

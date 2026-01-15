@@ -1,10 +1,13 @@
 package ci553.happyshop.client.customer;
 
 import ci553.happyshop.base_mvm.BaseView;
+import ci553.happyshop.catalogue.User;
 import ci553.happyshop.data.repository.CategoryRepository;
 import ci553.happyshop.data.repository.ProductRepository;
 import ci553.happyshop.data.repository.RepositoryFactory;
 import ci553.happyshop.domain.service.BasketService;
+import ci553.happyshop.domain.service.CategoryService;
+import ci553.happyshop.domain.service.ProductService;
 import ci553.happyshop.domain.service.ServiceFactory;
 import javafx.application.Application;
 import javafx.scene.layout.GridPane;
@@ -18,9 +21,8 @@ import org.apache.logging.log4j.LogManager;
  * Designed for early-stage testing, though full functionality may require other clients to be active.
  */
 
-public class CustomerClient extends Application
+public final class CustomerClient extends Application
 {
-
 	private static final Logger logger = LogManager.getLogger();
 	private static final String customerFXML = "/fxml/CustomerView.fxml";
 	private static final String customerCSS = "/css/styles.css";
@@ -33,7 +35,7 @@ public class CustomerClient extends Application
 	@Override
 	public void start(Stage window)
 	{
-		startCustomerClient(window);
+		//startCustomerClient(window);
 
 		//RemoveProductNotifier removeProductNotifier = new RemoveProductNotifier();
 		//removeProductNotifier.cusView = cusView;
@@ -41,21 +43,22 @@ public class CustomerClient extends Application
 	}
 
 	/**
-	 * Gets repository instances and injects dependencies into the Model, View, and Controller
+	 * injects dependencies into the Model, View, and Controller
 	 * @param window the <code>Stage</code> object to run
 	 */
-	public static void startCustomerClient(Stage window)
+	public static void startCustomerClient(Stage window, User user)
 	{
 		logger.info("Launching CustomerClient");
 
-		// Get instances of the services needed
-		ProductRepository productRepository = RepositoryFactory.getProductRepository();
-		CategoryRepository categoryRepository = RepositoryFactory.getCategoryRepository();
+		// Get service instances & inject in constructor
 		BasketService basketService = ServiceFactory.getBasketService();
+		ProductService productService = ServiceFactory.getProductService();
+		CategoryService categoryService = ServiceFactory.getCategoryService();
 
-		CustomerModel cusModel = new CustomerModel(productRepository, categoryRepository, basketService);
+		CustomerModel cusModel = new CustomerModel(user, basketService, productService, categoryService);
 		CustomerController cusController = new CustomerController(cusModel);
 		BaseView<CustomerController, GridPane> cusView = new BaseView<>(cusController, customerFXML, customerCSS, "Customer Client");
 		cusView.start(window);
+
 	}
 }

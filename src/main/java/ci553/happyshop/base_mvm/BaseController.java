@@ -14,15 +14,17 @@ public abstract class BaseController<M extends BaseModel>
     protected final M model;
 
 
-    protected BaseController(M model)
+    public BaseController(M model)
     {
         this.model = model;
     }
+
 
     /**
      * Initializes the controller after the root element is finished processing.
      */
     @FXML
-    protected abstract void initialize();
+    public abstract void initialize();
+
 
 }
