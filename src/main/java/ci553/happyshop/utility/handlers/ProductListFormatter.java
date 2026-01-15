@@ -1,8 +1,4 @@
-package ci553.happyshop.utility;
-
-import ci553.happyshop.catalogue.Product;
-
-import java.util.ArrayList;
+package ci553.happyshop.utility.handlers;
 
 /**
  * This class builds a formatted, receipt-like summary from a list of products.

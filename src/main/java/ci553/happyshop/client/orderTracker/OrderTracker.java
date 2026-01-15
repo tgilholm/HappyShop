@@ -3,7 +3,7 @@ package ci553.happyshop.client.orderTracker;
 import ci553.happyshop.orderManagement.OrderHub;
 import ci553.happyshop.utility.enums.OrderState;
 import ci553.happyshop.utility.UIStyle;
-import ci553.happyshop.utility.WinPosManager;
+import ci553.happyshop.utility.handlers.WindowHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -48,8 +48,8 @@ public class OrderTracker
 		window.setScene(scene);
 		window.setTitle("🛒Order Tracker");
 
-		// Registers the window's position with WinPosManager.
-		WinPosManager.registerWindow(window, WIDTH, HEIGHT); //calculate position x and y for this window
+		// Registers the window's position with WindowHandler.
+		WindowHandler.registerWindow(window, WIDTH, HEIGHT); //calculate position x and y for this window
 		window.show();
 	}
 

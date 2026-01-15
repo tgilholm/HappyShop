@@ -1,9 +1,9 @@
-package ci553.happyshop.domain.service;
+package ci553.happyshop.service;
 
-import ci553.happyshop.domain.service.impl.BasketServiceImpl;
-import ci553.happyshop.domain.service.impl.CategoryServiceImpl;
-import ci553.happyshop.domain.service.impl.UserServiceImpl;
-import ci553.happyshop.domain.service.impl.ProductServiceImpl;
+import ci553.happyshop.service.impl.BasketServiceImpl;
+import ci553.happyshop.service.impl.CategoryServiceImpl;
+import ci553.happyshop.service.impl.UserServiceImpl;
+import ci553.happyshop.service.impl.ProductServiceImpl;
 
 /**
  * Factory for creating singleton service instances. Services act as the business layer, mediating

@@ -1,6 +1,6 @@
 package ci553.happyshop.utility.alerts;
 
-import ci553.happyshop.utility.FileHandler;
+import ci553.happyshop.utility.handlers.FileHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import org.apache.logging.log4j.LogManager;

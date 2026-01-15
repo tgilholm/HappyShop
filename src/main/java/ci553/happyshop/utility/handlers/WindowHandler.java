@@ -1,4 +1,4 @@
-package ci553.happyshop.utility;
+package ci553.happyshop.utility.handlers;
 
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
@@ -19,7 +19,7 @@ import javafx.stage.Stage;
  */
 
 // final class:  to prevent subclassing
-public final class WinPosManager
+public final class WindowHandler
 {
 	// Get the screen size
 	private static final Rectangle2D SCREEN_SIZE = Screen.getPrimary().getVisualBounds();
@@ -36,7 +36,7 @@ public final class WinPosManager
 	private static double y = BASE_Y;//y position for current window
 
 	// Private constructor to prevent instantiation
-	private WinPosManager()
+	private WindowHandler()
 	{
 		throw new UnsupportedOperationException("final_static class does not have object");
 	}

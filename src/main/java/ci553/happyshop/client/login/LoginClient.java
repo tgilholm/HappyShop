@@ -1,8 +1,8 @@
 package ci553.happyshop.client.login;
 
 import ci553.happyshop.base_mvm.BaseView;
-import ci553.happyshop.domain.service.ServiceFactory;
-import ci553.happyshop.domain.service.UserService;
+import ci553.happyshop.service.ServiceFactory;
+import ci553.happyshop.service.UserService;
 import javafx.application.Application;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;

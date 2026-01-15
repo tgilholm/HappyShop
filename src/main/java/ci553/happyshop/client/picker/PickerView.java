@@ -1,7 +1,7 @@
 package ci553.happyshop.client.picker;
 
 import ci553.happyshop.utility.UIStyle;
-import ci553.happyshop.utility.WinPosManager;
+import ci553.happyshop.utility.handlers.WindowHandler;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -50,7 +50,7 @@ public class PickerView
 		scene = new Scene(vbOrderMapRoot, WIDTH, HEIGHT);
 		window.setScene(scene);
 		window.setTitle("🛒 HappyShop Order Picker");
-		WinPosManager.registerWindow(window, WIDTH, HEIGHT); //calculate position x and y for this window
+		WindowHandler.registerWindow(window, WIDTH, HEIGHT); //calculate position x and y for this window
 		window.show();
 
 		// Set the window close request to prevent closing if the order is not collected

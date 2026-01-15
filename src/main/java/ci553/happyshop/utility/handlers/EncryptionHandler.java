@@ -1,4 +1,4 @@
-package ci553.happyshop.utility;
+package ci553.happyshop.utility.handlers;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

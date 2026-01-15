@@ -1,10 +1,10 @@
-package ci553.happyshop.domain.service.impl;
+package ci553.happyshop.service.impl;
 
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.data.repository.ProductRepository;
 import ci553.happyshop.data.repository.RepositoryFactory;
-import ci553.happyshop.domain.service.ProductService;
+import ci553.happyshop.service.ProductService;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;

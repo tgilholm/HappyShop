@@ -1,9 +1,9 @@
-package ci553.happyshop.domain.service.impl;
+package ci553.happyshop.service.impl;
 
 import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.data.repository.CategoryRepository;
 import ci553.happyshop.data.repository.RepositoryFactory;
-import ci553.happyshop.domain.service.CategoryService;
+import ci553.happyshop.service.CategoryService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

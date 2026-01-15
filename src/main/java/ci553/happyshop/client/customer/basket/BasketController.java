@@ -2,8 +2,8 @@ package ci553.happyshop.client.customer.basket;
 
 import ci553.happyshop.base_mvm.BaseController;
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
-import ci553.happyshop.utility.BasketListCell;
-import ci553.happyshop.utility.ButtonActionCallback;
+import ci553.happyshop.utility.listCell.BasketListCell;
+import ci553.happyshop.utility.listCell.ButtonActionCallback;
 import ci553.happyshop.utility.alerts.AlertFactory;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;

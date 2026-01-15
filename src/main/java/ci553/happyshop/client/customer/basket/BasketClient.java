@@ -2,10 +2,9 @@ package ci553.happyshop.client.customer.basket;
 
 import ci553.happyshop.base_mvm.BaseView;
 import ci553.happyshop.catalogue.User;
-import ci553.happyshop.data.repository.RepositoryFactory;
-import ci553.happyshop.domain.service.BasketService;
-import ci553.happyshop.domain.service.ProductService;
-import ci553.happyshop.domain.service.ServiceFactory;
+import ci553.happyshop.service.BasketService;
+import ci553.happyshop.service.ProductService;
+import ci553.happyshop.service.ServiceFactory;
 import javafx.application.Application;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;

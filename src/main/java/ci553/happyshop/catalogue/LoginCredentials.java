@@ -1,4 +1,4 @@
-package ci553.happyshop.utility;
+package ci553.happyshop.catalogue;
 
 import ci553.happyshop.utility.enums.UserType;
 

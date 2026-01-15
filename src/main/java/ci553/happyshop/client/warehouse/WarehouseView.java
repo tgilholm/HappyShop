@@ -1,10 +1,9 @@
 package ci553.happyshop.client.warehouse;
 
 import ci553.happyshop.catalogue.Product;
-import ci553.happyshop.utility.StorageLocation;
 import ci553.happyshop.utility.UIStyle;
-import ci553.happyshop.utility.WinPosManager;
-import ci553.happyshop.utility.WindowBounds;
+import ci553.happyshop.utility.handlers.WindowHandler;
+import ci553.happyshop.catalogue.WindowBounds;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,8 +21,6 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javafx.geometry.Insets;
@@ -136,7 +133,7 @@ public class WarehouseView
 		Scene scene = new Scene(hbRoot, WIDTH, HEIGHT);
 		window.setScene(scene);
 		window.setTitle("Search_Page  🛒🛒HappyShop_Warehouse🛒🛒  ProductForm_Page(Edit & AddNew Product)");
-		WinPosManager.registerWindow(window, WIDTH, HEIGHT); // Registers the window with WinPosManager to
+		WindowHandler.registerWindow(window, WIDTH, HEIGHT); // Registers the window with WindowHandler to
 		// dynamically position itself based on its size, and any already displayed windows.
 		window.show();
 		viewWindow = window; // Sets the global viewWindow reference to this window for future reference and management.

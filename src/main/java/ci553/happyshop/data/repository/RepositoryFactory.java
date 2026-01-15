@@ -1,6 +1,6 @@
 package ci553.happyshop.data.repository;
 
-import ci553.happyshop.data.database.DatabaseConnection;
+import ci553.happyshop.data.DatabaseConnection;
 
 /**
  * Factory for creating singleton repository instances.

@@ -1,4 +1,4 @@
-package ci553.happyshop.data.database;
+package ci553.happyshop.data;
 
 /**
  * Extends RuntimeException to provide more detail to SQLExceptions

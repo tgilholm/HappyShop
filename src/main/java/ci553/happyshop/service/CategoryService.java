@@ -1,4 +1,4 @@
-package ci553.happyshop.domain.service;
+package ci553.happyshop.service;
 
 import ci553.happyshop.catalogue.Category;
 

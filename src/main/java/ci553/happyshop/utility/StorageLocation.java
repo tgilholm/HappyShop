@@ -41,12 +41,6 @@ import java.nio.file.Paths;
 
 public class StorageLocation
 {
-	/**
-	 * Note: The trailing '/' in "images/" is important.
-	 * It does not affect Path conversion, but is necessary for correct String operations,
-	 * such as: String relativeImageUrl = StorageLocation.imageFolder + imageName;
-	 */
-
 	// working Image folder
 	public static final String imageFolder = "images/";
 	public static final Path imageFolderPath = Paths.get(imageFolder);

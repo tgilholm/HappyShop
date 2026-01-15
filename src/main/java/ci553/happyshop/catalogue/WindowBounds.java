@@ -1,4 +1,4 @@
-package ci553.happyshop.utility;
+package ci553.happyshop.catalogue;
 
 /**
  * The WindowBounds class represents the dimensions and position of a window.
@@ -23,19 +23,6 @@ package ci553.happyshop.utility;
  * window-related calculations, ensuring the UI elements are well positioned.
  */
 
-public class WindowBounds
+public record WindowBounds(double x, double y, double width, double height)
 {
-	public double x;
-	public double y;
-	public double width;
-	public double height;
-
-	public WindowBounds(double x, double y, double width, double height)
-	{
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
-	}
-
 }

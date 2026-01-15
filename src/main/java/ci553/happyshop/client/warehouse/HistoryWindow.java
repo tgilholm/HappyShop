@@ -1,7 +1,7 @@
 package ci553.happyshop.client.warehouse;
 
 import ci553.happyshop.utility.UIStyle;
-import ci553.happyshop.utility.WindowBounds;
+import ci553.happyshop.catalogue.WindowBounds;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;

@@ -1,4 +1,4 @@
-package ci553.happyshop.domain.service.impl;
+package ci553.happyshop.service.impl;
 
 import ci553.happyshop.catalogue.BasketItem;
 import ci553.happyshop.catalogue.BasketItemID;
@@ -8,7 +8,7 @@ import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.data.repository.BasketRepository;
 import ci553.happyshop.data.repository.ProductRepository;
 import ci553.happyshop.data.repository.RepositoryFactory;
-import ci553.happyshop.domain.service.BasketService;
+import ci553.happyshop.service.BasketService;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;

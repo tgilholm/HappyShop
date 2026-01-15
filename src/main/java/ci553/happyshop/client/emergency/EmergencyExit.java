@@ -1,7 +1,7 @@
 package ci553.happyshop.client.emergency;
 
 import ci553.happyshop.utility.UIStyle;
-import ci553.happyshop.utility.WinPosManager;
+import ci553.happyshop.utility.handlers.WindowHandler;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -28,7 +28,7 @@ public class EmergencyExit
 	}
 
 	//Private constructor creates a shutdown window.
-	//The window displays a single button with a shutdown image,positioned via `WinPosManager`,
+	//The window displays a single button with a shutdown image,positioned via `WindowHandler`,
 	private EmergencyExit()
 	{
 		ImageView ivExit = new ImageView("images/ShutDown.jpg");
@@ -51,7 +51,7 @@ public class EmergencyExit
 		Stage window = new Stage();
 		window.setScene(scene);
 		window.setTitle("🛒 EXIT");
-		WinPosManager.registerWindow(window, WIDTH, HEIGHT); //calculate position x and y for this window
+		WindowHandler.registerWindow(window, WIDTH, HEIGHT); //calculate position x and y for this window
 		window.show();
 	}
 

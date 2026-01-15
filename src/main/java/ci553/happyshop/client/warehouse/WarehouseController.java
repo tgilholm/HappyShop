@@ -3,9 +3,8 @@ package ci553.happyshop.client.warehouse;
 import ci553.happyshop.base_mvm.BaseController;
 import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
-import ci553.happyshop.catalogue.Product;
-import ci553.happyshop.utility.ButtonActionCallback;
-import ci553.happyshop.utility.FileHandler;
+import ci553.happyshop.utility.listCell.ButtonActionCallback;
+import ci553.happyshop.utility.handlers.FileHandler;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,9 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 
-import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 
 public class WarehouseController extends BaseController<WarehouseModel>
 {

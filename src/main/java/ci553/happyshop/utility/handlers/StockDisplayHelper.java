@@ -1,4 +1,4 @@
-package ci553.happyshop.utility;
+package ci553.happyshop.utility.handlers;
 
 import javafx.scene.control.Label;
 

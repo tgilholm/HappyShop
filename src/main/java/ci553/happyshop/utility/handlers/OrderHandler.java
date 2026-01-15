@@ -1,4 +1,4 @@
-package ci553.happyshop.storageAccess;
+package ci553.happyshop.utility.handlers;
 
 import ci553.happyshop.utility.enums.OrderState;
 
@@ -42,7 +42,7 @@ import java.time.format.DateTimeFormatter;
  * </p>
  */
 
-public class OrderFileManager
+public class OrderHandler
 {
 
 	//Creates a new order file in the specified directory with the given content.

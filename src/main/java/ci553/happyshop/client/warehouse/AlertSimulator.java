@@ -1,7 +1,6 @@
 package ci553.happyshop.client.warehouse;
 
 import ci553.happyshop.utility.UIStyle;
-import ci553.happyshop.utility.WindowBounds;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;

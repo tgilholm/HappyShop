@@ -1,6 +1,8 @@
-package ci553.happyshop.utility;
+package ci553.happyshop.utility.listCell;
 
 import ci553.happyshop.catalogue.Product;
+import ci553.happyshop.utility.handlers.ImageHandler;
+import ci553.happyshop.utility.handlers.StockDisplayHelper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;

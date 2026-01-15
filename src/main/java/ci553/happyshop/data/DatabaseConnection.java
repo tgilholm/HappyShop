@@ -1,4 +1,4 @@
-package ci553.happyshop.data.database;
+package ci553.happyshop.data;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

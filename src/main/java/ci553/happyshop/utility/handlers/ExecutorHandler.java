@@ -1,4 +1,4 @@
-package ci553.happyshop.utility.threads;
+package ci553.happyshop.utility.handlers;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -1,7 +1,7 @@
 package ci553.happyshop.base_mvm;
 
 
-import ci553.happyshop.utility.threads.ExecutorHandler;
+import ci553.happyshop.utility.handlers.ExecutorHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -2,8 +2,8 @@ package ci553.happyshop.client.login;
 
 import ci553.happyshop.base_mvm.BaseModel;
 import ci553.happyshop.catalogue.User;
-import ci553.happyshop.domain.service.UserService;
-import ci553.happyshop.utility.LoginCredentials;
+import ci553.happyshop.service.UserService;
+import ci553.happyshop.catalogue.LoginCredentials;
 import ci553.happyshop.utility.enums.UserType;
 import javafx.beans.property.ReadOnlyStringProperty;
 import org.jetbrains.annotations.NotNull;

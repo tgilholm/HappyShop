@@ -1,8 +1,9 @@
-package ci553.happyshop.utility;
+package ci553.happyshop.utility.listCell;
 
 import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
 import ci553.happyshop.catalogue.Product;
+import ci553.happyshop.utility.handlers.ImageHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;

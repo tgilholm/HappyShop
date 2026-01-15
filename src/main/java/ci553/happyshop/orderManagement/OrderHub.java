@@ -1,19 +1,14 @@
 package ci553.happyshop.orderManagement;
 
-import ci553.happyshop.catalogue.Order;
-import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.client.orderTracker.OrderTracker;
 import ci553.happyshop.client.picker.PickerModel;
-import ci553.happyshop.storageAccess.OrderFileManager;
+import ci553.happyshop.utility.handlers.OrderHandler;
 import ci553.happyshop.utility.StorageLocation;
 import ci553.happyshop.utility.enums.OrderState;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +26,7 @@ import java.util.stream.Stream;
  * <p> It is the central coordinator responsible for managing all orders. It handles:
  *   Creating and tracking orders
  *   Maintaining and updating the internal order map, <OrderId, OrderState>
- *   Delegating file-related operations (e.g., updating state and moving files) to OrderFileManager class
+ *   Delegating file-related operations (e.g., updating state and moving files) to OrderHandler class
  *   Loading orders in the "ordered" and "progressing" states from storage during system startup
  *
  * <p> OrderHub also follows the Observer pattern: it notifies registered observers such as OrderTracker
@@ -90,7 +85,7 @@ public class OrderHub
 //		//write order details to file for the orderId in orderedPath (ie. orders/ordered)
 //		//String orderDetail = theOrder.orderDetails();
 //		Path path = orderedPath;
-//		//OrderFileManager.createOrderFile(path, orderId, orderDetail);
+//		//OrderHandler.createOrderFile(path, orderId, orderDetail);
 //
 //		//orderMap.put(orderId, theOrder.getState()); //add the order to orderMap,state is Ordered initially
 //		notifyOrderTrackers(); //notify OrderTrackers
@@ -164,10 +159,10 @@ public class OrderHub
 			switch (newState)
 			{
 			case OrderState.Progressing:
-				OrderFileManager.updateAndMoveOrderFile(orderId, newState, orderedPath, progressingPath);
+				OrderHandler.updateAndMoveOrderFile(orderId, newState, orderedPath, progressingPath);
 				break;
 			case OrderState.Collected:
-				OrderFileManager.updateAndMoveOrderFile(orderId, newState, progressingPath, collectedPath);
+				OrderHandler.updateAndMoveOrderFile(orderId, newState, progressingPath, collectedPath);
 				removeCollectedOrder(orderId); //Scheduled removal
 				break;
 			}
@@ -201,7 +196,7 @@ public class OrderHub
 		OrderState state = orderMap.get(orderId);
 		if (state.equals(OrderState.Progressing))
 		{
-			return OrderFileManager.readOrderFile(progressingPath, orderId);
+			return OrderHandler.readOrderFile(progressingPath, orderId);
 		} else
 		{
 			return "the fuction is only for picker";

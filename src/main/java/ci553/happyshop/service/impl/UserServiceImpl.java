@@ -1,10 +1,10 @@
-package ci553.happyshop.domain.service.impl;
+package ci553.happyshop.service.impl;
 
 import ci553.happyshop.catalogue.User;
 import ci553.happyshop.data.repository.RepositoryFactory;
 import ci553.happyshop.data.repository.UserRepository;
-import ci553.happyshop.domain.service.UserService;
-import ci553.happyshop.utility.EncryptionHandler;
+import ci553.happyshop.service.UserService;
+import ci553.happyshop.utility.handlers.EncryptionHandler;
 import ci553.happyshop.utility.enums.UserType;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleStringProperty;

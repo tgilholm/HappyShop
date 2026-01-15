@@ -25,7 +25,7 @@ module ci553.happyshop
 	exports ci553.happyshop;
 	exports ci553.happyshop.data.database;
 	exports ci553.happyshop.data.repository;
-	exports ci553.happyshop.domain.service;
+	exports ci553.happyshop.service;
 	exports ci553.happyshop.client;
 	exports ci553.happyshop.utility;
 	exports ci553.happyshop.catalogue;
@@ -35,10 +35,15 @@ module ci553.happyshop
 	exports ci553.happyshop.client.emergency;
 	exports ci553.happyshop.client.login;
 	exports ci553.happyshop.systemSetup;
-    exports ci553.happyshop.storageAccess;
 	exports ci553.happyshop.catalogue.DTO;
 	exports ci553.happyshop.data.repository.types;
 	exports ci553.happyshop.utility.enums;
 	opens ci553.happyshop.utility.enums to javafx.fxml;
+    exports ci553.happyshop.utility.listCell;
+    opens ci553.happyshop.utility.listCell to javafx.fxml;
+	exports ci553.happyshop.utility.handlers;
+	opens ci553.happyshop.utility.handlers to javafx.fxml;
+    opens ci553.happyshop.catalogue to javafx.fxml;
+	exports ci553.happyshop.data;
 
 }
