@@ -1,12 +1,12 @@
 package ci553.happyshop.utility;
 
-import ci553.happyshop.utility.alerts.BaseAlert;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+@SuppressWarnings("SameParameterValue")
 public final class EncryptionHandler
 {
 
@@ -20,12 +20,25 @@ public final class EncryptionHandler
 
 
     /**
-     * Encrypts a <code>String</code> using XOR and Base64 (reversible)
+     * Overloaded method. Allows users to simply encrypt strings without providing a cipher
      *
      * @param toEncrypt the <code>String</code> to encrypt
      * @return a Base64 encrypted <code>String</code>
      */
     public static @NotNull String encryptString(@NotNull String toEncrypt)
+    {
+        return encryptString(toEncrypt, CIPHER);
+    }
+
+
+    /**
+     * Encrypts a <code>String</code> using XOR and Base64 (reversible)
+     *
+     * @param toEncrypt the <code>String</code> to encrypt
+     * @param cipher    a byte array cipher
+     * @return a Base64 encrypted <code>String</code>
+     */
+    static @NotNull String encryptString(@NotNull String toEncrypt, byte @NotNull [] cipher)
     {
         if (toEncrypt.isEmpty())
         {
@@ -36,10 +49,45 @@ public final class EncryptionHandler
         byte[] plaintext = toEncrypt.getBytes(StandardCharsets.UTF_8);  // Same charset as cipher
 
         // Carry out the XOR on each of the bytes
-        byte[] xorArray = getXORArray(plaintext);
+        byte[] xorArray = getXORArray(plaintext, cipher);
 
         // Encodes the XOR-applied byte array in byte 64, then converts each byte to a character
         return Base64.getEncoder().encodeToString(xorArray);
+    }
+
+
+    /**
+     * Overloaded method. Allows users to decrypt strings without knowing the cipher.
+     *
+     * @param toDecrypt the <code>String</code> to decrypt
+     * @return a decrypted <code>String</code>
+     */
+    public static @NotNull String decryptString(@NotNull String toDecrypt)
+    {
+        return decryptString(toDecrypt, CIPHER);
+    }
+
+
+    /**
+     * Decrypts a <code>String</code> by reversing the encryption algorithm
+     *
+     * @param toDecrypt the <code>String</code> to decrypt
+     * @return a decrypted <code>String</code>
+     */
+    static @NotNull String decryptString(@NotNull String toDecrypt, byte @NotNull [] cipher)
+    {
+        if (toDecrypt.isEmpty())
+        {
+            return "";
+        }
+        // Convert the input to a byte array
+        byte[] decoded = Base64.getDecoder().decode(toDecrypt);
+
+        // Decode from Base64, repeat the XOR operation to reverse
+        byte[] plaintext = getXORArray(decoded, cipher);
+
+        // Encodes the XOR-applied byte array in byte 64
+        return new String(plaintext, StandardCharsets.UTF_8);   // String allows specifying charset.
     }
 
 
@@ -70,43 +118,21 @@ public final class EncryptionHandler
      * This is equal to "a".
      *
      * @param plaintext the byte array on which to perform the operation
+     * @param cipher
      * @return a byte array, on which each of the bytes has been XOR'ed with the cipher
      */
     @Contract(pure = true)
-    private static byte @NotNull [] getXORArray(byte @NotNull [] plaintext)
+    static byte @NotNull [] getXORArray(byte @NotNull [] plaintext, byte @NotNull [] cipher)
     {
         // Output byte array, same length as input
         byte[] output = new byte[plaintext.length];
-        int keyLength = CIPHER.length;
+        int keyLength = cipher.length;
 
         for (int i = 0; i < plaintext.length; i++)
         {
 
-            output[i] = (byte) (plaintext[i] ^ CIPHER[i % keyLength]);
+            output[i] = (byte) (plaintext[i] ^ cipher[i % keyLength]);
         }
         return output;  // The encoded array
-    }
-
-
-    /**
-     * Decrypts a <code>String</code> by reversing the encryption algorithm
-     *
-     * @param toDecrypt the <code>String</code> to decrypt
-     * @return a decrypted <code>String</code>
-     */
-    public static @NotNull String decryptString(@NotNull String toDecrypt)
-    {
-        if (toDecrypt.isEmpty())
-        {
-            return "";
-        }
-        // Convert the input to a byte array
-        byte[] decoded = Base64.getDecoder().decode(toDecrypt);
-
-        // Decode from Base64, repeat the XOR operation to reverse
-        byte[] plaintext = getXORArray(decoded);
-
-        // Encodes the XOR-applied byte array in byte 64
-        return new String(plaintext, StandardCharsets.UTF_8);   // String allows specifying charset.
     }
 }
