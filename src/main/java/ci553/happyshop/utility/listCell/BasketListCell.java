@@ -15,6 +15,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
+/**
+ * Class extending list cell to provide custom layout for basket items in customers' baskets
+ * The basket is a one-column ListView, not an unlimited-column TilePane as in other Views,
+ * so this class is free to extend ListCell instead of CardPane.
+ */
 public class BasketListCell extends ListCell<BasketItemWithDetails>
 {
     @FXML
@@ -27,10 +32,16 @@ public class BasketListCell extends ListCell<BasketItemWithDetails>
     public Button btnAdd, btnRemove;
 
     private final Node graphic;   // Graphic node for each cell
-    private final ButtonActionCallback callback;
+    private final ProductCardCallback callback;
 
 
-    public BasketListCell(@NotNull ButtonActionCallback callback)
+    /**
+     * Constructs a new BasketListCell object with the provided
+     * callback behaviour. Loads the custom layout from the FXML file
+     *
+     * @param callback a <code>ProductCardCallback</code> implementation
+     */
+    public BasketListCell(@NotNull ProductCardCallback callback)
     {
         this.callback = callback;
 
@@ -49,6 +60,14 @@ public class BasketListCell extends ListCell<BasketItemWithDetails>
     }
 
 
+    /**
+     * When the underlying product data for this cell updates, this method is
+     * invoked and updates the layout of the cell.
+     * @param item  The new item for the cell.
+     * @param empty whether this cell represents data from the list. If it
+     *              is empty, then it does not represent any domain data, but is a cell
+     *              being used to render an "empty" row.
+     */
     @Override
     protected void updateItem(BasketItemWithDetails item, boolean empty)
     {
@@ -87,7 +106,7 @@ public class BasketListCell extends ListCell<BasketItemWithDetails>
 
 
             // Set button actions
-            btnAdd.setOnAction(x ->callback.onAddItem(product));
+            btnAdd.setOnAction(x -> callback.onAddItem(product));
 
             // Set button actions
             btnRemove.setOnAction(x -> callback.onRemoveItem(product));

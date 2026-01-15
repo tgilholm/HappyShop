@@ -10,8 +10,9 @@ module ci553.happyshop
     requires org.jetbrains.annotations;
 	requires java.desktop;
     requires org.apache.logging.log4j;
+	requires java.smartcardio;
 
-    opens ci553.happyshop to javafx.fxml;
+	opens ci553.happyshop to javafx.fxml;
 	opens ci553.happyshop.client to javafx.fxml;
 	opens ci553.happyshop.client.customer.basket to javafx.fxml;
     opens ci553.happyshop.utility to javafx.fxml;

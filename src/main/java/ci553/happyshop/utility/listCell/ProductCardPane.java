@@ -15,9 +15,10 @@ import java.io.IOException;
 
 
 /**
- * A custom HBox subclass that loads ProductTileCell.fxml. Handles button clicks and updates product details.
+ * A CardPane subclass that loads ProductTileCell.fxml.
+ * Handles button clicks and updates product details.
  */
-public class ProductCardPane extends VBox
+public class ProductCardPane extends CardPane
 {
     @FXML
     private ImageView ivImage;
@@ -32,32 +33,19 @@ public class ProductCardPane extends VBox
 
     /**
      * Constructs a new <code>ProductCardPane</code> from a specified <code>Product</code> and a <code>callback</code>
-     * Loads FXML from ProductTileCell.fxml and initializes with product data.
+     * Loads FXML in the parent class and initializes with product data.
      * @param product the specific product to initialize the layout with
      * @param callback defined actions for the buttons on the layout
      */
-    public ProductCardPane(Product product, ButtonActionCallback callback)
+    public ProductCardPane(Product product, ProductCardCallback callback)
     {
-        //FXML is loaded here to prevent it being reloaded every time a card is updated
-        FXMLLoader loader = new FXMLLoader();
-
-        try
-        {
-            loader.setLocation(getClass().getResource("/fxml/ProductTileCell.fxml"));
-            loader.setController(this);
-            loader.setRoot(this);
-
-            loader.load();
-        } catch (IOException e)
-        {
-            System.err.println("Error loading ProductTileCell.fxml " + e);
-        }
+        super("/fxml/ProductTileCell.fxml");    // Invoke super constructor to load the FXML
 
         // Initialise the product data
         updateProduct(product, callback);
     }
 
-    public void updateProduct(@NotNull Product product, @NotNull ButtonActionCallback callback)
+    public void updateProduct(@NotNull Product product, @NotNull ProductCardCallback callback)
     {
         // Set text fields
         lbName.setText(product.getName());

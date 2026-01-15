@@ -8,7 +8,7 @@ import ci553.happyshop.client.customer.basket.BasketClient;
 import ci553.happyshop.utility.handlers.FileHandler;
 import ci553.happyshop.utility.handlers.ImageHandler;
 import ci553.happyshop.utility.handlers.StockDisplayHelper;
-import ci553.happyshop.utility.listCell.ButtonActionCallback;
+import ci553.happyshop.utility.listCell.ProductCardCallback;
 import ci553.happyshop.utility.listCell.ProductCardPane;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
@@ -130,14 +130,14 @@ public class CustomerController extends BaseController<CustomerModel>
     }
 
     /**
-     * Refreshes the tilePane with the filtered product list. Defines the ButtonActionCallback
+     * Refreshes the tilePane with the filtered product list. Defines the ProductCardCallback
      */
     private void bindProductList()
     {
         tpProducts.getChildren().clear();            // Load products from the database
 
         // Provide the methods to the callback
-        ButtonActionCallback callback = new ButtonActionCallback(
+        ProductCardCallback callback = new ProductCardCallback(
                 model::addToBasket,                     // add product to the basket
                 model::removeFromBasket,                // remove product from the basket
                 model::getBasketQuantity,               // get the basket quantity
@@ -189,11 +189,11 @@ public class CustomerController extends BaseController<CustomerModel>
     /**
      * Create a new <code>ProductCardPane</code> from a <code>Product object</code>
      * @param product the <code>Product</code> object
-     * @param callback a <code>ProductCardPane.ButtonActionCallback</code>
+     * @param callback a <code>ProductCardPane.ProductCardCallback</code>
      * @return a <code>VBox</code> containing the card layout
      */
     @Contract("_, _ -> new")
-    private @NotNull VBox createProductCard(Product product, ButtonActionCallback callback)
+    private @NotNull VBox createProductCard(Product product, ProductCardCallback callback)
     {
         return new ProductCardPane(product, callback);
     }

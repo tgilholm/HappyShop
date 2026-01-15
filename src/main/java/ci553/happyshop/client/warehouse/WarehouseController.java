@@ -3,7 +3,7 @@ package ci553.happyshop.client.warehouse;
 import ci553.happyshop.base_mvm.BaseController;
 import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
-import ci553.happyshop.utility.listCell.ButtonActionCallback;
+import ci553.happyshop.utility.listCell.ProductCardCallback;
 import ci553.happyshop.utility.handlers.FileHandler;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
@@ -129,14 +129,14 @@ public class WarehouseController extends BaseController<WarehouseModel>
     }
 
     /**
-     * Refreshes the tilePane with the filtered product list. Defines the ButtonActionCallback
+     * Refreshes the tilePane with the filtered product list. Defines the ProductCardCallback
      */
     private void bindProductList()
     {
         tpProducts.getChildren().clear();            // Load products from the database
 
         // Provide the methods to the callback
-        ButtonActionCallback callback = new ButtonActionCallback(
+        ProductCardCallback callback = new ProductCardCallback(
                 model::addToBasket,                     // add product to the basket
                 model::removeFromBasket,                // remove product from the basket
                 model::getBasketQuantity,               // get the basket quantity

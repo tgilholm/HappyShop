@@ -11,7 +11,7 @@ import java.util.function.Function;
 /**
  * Declares methods called by buttons on cards (ListCell, TilePane etc)
  */
-public class ButtonActionCallback
+public class ProductCardCallback
 {
     private final Logger logger = LogManager.getLogger();
 
@@ -26,13 +26,13 @@ public class ButtonActionCallback
 
 
     /**
-     * Constructs a ButtonActionCallback with the provided functions determining
+     * Constructs a ProductCardCallback with the provided functions
      *
      * @param onAdd    a <code>Consumer</code> method determining "add item" behaviour for a specified <code>Product</code>
      * @param onRemove a <code>Consumer</code> method determining "remove item" behaviour for a specified <code>Product</code>
      * @param getQty   a <code>Function</code> that gets the quantity of a specified <code>Product</code>
      */
-    public ButtonActionCallback(Consumer<Product> onAdd, Consumer<Product> onRemove, Function<Product, Integer> getQty,
+    public ProductCardCallback(Consumer<Product> onAdd, Consumer<Product> onRemove, Function<Product, Integer> getQty,
             Function<Product, Integer> getStockQty)
     {
         this.onAdd = onAdd;
@@ -78,6 +78,12 @@ public class ButtonActionCallback
     }
 
 
+    /**
+     * Executes the <code>getStockQty</code> <code>Function</code> on a specified <code>Product</code>
+     *
+     * @param product the <code>Product</code> object from which the stock quantity is extracted.
+     * @return an int value of the quantity
+     */
     int getStockQuantity(@NotNull Product product)
     {
         return getStockQty.apply(product);
