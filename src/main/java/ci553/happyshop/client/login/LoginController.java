@@ -101,7 +101,7 @@ public class LoginController extends BaseController<LoginModel>
      */
     public void createAccount()
     {
-        AlertFactory.login().ifPresent(loginCredentials ->
+        AlertFactory.createAccount().ifPresent(loginCredentials ->
         {
             User user = model.createAccount(loginCredentials);
 
