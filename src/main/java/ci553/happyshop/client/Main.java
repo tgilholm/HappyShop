@@ -179,8 +179,8 @@ public class Main extends Application
 
 
     // Create dependent views that need window info
-    HistoryWindow historyWindow = new HistoryWindow();
-    AlertSimulator alertSimulator = new AlertSimulator();
+//    HistoryWindow historyWindow = new HistoryWindow();
+//    AlertSimulator alertSimulator = new AlertSimulator();
 
 
     /**

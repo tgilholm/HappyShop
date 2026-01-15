@@ -4,14 +4,10 @@ import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.utility.handlers.ImageHandler;
 import ci553.happyshop.utility.handlers.StockDisplayHelper;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
 
 
 /**
@@ -30,11 +26,11 @@ public class ProductCardPane extends CardPane
     private Button btnAdd, btnRemove;
 
 
-
     /**
      * Constructs a new <code>ProductCardPane</code> from a specified <code>Product</code> and a <code>callback</code>
      * Loads FXML in the parent class and initializes with product data.
-     * @param product the specific product to initialize the layout with
+     *
+     * @param product  the specific product to initialize the layout with
      * @param callback defined actions for the buttons on the layout
      */
     public ProductCardPane(Product product, ProductCardCallback callback)
@@ -45,6 +41,13 @@ public class ProductCardPane extends CardPane
         updateProduct(product, callback);
     }
 
+
+    /**
+     * Updates the layout of the ProductCardPane when the product data changes
+     *
+     * @param product  the <code>Product</code> from which data is extracted
+     * @param callback the callback behaviour for the buttons
+     */
     public void updateProduct(@NotNull Product product, @NotNull ProductCardCallback callback)
     {
         // Set text fields
@@ -62,14 +65,16 @@ public class ProductCardPane extends CardPane
         lbBasketQty.setText(String.valueOf(callback.getBasketQuantity(product)));
 
         // Add button action
-        btnAdd.setOnAction(x -> {
+        btnAdd.setOnAction(x ->
+        {
             // Add the item to the basket & update quantity
             callback.onAddItem(product);
             lbBasketQty.setText(String.valueOf(callback.getBasketQuantity(product)));
         });
 
         // Remove button action
-        btnRemove.setOnAction(x -> {
+        btnRemove.setOnAction(x ->
+        {
             // Remove the item from the basket & update quantity
             callback.onRemoveItem(product);
             lbBasketQty.setText(String.valueOf(callback.getBasketQuantity(product)));

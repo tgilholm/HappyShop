@@ -14,7 +14,7 @@
 
 <!-- The Controller is attached to the View here -->
 <?import javafx.scene.control.ScrollPane?>
-<GridPane prefHeight="600" prefWidth="1300" styleClass="root" hgap="10" vgap="10"
+<GridPane prefHeight="600" prefWidth="1300" styleClass="customerRoot" hgap="10" vgap="10"
           xmlns:fx="http://javafx.com/fxml/1" fx:controller="ci553.happyshop.client.customer.CustomerController">
     <padding>
         <Insets top="25" right="25" bottom="25" left="25"/>

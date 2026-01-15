@@ -1,11 +1,6 @@
 package ci553.happyshop.client;
 
 
-import ci553.happyshop.client.customer.*;
-import ci553.happyshop.client.warehouse.*;
-import ci553.happyshop.storageAccess.DatabaseRW;
-import ci553.happyshop.storageAccess.DatabaseRWFactory;
-import javafx.stage.Stage;
 
 
 // Class to contain all the implementations for opening windows

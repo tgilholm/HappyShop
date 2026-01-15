@@ -2,7 +2,6 @@ package ci553.happyshop.systemSetup;
 
 import ci553.happyshop.data.DatabaseConnection;
 import ci553.happyshop.data.DatabaseException;
-import ci553.happyshop.storageAccess.DatabaseRWFactory;
 import ci553.happyshop.utility.StorageLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,7 +35,8 @@ public class SetDatabase
     private static final Logger logger = LogManager.getLogger();
 
     // Create the database if it doesn't exist
-    private static final String dbURL = DatabaseRWFactory.dbURL + ";create=true";
+    private static final String DB_URL = "jdbc:derby:happyShopDB";
+    private static final String dbURL = DB_URL + ";create=true";
 
     // Get a dbConnection
     private static final DatabaseConnection dbConnection = new DatabaseConnection(dbURL);

@@ -189,7 +189,7 @@ public class CustomerController extends BaseController<CustomerModel>
     /**
      * Create a new <code>ProductCardPane</code> from a <code>Product object</code>
      * @param product the <code>Product</code> object
-     * @param callback a <code>ProductCardPane.ProductCardCallback</code>
+     * @param callback a <code>ProductCardCallback</code>
      * @return a <code>VBox</code> containing the card layout
      */
     @Contract("_, _ -> new")

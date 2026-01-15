@@ -3,8 +3,13 @@ package ci553.happyshop.client.warehouse;
 import ci553.happyshop.base_mvm.BaseController;
 import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
+import ci553.happyshop.catalogue.Product;
+import ci553.happyshop.utility.handlers.ImageHandler;
+import ci553.happyshop.utility.handlers.StockDisplayHelper;
 import ci553.happyshop.utility.listCell.ProductCardCallback;
 import ci553.happyshop.utility.handlers.FileHandler;
+import ci553.happyshop.utility.listCell.WarehouseCardCallback;
+import ci553.happyshop.utility.listCell.WarehouseCardPane;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,26 +20,26 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
 
 public class WarehouseController extends BaseController<WarehouseModel>
 {
-    public WarehouseModel model;
     public @FXML ImageView ivSearchIcon;
     public @FXML TextField tfSearchBar, tfName, tfPrice;
     public @FXML ComboBox<String> cbCategories;
     public @FXML TilePane tpProducts;
     public @FXML ImageView ivDetailImage;
     public @FXML ComboBox<String> cbSelectMode;
-    public @FXML Label lbDetailID;
+    public @FXML Label lbDetailID, lbStockQty;
     public @FXML ComboBox<String> cbChangeCategory;
 
 
     public WarehouseController(WarehouseModel model)
     {
         super(model);
-
     }
 
 
@@ -107,6 +112,61 @@ public class WarehouseController extends BaseController<WarehouseModel>
 
     }
 
+    /**
+     * Refreshes the tilePane with the filtered product list. Defines the WarehouseCardCallback
+     */
+    private void bindProductList()
+    {
+        // Load products and display them in the TilePane
+        tpProducts.getChildren().clear();
+
+        // Provide callback behaviour
+        WarehouseCardCallback callback = new WarehouseCardCallback(
+                model::editItem,
+                model::deleteItem
+        );
+
+        // Add each product as a WarehouseCardPane
+        for (ProductWithCategory productWithCategory : model.getSearchFilteredList())
+        {
+            VBox productCard = createProductCard(productWithCategory.product(), callback);
+
+            // Add to the TilePane
+            tpProducts.getChildren().add(productCard);
+        }
+    }
+
+    /**
+     * Updates the detailPane on the View with the details from a <code>ProductWithCategory</code> object
+     * @param productWithCategory the <code>ProductWithCategory</code> object to load data from
+     */
+    private void updateDetailPane(@NotNull ProductWithCategory productWithCategory)
+    {
+        ivDetailImage.setImage(ImageHandler.getImageFromProduct(productWithCategory.product()));
+        tfName.setText(productWithCategory.product().getName());
+        lbDetailID.setText("ID: " + productWithCategory.product().getId());
+        tfPrice.setText(String.format("£%.2f", productWithCategory.product().getUnitPrice()));
+
+        // Set the category name
+        // todo set category in combobox
+        //cbChangeCategory.setText(productWithCategory.category().getName());
+
+        // Use the dynamic stock colour method from StockDisplayHelper
+        StockDisplayHelper.updateStockLabel(lbStockQty, productWithCategory.product().getStockQuantity());
+    }
+
+    /**
+     * Create a new <code>WarehouseCardPane</code> from a <code>Product object</code>
+     * @param product the <code>Product</code> object
+     * @param callback a <code>WarehouseCardCallback</code>
+     * @return a <code>VBox</code> containing the card layout
+     */
+    @Contract("_, _ -> new")
+    private @NotNull VBox createProductCard(Product product, WarehouseCardCallback callback)
+    {
+        return new WarehouseCardPane(product, callback);
+    }
+
 
     public void goBack(ActionEvent actionEvent)
     {
@@ -126,44 +186,6 @@ public class WarehouseController extends BaseController<WarehouseModel>
     public void saveChanges(ActionEvent actionEvent)
     {
 
-    }
-
-    /**
-     * Refreshes the tilePane with the filtered product list. Defines the ProductCardCallback
-     */
-    private void bindProductList()
-    {
-        tpProducts.getChildren().clear();            // Load products from the database
-
-        // Provide the methods to the callback
-        ProductCardCallback callback = new ProductCardCallback(
-                model::addToBasket,                     // add product to the basket
-                model::removeFromBasket,                // remove product from the basket
-                model::getBasketQuantity,               // get the basket quantity
-                model::getStockQuantity                 // Get quantity in stock
-        );
-
-        // Add each of the products as a card
-        for (ProductWithCategory productWithCategory : model.getSearchFilteredList())
-        {
-            VBox productCard = createProductCard(productWithCategory.product(), callback);
-
-            // Add the click listener to select a product
-            productCard.setOnMouseClicked(x ->
-            {
-                logger.info("Product selected, id: {}", productWithCategory.product().getId());
-
-                // Reset style to remove border on unselected cards
-                tpProducts.getChildren().forEach(node ->
-                        node.setStyle("-fx-cursor: hand"));
-
-                // Draw a border around the selected item
-                productCard.setStyle("-fx-border-color: lightgray; -fx-border-width: 1; -fx-cursor: hand");
-                updateDetailPane(productWithCategory);
-            });
-
-            tpProducts.getChildren().add(productCard);
-        }
     }
 
 

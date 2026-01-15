@@ -1,6 +1,9 @@
 package ci553.happyshop.client.warehouse;
 
 import ci553.happyshop.base_mvm.BaseView;
+import ci553.happyshop.service.CategoryService;
+import ci553.happyshop.service.ProductService;
+import ci553.happyshop.service.ServiceFactory;
 import javafx.application.Application;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -46,14 +49,19 @@ public class WarehouseClient extends Application
     {
         logger.info("Launching WarehouseClient");
 
-        //WarehouseModel model = new WarehouseModel();
+        // Create service instances
+        final ProductService productService = ServiceFactory.getProductService();
+        final CategoryService categoryService = ServiceFactory.getCategoryService();
+
+
+        WarehouseModel model = new WarehouseModel(productService, categoryService);
         WarehouseController controller = new WarehouseController(model);
         BaseView<WarehouseController, GridPane> view = new BaseView<>(controller, warehouseFXML, warehouseCSS, "Warehouse");
         view.start(window);
 
 
-        HistoryWindow historyWindow = new HistoryWindow();
-        AlertSimulator alertSimulator = new AlertSimulator();
+        //HistoryWindow historyWindow = new HistoryWindow();
+        //AlertSimulator alertSimulator = new AlertSimulator();
 
         // Link after start warehouse interface
 //        model.historyWindow = historyWindow;
