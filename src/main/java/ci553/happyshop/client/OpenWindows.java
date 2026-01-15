@@ -29,28 +29,28 @@ public class OpenWindows
 //	}
 	
 	// Open the warehouse client window on login
-	public void startWarehouseClient()
-	{
-		WarehouseView view = new WarehouseView();
-		WarehouseController controller = new WarehouseController();
-		WarehouseModel model = new WarehouseModel();
-		//DatabaseRW databaseRW = DatabaseRWFactory.createDatabaseRW();
-
-		// Link controller, model, and view and start view
-		view.controller = controller;
-		controller.model = model;
-		model.view = view;
-		//model.databaseRW = databaseRW;
-		view.start(new Stage());
-
-		// create dependent views that need window info
-		HistoryWindow historyWindow = new HistoryWindow();
-		AlertSimulator alertSimulator = new AlertSimulator();
-
-		// Link after start
-		model.historyWindow = historyWindow;
-		model.alertSimulator = alertSimulator;
-		historyWindow.warehouseView = view;
-		alertSimulator.warehouseView = view;
-	}
+//	public void startWarehouseClient()
+//	{
+//		WarehouseView view = new WarehouseView();
+//		WarehouseController controller = new WarehouseController();
+//		WarehouseModel model = new WarehouseModel();
+//		//DatabaseRW databaseRW = DatabaseRWFactory.createDatabaseRW();
+//
+//		// Link controller, model, and view and start view
+//		view.controller = controller;
+//		controller.model = model;
+//		model.view = view;
+//		//model.databaseRW = databaseRW;
+//		view.start(new Stage());
+//
+//		// create dependent views that need window info
+//		HistoryWindow historyWindow = new HistoryWindow();
+//		AlertSimulator alertSimulator = new AlertSimulator();
+//
+//		// Link after start
+//		model.historyWindow = historyWindow;
+//		model.alertSimulator = alertSimulator;
+//		historyWindow.warehouseView = view;
+//		alertSimulator.warehouseView = view;
+//	}
 }

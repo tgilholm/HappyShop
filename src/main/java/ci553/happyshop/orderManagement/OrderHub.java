@@ -78,26 +78,26 @@ public class OrderHub
 		return orderHub;
 	}
 
-	//Creates a new order using the provided list of products.
-	//and also notify picker and orderTracker
-	public Order newOrder(ArrayList<Product> trolley) throws IOException, SQLException
-	{
-		int orderId = OrderCounter.generateOrderId(); //get unique orderId
-		String orderedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-		//make an Order Object: id, Ordered_state, orderedDateTime, and productsList(trolley)
-		Order theOrder = new Order(orderId, OrderState.Ordered, orderedDateTime, trolley);
-
-		//write order details to file for the orderId in orderedPath (ie. orders/ordered)
-		//String orderDetail = theOrder.orderDetails();
-		Path path = orderedPath;
-		//OrderFileManager.createOrderFile(path, orderId, orderDetail);
-
-		orderMap.put(orderId, theOrder.getState()); //add the order to orderMap,state is Ordered initially
-		notifyOrderTrackers(); //notify OrderTrackers
-		notifyPickerModels();//notify pickers
-
-		return theOrder;
-	}
+//	//Creates a new order using the provided list of products.
+//	//and also notify picker and orderTracker
+//	public Order newOrder(ArrayList<Product> trolley) throws IOException, SQLException
+//	{
+//		int orderId = OrderCounter.generateOrderId(); //get unique orderId
+//		String orderedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+//		//make an Order Object: id, Ordered_state, orderedDateTime, and productsList(trolley)
+//		//Order theOrder = new Order(orderId, OrderState.Ordered, orderedDateTime, trolley);
+//
+//		//write order details to file for the orderId in orderedPath (ie. orders/ordered)
+//		//String orderDetail = theOrder.orderDetails();
+//		Path path = orderedPath;
+//		//OrderFileManager.createOrderFile(path, orderId, orderDetail);
+//
+//		//orderMap.put(orderId, theOrder.getState()); //add the order to orderMap,state is Ordered initially
+//		notifyOrderTrackers(); //notify OrderTrackers
+//		notifyPickerModels();//notify pickers
+//
+//		//return null;
+//	}
 
 	//Registers an OrderTracker to receive updates about changes.
 	public void registerOrderTracker(OrderTracker orderTracker)

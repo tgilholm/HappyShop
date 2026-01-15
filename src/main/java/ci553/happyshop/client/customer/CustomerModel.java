@@ -62,7 +62,7 @@ public class CustomerModel extends BaseModel
      * @param user           the currently logged-in user
      */
     public CustomerModel(User user, @NotNull BasketService basketService, @NotNull ProductService productService,
-            CategoryService categoryService)
+            @NotNull CategoryService categoryService)
     {
         this.currentUser = user;
         this.basketService = basketService;

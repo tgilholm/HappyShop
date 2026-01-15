@@ -5,10 +5,7 @@ import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.client.customer.basket.BasketClient;
-import ci553.happyshop.utility.ButtonActionCallback;
-import ci553.happyshop.utility.ImageHandler;
-import ci553.happyshop.utility.ProductCardPane;
-import ci553.happyshop.utility.StockDisplayHelper;
+import ci553.happyshop.utility.*;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -67,10 +64,10 @@ public class CustomerController extends BaseController<CustomerModel>
     public void initialize()
     {
         // Load the search icon
-        URL iconUrl = getClass().getResource("/images/search_icon.png");
-        if (iconUrl != null)
+        URL iconURL = FileHandler.parseURL("/images/search_icon.png");
+        if (iconURL != null)
         {
-            Image image = new Image(iconUrl.toExternalForm());
+            Image image = new Image(iconURL.toExternalForm());
             ivSearchIcon.setImage(image);
         } else
         {
@@ -79,10 +76,15 @@ public class CustomerController extends BaseController<CustomerModel>
 
         // Set up category combobox
         refreshComboBox();
+        cbCategories.getSelectionModel().selectFirst();
 
         model.loadProducts();            // Load product list
         model.loadCategories();          // Load category list
         bindProductList();               // Bind the product list to the view
+
+        // Update ComboBox when the categoryList changes
+        model.getCategories().addListener((ListChangeListener<Category>) change ->
+                refreshComboBox());
 
 
         // Add a listener on the comboBox valueProperty, extract the string and set the categoryFilter
@@ -99,9 +101,7 @@ public class CustomerController extends BaseController<CustomerModel>
         // Automatically refresh when the filteredList changes
         model.getSearchFilteredList().addListener((ListChangeListener<ProductWithCategory>) change -> bindProductList());
 
-        // Update ComboBox when the categoryList changes
-        model.getCategories().addListener((ListChangeListener<Category>) change ->
-                refreshComboBox());
+
 
         logger.info("Finished initializing controller");
     }
@@ -123,7 +123,6 @@ public class CustomerController extends BaseController<CustomerModel>
 
         // Add the "select category" placeholder
         cbCategories.getItems().add("Select Category");
-        cbCategories.getSelectionModel().selectFirst();
     }
 
     /**

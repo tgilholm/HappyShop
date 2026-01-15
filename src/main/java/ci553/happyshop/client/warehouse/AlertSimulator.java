@@ -47,7 +47,7 @@ public class AlertSimulator
 	private static int WIDTH = UIStyle.AlertSimWinWidth;
 	private static int HEIGHT = UIStyle.AlertSimWinHeight;
 
-	public WarehouseView warehouseView;
+	//public WarehouseView warehouseView;
 	private Stage window; // window for AlertSimulator
 	private Scene scene; // Scene for AlertSimulator
 	private Label laErrorMsg;// Label to display error messages
@@ -97,10 +97,10 @@ public class AlertSimulator
 
 		// get bounds of warehouse window which trigers the alertSimulator
 		// so that we can put the alertSimulator on top of it and at a suitable position
-		WindowBounds bounds = warehouseView.getWindowBounds();
-		window.setX(bounds.x + bounds.width - 10);
-		window.setY(bounds.y + UIStyle.HistoryWinHeight + 30);
-		window.show();
+		//WindowBounds bounds = warehouseView.getWindowBounds();
+		//window.setX(bounds.x + bounds.width - 10);
+		//window.setY(bounds.y + UIStyle.HistoryWinHeight + 30);
+		//window.show();
 	}
 
 	// Show error message in the alert window

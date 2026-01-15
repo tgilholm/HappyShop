@@ -1,9 +1,19 @@
 package ci553.happyshop.client.warehouse;
 
+import ci553.happyshop.base_mvm.BaseModel;
+import ci553.happyshop.catalogue.Category;
+import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.catalogue.Product;
+import ci553.happyshop.domain.service.BasketService;
+import ci553.happyshop.domain.service.CategoryService;
+import ci553.happyshop.domain.service.ProductService;
 import ci553.happyshop.storageAccess.DatabaseRW;
 import ci553.happyshop.storageAccess.ImageFileManager;
 import ci553.happyshop.utility.StorageLocation;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -12,23 +22,52 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class WarehouseModel
+/**
+ * The Warehouse model interfaces with the Services to get and set product information
+ * It features the same double-filtered list present in the Customer model, albeit
+ * with a different card displayed in the TilePane
+ */
+public class WarehouseModel extends BaseModel
 {
-	public WarehouseView view;
-	public DatabaseRW databaseRW; //Interface type, not specific implementation
-	//Benefits: Flexibility: Easily change the database implementation.
+	private final ProductService productService;
+	private final CategoryService categoryService;
 
-	private ArrayList<Product> productList = new ArrayList<>(); // search results fetched from the database
-	private Product theSelectedPro; // the product selected from the ListView before the user edits or deletes
-	private String theNewProId;
+	private final ObservableList<ProductWithCategory> productWithCategoryList = FXCollections.observableArrayList();
+	private final ObservableList<Category> categoryList = FXCollections.observableArrayList();
+	private FilteredList<ProductWithCategory> searchFilteredList;
+	private FilteredList<ProductWithCategory> categoryFilteredList;
+
+	// The same executor service as present in other Models, used for concurrent DB access
+	private final ExecutorService executorService = Executors.newSingleThreadExecutor(runnable ->
+	{
+		// The executorService will re-use this thread and execute the provided runnable.
+		Thread thread = new Thread(runnable, "WarehouseModel-DBLoader");
+		thread.setDaemon(true); // daemon = true so that the JVM doesn't get stuck on background threads that won't end
+		logger.debug("Starting runnable");
+		return thread;
+	});
+
+	public WarehouseModel(@NotNull BasketService basketService, @NotNull ProductService productService,
+			@NotNull CategoryService categoryService)
+	{
+
+	}
+
+
+	//private Product theSelectedPro; // the product selected from the ListView before the user edits or deletes
+	//private String theNewProId;
+
+
 
 	//information used to update editProduct child in WarehouseView
-	String displayIdEdit = "";
-	String displayPriceEdit = "";
-	String displayStockEdit = "";
-	String displayDescriptionEdit = "";
-	String displayImageUrlEdit = "images/WarehouseImageHolder.jpg";
+//	String displayIdEdit = "";
+//	String displayPriceEdit = "";
+//	String displayStockEdit = "";
+//	String displayDescriptionEdit = "";
+//	String displayImageUrlEdit = "images/WarehouseImageHolder.jpg";
 
 	public HistoryWindow historyWindow;
 	public AlertSimulator alertSimulator;

@@ -65,28 +65,12 @@ import javafx.scene.input.MouseEvent;
 
 public class WarehouseView
 {
-	private final int WIDTH = UIStyle.warehouseWinWidth;
-	private final int HEIGHT = UIStyle.warehouseWinHeight;
-	private final int COLUMN_WIDTH = WIDTH / 2 - 10;
-
-	public WarehouseController controller;
-	private Stage viewWindow;
-	/** A reference to the main window that is used to get its bounds (position and size).
-	 * This allows us to position other windows (like the History window or alert) relative to the Warehouse window.
-	 * It helps in keeping the UI layout consistent by placing new windows near the Warehouse window.
-	 */
-
 	//some elements in searchPage
-	TextField tfSearchKeyword; //user typing in it
-	private Label laSearchSummary; //eg. the lable shows "3 products found" after search
 	private ObservableList<Product> obeProductList; //observable product list
 	ListView<Product> obrLvProducts; //A ListView observes the product list
 
 	//ProductFormPage:has two children at a time,
-	ComboBox<String> cbProductFormMode; //the first child
-	private VBox vbEditProduct; //the seceond child
-	private VBox vbNewProduct; //another second child
-	String theProFormMode = "EDIT";
+
 	/** productFormPage has two children at a time,
 	 * 1. cbProductFormMode: A ComboBox that holds two action types for the product form:
 	 *    - "EDIT": For editing an existing product
