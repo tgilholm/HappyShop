@@ -75,14 +75,12 @@ public class ButtonActionCallback
      */
     int getBasketQuantity(@NotNull Product product)
     {
-        logger.debug("Getting qty for {}", product);
         return getQty.apply(product); // "applies" or gets the result from the method
     }
 
 
     int getStockQuantity(@NotNull Product product)
     {
-        logger.debug("Getting stock quantity for {}", product);
         return getStockQty.apply(product);
     }
 }

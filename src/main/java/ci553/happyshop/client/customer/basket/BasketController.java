@@ -84,11 +84,6 @@ public class BasketController extends BaseController<BasketModel>
     }
 
 
-    // todo decrease stock of all in basket
-    // todo low stock handling, if basket exceeds total stock etc, alert window
-
-
-    // todo move to model
     /**
      * Requests user confirmation. Once received, either does nothing or delegates to the Model
      * to decrease stock of all purchased items and displays a receipt.

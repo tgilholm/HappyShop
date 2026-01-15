@@ -78,13 +78,11 @@ public class CustomerController extends BaseController<CustomerModel>
         }
 
         // Set up category combobox
-        cbCategories.getItems().add("Select Category");
-        cbCategories.getSelectionModel().selectFirst();
+        refreshComboBox();
 
         model.loadProducts();            // Load product list
         model.loadCategories();          // Load category list
-        bindProductList();                  // Bind the product list to the view
-        refreshComboBox();
+        bindProductList();               // Bind the product list to the view
 
 
         // Add a listener on the comboBox valueProperty, extract the string and set the categoryFilter
@@ -122,6 +120,10 @@ public class CustomerController extends BaseController<CustomerModel>
         {
             cbCategories.getItems().add(c.getName());
         }
+
+        // Add the "select category" placeholder
+        cbCategories.getItems().add("Select Category");
+        cbCategories.getSelectionModel().selectFirst();
     }
 
     /**
@@ -230,7 +232,7 @@ public class CustomerController extends BaseController<CustomerModel>
 
         } catch (Exception e)
         {
-            throw new RuntimeException(e);
+            logger.error("Failed to open basket", e);
         }
     }
 }

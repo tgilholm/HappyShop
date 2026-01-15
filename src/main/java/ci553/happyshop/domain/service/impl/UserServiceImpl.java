@@ -126,8 +126,8 @@ public class UserServiceImpl implements UserService
         }
 
         // Encrypt the username and password
-        username = EncryptionHandler.decryptString(username);
-        password = EncryptionHandler.decryptString(password);
+        username = EncryptionHandler.encryptString(username);
+        password = EncryptionHandler.encryptString(password);
 
         // Check if the username already exists in the table
         if (userRepository.usernameExists(username))
