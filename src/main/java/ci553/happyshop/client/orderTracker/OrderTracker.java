@@ -1,7 +1,7 @@
 package ci553.happyshop.client.orderTracker;
 
 import ci553.happyshop.orderManagement.OrderHub;
-import ci553.happyshop.orderManagement.OrderState;
+import ci553.happyshop.utility.enums.OrderState;
 import ci553.happyshop.utility.UIStyle;
 import ci553.happyshop.utility.WinPosManager;
 import javafx.geometry.Pos;

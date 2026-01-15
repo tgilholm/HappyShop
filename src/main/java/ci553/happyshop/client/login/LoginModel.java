@@ -2,13 +2,10 @@ package ci553.happyshop.client.login;
 
 import ci553.happyshop.base_mvm.BaseModel;
 import ci553.happyshop.catalogue.User;
-import ci553.happyshop.client.customer.CustomerClient;
 import ci553.happyshop.domain.service.UserService;
 import ci553.happyshop.utility.LoginCredentials;
-import ci553.happyshop.utility.UserType;
+import ci553.happyshop.utility.enums.UserType;
 import javafx.beans.property.ReadOnlyStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,5 +1,7 @@
 package ci553.happyshop.utility;
 
+import ci553.happyshop.utility.enums.UserType;
+
 /**
  * Record class to carry the username and password of a customer
  * @param username a <code>String</code> username

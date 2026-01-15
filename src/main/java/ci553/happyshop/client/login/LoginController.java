@@ -4,7 +4,7 @@ package ci553.happyshop.client.login;
 import ci553.happyshop.base_mvm.BaseController;
 import ci553.happyshop.catalogue.User;
 import ci553.happyshop.client.customer.CustomerClient;
-import ci553.happyshop.utility.UserType;
+import ci553.happyshop.utility.enums.UserType;
 import ci553.happyshop.utility.alerts.AlertFactory;
 import javafx.application.Platform;
 import javafx.fxml.FXML;

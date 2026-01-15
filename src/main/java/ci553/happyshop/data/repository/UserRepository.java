@@ -4,7 +4,7 @@ package ci553.happyshop.data.repository;
 import ci553.happyshop.catalogue.User;
 import ci553.happyshop.data.database.DatabaseConnection;
 import ci553.happyshop.data.repository.types.CommonRepository;
-import ci553.happyshop.utility.UserType;
+import ci553.happyshop.utility.enums.UserType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Contract;

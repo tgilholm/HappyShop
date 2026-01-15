@@ -1,7 +1,7 @@
 package ci553.happyshop.catalogue;
 
 
-import ci553.happyshop.utility.UserType;
+import ci553.happyshop.utility.enums.UserType;
 
 /**
  * The class holding users' passwords, usernames, and their userType.

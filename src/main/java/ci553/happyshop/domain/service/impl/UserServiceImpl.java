@@ -5,7 +5,7 @@ import ci553.happyshop.data.repository.RepositoryFactory;
 import ci553.happyshop.data.repository.UserRepository;
 import ci553.happyshop.domain.service.UserService;
 import ci553.happyshop.utility.EncryptionHandler;
-import ci553.happyshop.utility.UserType;
+import ci553.happyshop.utility.enums.UserType;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

@@ -1,7 +1,7 @@
 package ci553.happyshop.domain.service;
 
 import ci553.happyshop.catalogue.User;
-import ci553.happyshop.utility.UserType;
+import ci553.happyshop.utility.enums.UserType;
 import javafx.beans.property.ReadOnlyStringProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

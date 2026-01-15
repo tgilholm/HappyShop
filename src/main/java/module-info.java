@@ -38,5 +38,7 @@ module ci553.happyshop
     exports ci553.happyshop.storageAccess;
 	exports ci553.happyshop.catalogue.DTO;
 	exports ci553.happyshop.data.repository.types;
+	exports ci553.happyshop.utility.enums;
+	opens ci553.happyshop.utility.enums to javafx.fxml;
 
 }

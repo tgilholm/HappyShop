@@ -1,4 +1,4 @@
-package ci553.happyshop.orderManagement;
+package ci553.happyshop.utility.enums;
 
 /**
  * Represents the state of an order in the system.

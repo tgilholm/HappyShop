@@ -1,7 +1,7 @@
 package ci553.happyshop.client.picker;
 
 import ci553.happyshop.orderManagement.OrderHub;
-import ci553.happyshop.orderManagement.OrderState;
+import ci553.happyshop.utility.enums.OrderState;
 
 import java.io.IOException;
 import java.util.Map;

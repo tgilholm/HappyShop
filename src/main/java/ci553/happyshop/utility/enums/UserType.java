@@ -1,4 +1,4 @@
-package ci553.happyshop.utility;
+package ci553.happyshop.utility.enums;
 
 public enum UserType
 {
