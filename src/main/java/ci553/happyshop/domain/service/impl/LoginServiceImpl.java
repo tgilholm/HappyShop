@@ -27,8 +27,8 @@ public class LoginServiceImpl extends LoginService
         }
 
         // Encrypt the username and password
-        username = EncryptionHandler.decryptString(username);
-        password = EncryptionHandler.decryptString(password);
+        username = EncryptionHandler.encryptString(username);
+        password = EncryptionHandler.encryptString(password);
 
         // Pass to the repository
         Customer customer = customerRepository.getCustomer(username, password);
@@ -40,7 +40,7 @@ public class LoginServiceImpl extends LoginService
             return null;
         } else
         {
-            logger.info("Retrieved customer ");
+            logger.info("Retrieved customer");
             return customer;
         }
     }

@@ -18,8 +18,8 @@
 
     <VBox spacing="10" alignment="CENTER">
         <Label style="-fx-font-size: 30px; -fx-font-weight: bold;" text="HappyShop"/>
-        <Button style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Customer Login" fx:id="btnCustomer" onAction="#customerLogin"/>
-        <Button style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Warehouse Login" fx:id="btnWarehouse" onAction="#warehouseLogin"/>
+        <Button style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Customer Login" onAction="#customerLogin"/>
+        <Button style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Warehouse Login" onAction="#warehouseLogin"/>
     </VBox>
 
 </HBox>

@@ -4,6 +4,7 @@ package ci553.happyshop.client.login;
 import ci553.happyshop.base_mvm.BaseController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 
 
 /**
@@ -12,10 +13,10 @@ import javafx.fxml.FXML;
  */
 public class LoginController extends BaseController<LoginModel>
 {
-	protected LoginController(LoginModel model)
-	{
-		super(model);
-	}
+    protected LoginController(LoginModel model)
+    {
+        super(model);
+    }
 
 
 //	public void buttonClicked(String btnText)
@@ -33,23 +34,32 @@ public class LoginController extends BaseController<LoginModel>
 //	}
 
 
-	/**
-	 * Initializes the controller after the root element is finished processing.
-	 */
-	@Override
-	@FXML
-	public void initialize()
-	{
+    /**
+     * Initializes the controller after the root element is finished processing.
+     */
+    @Override
+    @FXML
+    public void initialize()
+    {
 
-	}
-
-
-	public void customerLogin(ActionEvent actionEvent)
-	{
-	}
+    }
 
 
-	public void warehouseLogin(ActionEvent actionEvent)
-	{
-	}
+    /**
+     * Delegates to the LoginModel to attempt to log in to the customer system
+     */
+    public void customerLogin()
+    {
+        model.customerLogin();
+    }
+
+
+    /**
+     * Delegates to the LoginModel to attempt to log in to the customer system
+     */
+    public void warehouseLogin()
+    {
+    }
+
+
 }

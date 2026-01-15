@@ -22,9 +22,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class CustomerModel extends BaseModel
 {
-    // TODO GET CURRENTLY LOGGED IN USER
-    // This is a mockup of a logged in user that will be used to test basket methods
-    private final Customer currentCustomer = new Customer(1, "PLACEHOLDER", "PLACEHOLDER");
+    private final Customer currentCustomer;   // The customer logged in to the system
 
     // Get repository instances
     private final ProductRepository productRepository = RepositoryFactory.getProductRepository();
@@ -38,8 +36,9 @@ public class CustomerModel extends BaseModel
     /**
      * Constructs a new CustomerModel instance that handles data from the DB.
      */
-    public CustomerModel()
+    public CustomerModel(Customer customer)
     {
+        this.currentCustomer = customer;
         // Observe the changeCounter in BasketService and automatically reload the product list
         basketService.basketChanged().addListener((observable, oldValue, newValue) -> loadProducts());
     }
