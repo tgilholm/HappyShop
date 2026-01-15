@@ -10,6 +10,7 @@ import ci553.happyshop.domain.service.ProductService;
 import ci553.happyshop.storageAccess.DatabaseRW;
 import ci553.happyshop.storageAccess.ImageFileManager;
 import ci553.happyshop.utility.StorageLocation;
+import ci553.happyshop.utility.threads.ExecutorHandler;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -42,15 +43,6 @@ public class WarehouseModel extends BaseModel
 	private FilteredList<ProductWithCategory> searchFilteredList;
 	private FilteredList<ProductWithCategory> categoryFilteredList;
 
-	// The same executor service as present in other Models, used for concurrent DB access
-	private final ExecutorService executorService = Executors.newSingleThreadExecutor(runnable ->
-	{
-		// The executorService will re-use this thread and execute the provided runnable.
-		Thread thread = new Thread(runnable, "WarehouseModel-DBLoader");
-		thread.setDaemon(true); // daemon = true so that the JVM doesn't get stuck on background threads that won't end
-		logger.debug("Starting runnable");
-		return thread;
-	});
 
 
 	/**

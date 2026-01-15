@@ -13,8 +13,6 @@ import javafx.collections.transformation.FilteredList;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 
 /**
@@ -33,22 +31,6 @@ public class CustomerModel extends BaseModel
     private final ObservableList<Category> categoryList = FXCollections.observableArrayList();
     private FilteredList<ProductWithCategory> searchFilteredList;
     private FilteredList<ProductWithCategory> categoryFilteredList;
-
-    /*
-    The ExecutorService used for background DB queries.
-    This allows access to the database without slowing down the system. Note that this means
-    Platform.runLater() is used in order to update JavaFX elements on the main thread, as is required.
-
-    singleThreadExecutors run tasks sequentially, parallel to the main thread.
-     */
-    private final ExecutorService executorService = Executors.newSingleThreadExecutor(runnable ->
-    {
-        // The executorService will re-use this thread and execute the provided runnable.
-        Thread thread = new Thread(runnable, "CustomerModel-DBLoader");
-        thread.setDaemon(true); // daemon = true so that the JVM doesn't get stuck on background threads that won't end
-        logger.debug("Starting runnable");
-        return thread;
-    });
 
     //private final String imageName = "images/imageHolder.jpg"; // Image to show in product preview (Search Page)
 
