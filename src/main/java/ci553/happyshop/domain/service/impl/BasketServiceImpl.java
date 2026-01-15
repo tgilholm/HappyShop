@@ -9,9 +9,11 @@ import ci553.happyshop.data.repository.BasketRepository;
 import ci553.happyshop.data.repository.ProductRepository;
 import ci553.happyshop.data.repository.RepositoryFactory;
 import ci553.happyshop.domain.service.BasketService;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -20,8 +22,36 @@ import java.util.stream.Collectors;
 /**
  * Implements methods from <code>BasketService</code>
  */
-public class BasketServiceImpl extends BasketService
+public class BasketServiceImpl implements BasketService
 {
+    // Get repository instances
+    private final BasketRepository basketRepository = RepositoryFactory.getBasketRepository();
+    private final ProductRepository productRepository = RepositoryFactory.getProductRepository();
+    private final IntegerProperty changeProperty = new SimpleIntegerProperty(0); // Used for updating lists on changes
+
+    private static final Logger logger = LogManager.getLogger();
+
+    /**
+     * Updates the <code>changeProperty</code>. Use whenever the underlying data has changed to trigger
+     * all observers waiting to update internal lists
+     */
+    private void notifyChanged()
+    {
+        changeProperty.set(changeProperty.getValue() + 1);
+        logger.debug("notifyChanged() invoked");
+    }
+
+
+    /**
+     * Exposes an observable form of the change counter
+     *
+     * @return an immutable form of the counter
+     */
+    public ReadOnlyIntegerProperty basketChanged()
+    {
+        return changeProperty;
+    }
+
     /**
      * Decrements the number of items by if the quantity is greater than 1, deletes it completely otherwise.
      * This avoids items with <code>quantity = 0</code> in the basket

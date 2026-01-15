@@ -6,7 +6,6 @@ import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.catalogue.User;
 import ci553.happyshop.domain.service.BasketService;
 import ci553.happyshop.domain.service.ProductService;
-import ci553.happyshop.domain.service.ServiceFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.stage.Stage;
@@ -17,8 +16,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BasketModel extends BaseModel
 {
-    private final BasketService basketService = ServiceFactory.getBasketService();
-    private final ProductService productService = ServiceFactory.getProductService();
+    private final BasketService basketService;
+    private final ProductService productService;
     private final User user;        // The ID of the user accessing their basket
     private final ObservableList<BasketItemWithDetails> basketItems = FXCollections.observableArrayList();
 
@@ -28,8 +27,10 @@ public class BasketModel extends BaseModel
      *
      * @param user the currently logged-in user
      */
-    public BasketModel(User user)
+    public BasketModel(User user, @NotNull BasketService basketService, @NotNull ProductService productService)
     {
+        this.basketService = basketService;
+        this.productService = productService;
         this.user = user;
 
         // Observe the changeCounter in BasketService and automatically reload the basket

@@ -1,6 +1,7 @@
 package ci553.happyshop.domain.service;
 
 import ci553.happyshop.domain.service.impl.BasketServiceImpl;
+import ci553.happyshop.domain.service.impl.CategoryServiceImpl;
 import ci553.happyshop.domain.service.impl.UserServiceImpl;
 import ci553.happyshop.domain.service.impl.ProductServiceImpl;
 
@@ -20,6 +21,7 @@ public final class ServiceFactory
     private static BasketService basketService;
     private static ProductService productService;
     private static UserService userService;
+    private static CategoryService categoryService;
 
 
     /**
@@ -63,5 +65,15 @@ public final class ServiceFactory
             userService = new UserServiceImpl();
         }
         return userService;
+    }
+
+
+    public static CategoryService getCategoryService()
+    {
+        if (categoryService == null)
+        {
+            categoryService = new CategoryServiceImpl();
+        }
+        return categoryService;
     }
 }

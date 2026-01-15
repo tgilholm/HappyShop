@@ -105,7 +105,8 @@ public final class AlertFactory
 
         // Password field
         Label lbPassword = new Label("Password");
-        TextField tfPassword = new TextField();
+        TextField tfPassword = new PasswordField();
+
 
         // Add these to HBoxes, then add to root
         content.getChildren().add(new HBox(10, lbUsername, tfUsername));     // Username row

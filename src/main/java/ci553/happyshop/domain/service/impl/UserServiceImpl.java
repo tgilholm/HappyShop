@@ -1,19 +1,68 @@
 package ci553.happyshop.domain.service.impl;
 
 import ci553.happyshop.catalogue.User;
+import ci553.happyshop.data.repository.RepositoryFactory;
+import ci553.happyshop.data.repository.UserRepository;
 import ci553.happyshop.domain.service.UserService;
 import ci553.happyshop.utility.EncryptionHandler;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class UserServiceImpl extends UserService
+/**
+ * Implements the business logic user methods from the UserService interface
+ */
+public class UserServiceImpl implements UserService
 {
+    // Get repository instances
+    private final UserRepository userRepository = RepositoryFactory.getCustomerRepository();
+    private final StringProperty errorProperty = new SimpleStringProperty("");
+    private static final Logger logger = LogManager.getLogger();
+
+
+    /**
+     * Updates the <code>errorProperty</code> to the specified validation error.
+     * This is used whenever there is an error in validating a login or account creation.
+     * Changes to this property should trigger observers and display alerts.
+     *
+     * @param error a description of the error
+     */
+    protected void notifyError(@NotNull String error)
+    {
+        errorProperty.set(error);
+        logger.debug("notifyError() invoked");
+    }
+
+
+    /**
+     * Exposes an immutable version of the validation error
+     *
+     * @return a <code>ReadOnlyStringProperty</code> to be observed by models
+     */
+    public ReadOnlyStringProperty userError()
+    {
+        return errorProperty;
+    }
+
+
+    /**
+     * Resets the user error field back to the default
+     */
+    public void resetUserError()
+    {
+        errorProperty.set("");
+    }
+
 
     /**
      * Logs in a user with the specified username and password
      *
-     * @param username a <code>String</code> username field
-     * @param password a <code>String</code> password field
+     * @param username   a <code>String</code> username field
+     * @param password   a <code>String</code> password field
      * @param accessType a <code>UserType</code> property of the requested access, backend or frontend
      * @return a <code>User</code> if the login succeeded, else null.
      */

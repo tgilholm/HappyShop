@@ -6,6 +6,8 @@ import ci553.happyshop.data.repository.CategoryRepository;
 import ci553.happyshop.data.repository.ProductRepository;
 import ci553.happyshop.data.repository.RepositoryFactory;
 import ci553.happyshop.domain.service.BasketService;
+import ci553.happyshop.domain.service.CategoryService;
+import ci553.happyshop.domain.service.ProductService;
 import ci553.happyshop.domain.service.ServiceFactory;
 import javafx.application.Application;
 import javafx.scene.layout.GridPane;
@@ -48,7 +50,12 @@ public final class CustomerClient extends Application
 	{
 		logger.info("Launching CustomerClient");
 
-		CustomerModel cusModel = new CustomerModel(user);
+		// Get service instances & inject in constructor
+		BasketService basketService = ServiceFactory.getBasketService();
+		ProductService productService = ServiceFactory.getProductService();
+		CategoryService categoryService = ServiceFactory.getCategoryService();
+
+		CustomerModel cusModel = new CustomerModel(user, basketService, productService, categoryService);
 		CustomerController cusController = new CustomerController(cusModel);
 		BaseView<CustomerController, GridPane> cusView = new BaseView<>(cusController, customerFXML, customerCSS, "Customer Client");
 		cusView.start(window);

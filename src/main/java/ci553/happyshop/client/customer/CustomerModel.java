@@ -3,12 +3,9 @@ package ci553.happyshop.client.customer;
 import ci553.happyshop.base_mvm.BaseModel;
 import ci553.happyshop.catalogue.*;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
-import ci553.happyshop.data.repository.CategoryRepository;
-import ci553.happyshop.data.repository.ProductRepository;
-import ci553.happyshop.data.repository.RepositoryFactory;
 import ci553.happyshop.domain.service.BasketService;
+import ci553.happyshop.domain.service.CategoryService;
 import ci553.happyshop.domain.service.ProductService;
-import ci553.happyshop.domain.service.ServiceFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -23,34 +20,39 @@ import org.jetbrains.annotations.NotNull;
 public class CustomerModel extends BaseModel
 {
     private final User currentUser;   // The user logged in to the system
+    private final BasketService basketService;
+    private final ProductService productService;
+    private final CategoryService categoryService;
 
-    // Get repository instances
-    private final ProductRepository productRepository = RepositoryFactory.getProductRepository();
-    private final CategoryRepository categoryRepository = RepositoryFactory.getCategoryRepository();
+    private final ObservableList<ProductWithCategory> productWithCategoryList = FXCollections.observableArrayList();
+    private final ObservableList<Category> categoryList = FXCollections.observableArrayList();
+    private FilteredList<ProductWithCategory> searchFilteredList;
+    private FilteredList<ProductWithCategory> categoryFilteredList;
 
-    // Get service instances
-    private final BasketService basketService = ServiceFactory.getBasketService();
-    private final ProductService productService = ServiceFactory.getProductService();
+    //private final String imageName = "images/imageHolder.jpg"; // Image to show in product preview (Search Page)
 
 
     /**
-     * Constructs a new CustomerModel instance that handles data from the DB.
-     * @param user the currently logged-in user
+     * Constructs a new CustomerModel instance that handles data from the DB. Injects services via
+     * dependency injection in constructor
+     *
+     * @param basketService  a <code>BasketService</code> instance
+     * @param productService a <code>ProductService</code> instance
+     * @param user           the currently logged-in user
      */
-    public CustomerModel(User user)
+    public CustomerModel(User user, @NotNull BasketService basketService, @NotNull ProductService productService,
+            CategoryService categoryService)
     {
         this.currentUser = user;
+        this.basketService = basketService;
+        this.productService = productService;
+        this.categoryService = categoryService;
+
         // Observe the changeCounter in BasketService and automatically reload the product list
         basketService.basketChanged().addListener((observable, oldValue, newValue) -> loadProducts());
     }
 
 
-    private final ObservableList<ProductWithCategory> productWithCategoryList = FXCollections.observableArrayList();        // Observable product list
-    private final ObservableList<Category> categoryList = FXCollections.observableArrayList();                              // Observable category list
-    private FilteredList<ProductWithCategory> searchFilteredList;                                                           // Filtered product list
-    private FilteredList<ProductWithCategory> categoryFilteredList;                                                         // Product list filtered by category
-
-    private final String imageName = "images/imageHolder.jpg";                // Image to show in product preview (Search Page)
 
 
     // todo preview image in detail pane with placeholder image
@@ -86,7 +88,7 @@ public class CustomerModel extends BaseModel
     public void loadProducts()
     {
         // Use setAll to update the productList
-        productWithCategoryList.setAll(productRepository.getAllWithCategories());
+        productWithCategoryList.setAll(productService.getAllWithCategories());
 
         logger.debug("Retrieved {} products with categories from ProductTable", productWithCategoryList.size());
     }
@@ -97,7 +99,7 @@ public class CustomerModel extends BaseModel
      */
     public void loadCategories()
     {
-        categoryList.setAll(categoryRepository.getAll());
+        categoryList.setAll(categoryService.getAll());
 
         logger.debug("Retrieved {} categories from CategoryTable", categoryList.size());
     }
@@ -149,8 +151,8 @@ public class CustomerModel extends BaseModel
      */
     public void setSearchFilter(String searchFilter)
     {
-        // Update the predicate of searchFilteredList
-        searchFilteredList.setPredicate(productWithCategory ->
+        // Get the list before filtering-avoids null lists
+        getSearchFilteredList().setPredicate(productWithCategory ->
         {
             if (searchFilter == null)
             {
@@ -173,8 +175,8 @@ public class CustomerModel extends BaseModel
      */
     public void setCategoryFilter(String categoryFilter)
     {
-        // Update the predicate of categoryFilteredList
-        categoryFilteredList.setPredicate(productWithCategory ->
+        // Get the list before filtering-avoids null lists
+        getSearchFilteredList().setPredicate(productWithCategory ->
         {
             if (categoryFilter == null)
             {
@@ -227,6 +229,7 @@ public class CustomerModel extends BaseModel
 
     /**
      * Gets the currently logged-in <code>User</code>
+     *
      * @return a <code>User</code> object
      */
     public User getCurrentUser()
