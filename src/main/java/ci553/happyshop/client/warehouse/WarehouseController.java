@@ -4,6 +4,7 @@ import ci553.happyshop.base_mvm.BaseController;
 import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.catalogue.Product;
+import ci553.happyshop.utility.ButtonActionCallback;
 import ci553.happyshop.utility.FileHandler;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
@@ -14,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
@@ -24,12 +26,12 @@ public class WarehouseController extends BaseController<WarehouseModel>
     public WarehouseModel model;
     public @FXML ImageView ivSearchIcon;
     public @FXML TextField tfSearchBar, tfName, tfPrice;
-    public @FXML ComboBox<Category> cbCategories;
+    public @FXML ComboBox<String> cbCategories;
     public @FXML TilePane tpProducts;
     public @FXML ImageView ivDetailImage;
     public @FXML ComboBox<String> cbSelectMode;
     public @FXML Label lbDetailID;
-    public @FXML ComboBox<Category> cbChangeCategory;
+    public @FXML ComboBox<String> cbChangeCategory;
 
 
     public WarehouseController(WarehouseModel model)
@@ -127,6 +129,44 @@ public class WarehouseController extends BaseController<WarehouseModel>
     public void saveChanges(ActionEvent actionEvent)
     {
 
+    }
+
+    /**
+     * Refreshes the tilePane with the filtered product list. Defines the ButtonActionCallback
+     */
+    private void bindProductList()
+    {
+        tpProducts.getChildren().clear();            // Load products from the database
+
+        // Provide the methods to the callback
+        ButtonActionCallback callback = new ButtonActionCallback(
+                model::addToBasket,                     // add product to the basket
+                model::removeFromBasket,                // remove product from the basket
+                model::getBasketQuantity,               // get the basket quantity
+                model::getStockQuantity                 // Get quantity in stock
+        );
+
+        // Add each of the products as a card
+        for (ProductWithCategory productWithCategory : model.getSearchFilteredList())
+        {
+            VBox productCard = createProductCard(productWithCategory.product(), callback);
+
+            // Add the click listener to select a product
+            productCard.setOnMouseClicked(x ->
+            {
+                logger.info("Product selected, id: {}", productWithCategory.product().getId());
+
+                // Reset style to remove border on unselected cards
+                tpProducts.getChildren().forEach(node ->
+                        node.setStyle("-fx-cursor: hand"));
+
+                // Draw a border around the selected item
+                productCard.setStyle("-fx-border-color: lightgray; -fx-border-width: 1; -fx-cursor: hand");
+                updateDetailPane(productWithCategory);
+            });
+
+            tpProducts.getChildren().add(productCard);
+        }
     }
 
 
