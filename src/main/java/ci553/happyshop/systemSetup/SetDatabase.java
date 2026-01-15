@@ -123,8 +123,8 @@ public class SetDatabase
     };
 
     // Default users
-    private static final String[] DEFAULT_USERS = {
-            "INSERT INTO UserTable (username, password, type) VALUES ('admin', 'password', 'staff')"
+    private static final String[] DEFAULT_USERS = {     // "admin" and "password" in encrypted text
+            "INSERT INTO UserTable (username, password, type) VALUES ('QlNXXhw=', 'U1ZJRAU3RVU=', 'staff')"
     };
 
     public static void main(String[] args) throws SQLException, IOException

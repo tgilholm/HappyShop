@@ -9,6 +9,7 @@ import ci553.happyshop.client.login.*;
 
 import ci553.happyshop.client.warehouse.*;
 import ci553.happyshop.orderManagement.OrderHub;
+import ci553.happyshop.utility.EncryptionHandler;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -47,7 +48,7 @@ public class Main extends Application
 {
     public static void main(String[] args)
     {
-        launch(args); // Launches the JavaFX application and calls the @Override start()
+
     }
 
 
