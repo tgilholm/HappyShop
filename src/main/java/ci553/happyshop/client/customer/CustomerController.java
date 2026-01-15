@@ -82,7 +82,7 @@ public class CustomerController extends BaseController<CustomerModel>
 
         model.loadProducts();            // Load product list
         model.loadCategories();          // Load category list
-        bindProductList();                  // Bind the product list to the view
+        bindProductList();               // Bind the product list to the view
 
 
         // Add a listener on the comboBox valueProperty, extract the string and set the categoryFilter

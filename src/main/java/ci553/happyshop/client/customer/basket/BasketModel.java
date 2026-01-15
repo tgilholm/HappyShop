@@ -1,15 +1,21 @@
 package ci553.happyshop.client.customer.basket;
 
 import ci553.happyshop.base_mvm.BaseModel;
+import ci553.happyshop.catalogue.BasketItem;
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.catalogue.User;
 import ci553.happyshop.domain.service.BasketService;
 import ci553.happyshop.domain.service.ProductService;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Model for the Basket MVC. Connects to the basketService to get basket details.
@@ -20,6 +26,16 @@ public class BasketModel extends BaseModel
     private final ProductService productService;
     private final User user;        // The ID of the user accessing their basket
     private final ObservableList<BasketItemWithDetails> basketItems = FXCollections.observableArrayList();
+
+    // Get an executorService for background DB queries
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor(runnable ->
+    {
+        // The executorService will re-use this thread and execute the provided runnable.
+        Thread thread = new Thread(runnable, "BasketModel-DBLoader");
+        thread.setDaemon(true); // daemon = true so that the JVM doesn't get stuck on background threads that won't end
+        logger.debug("Starting runnable");
+        return thread;
+    });
 
 
     /**
@@ -54,8 +70,24 @@ public class BasketModel extends BaseModel
      */
     public void loadBasketItems()
     {
-        basketItems.setAll(basketService.getAll(user.id()));
-        logger.debug("Loaded {} items into basket", basketItems.size());
+        // Async refresh
+        executorService.submit(() ->
+        {
+            List<BasketItemWithDetails> list = basketService.getAll(user.id());
+            if (list != null)
+            {
+                // Execute the change to the observable list on the JavaFX thread
+                Platform.runLater(() ->
+                {
+                    basketItems.setAll(list);
+                });
+                logger.debug("Loaded {} items into basket", list.size());
+            }
+            {
+                logger.debug("Basket is empty");
+            }
+
+        });
     }
 
 
@@ -66,7 +98,11 @@ public class BasketModel extends BaseModel
      */
     public void addToBasket(@NotNull Product product)
     {
-        basketService.addOrUpdateItem(user.id(), product.getId(), 1);
+        executorService.submit(() ->
+        {
+            // Delegate to service
+            basketService.addOrUpdateItem(user.id(), product.getId(), 1);
+        });
     }
 
 
@@ -77,7 +113,11 @@ public class BasketModel extends BaseModel
      */
     public void removeFromBasket(@NotNull Product product)
     {
-        basketService.decreaseOrRemoveItem(user.id(), product.getId());
+        executorService.submit(() ->
+        {
+            // Delegate to service
+            basketService.decreaseOrRemoveItem(user.id(), product.getId());
+        });
     }
 
 
@@ -120,7 +160,11 @@ public class BasketModel extends BaseModel
      */
     public void clearBasket()
     {
-        basketService.clearBasket(user.id());
+        executorService.submit(() ->
+        {
+            // Execute on a background thread
+            basketService.clearBasket(user.id());
+        });
     }
 
 
@@ -129,7 +173,11 @@ public class BasketModel extends BaseModel
      */
     public void checkoutBasket()
     {
-        basketService.checkoutBasket(user.id());
+        executorService.submit(() ->
+        {
+            // Delegate to a background thread
+            basketService.checkoutBasket(user.id());
+        });
     }
 
 

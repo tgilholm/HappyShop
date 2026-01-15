@@ -34,11 +34,6 @@ public final class CustomerClient extends Application
     @Override
     public void start(Stage window)
     {
-        //startCustomerClient(window);
-
-        //RemoveProductNotifier removeProductNotifier = new RemoveProductNotifier();
-        //removeProductNotifier.cusView = cusView;
-        //cusModel.removeProductNotifier = removeProductNotifier;
     }
 
 
@@ -60,6 +55,5 @@ public final class CustomerClient extends Application
         CustomerController cusController = new CustomerController(cusModel);
         BaseView<CustomerController, GridPane> cusView = new BaseView<>(cusController, customerFXML, customerCSS, "Customer Client");
         cusView.start(window);
-
     }
 }

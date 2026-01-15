@@ -50,7 +50,6 @@ public class CustomerModel extends BaseModel
         return thread;
     });
 
-    // todo placeholder image
     //private final String imageName = "images/imageHolder.jpg"; // Image to show in product preview (Search Page)
 
 
@@ -73,11 +72,6 @@ public class CustomerModel extends BaseModel
         // Observe the changeCounter in BasketService and automatically reload the product list
         basketService.basketChanged().addListener((observable, oldValue, newValue) -> loadProducts());
     }
-
-
-    // todo preview image in detail pane with placeholder image
-    // todo placeholder image for image not found cases
-    // todo observe quantity remaining in product cards or update manually
 
 
     /**
@@ -269,6 +263,7 @@ public class CustomerModel extends BaseModel
      */
     public int getBasketQuantity(@NotNull Product product)
     {
+        // Simple reads like quantity checks (unfortunately) are synchronous
         return basketService.getQuantity(currentUser.id(), product.getId());
     }
 
@@ -284,7 +279,12 @@ public class CustomerModel extends BaseModel
     }
 
 
-    public Integer getStockQuantity(@NotNull Product product)
+    /**
+     * Gets the stock quantity of a given product
+     * @param product the <code>Product</code> from which to get the quantity
+     * @return the int stock quantity of the specified product
+     */
+    public int getStockQuantity(@NotNull Product product)
     {
         return productService.getStockQuantity(product.getId());
     }
