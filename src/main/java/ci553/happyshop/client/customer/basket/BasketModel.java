@@ -1,9 +1,9 @@
 package ci553.happyshop.client.customer.basket;
 
 import ci553.happyshop.base_mvm.BaseModel;
-import ci553.happyshop.catalogue.Customer;
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
 import ci553.happyshop.catalogue.Product;
+import ci553.happyshop.catalogue.User;
 import ci553.happyshop.domain.service.BasketService;
 import ci553.happyshop.domain.service.ProductService;
 import ci553.happyshop.domain.service.ServiceFactory;
@@ -19,18 +19,18 @@ public class BasketModel extends BaseModel
 {
     private final BasketService basketService = ServiceFactory.getBasketService();
     private final ProductService productService = ServiceFactory.getProductService();
-    private final Customer customer;        // The ID of the customer accessing the basket
+    private final User user;        // The ID of the user accessing their basket
     private final ObservableList<BasketItemWithDetails> basketItems = FXCollections.observableArrayList();
 
 
     /**
      * Constructs a new BasketModel
      *
-     * @param customer      the currently logged-in customer
+     * @param user the currently logged-in user
      */
-    public BasketModel(Customer customer)
+    public BasketModel(User user)
     {
-        this.customer = customer;
+        this.user = user;
 
         // Observe the changeCounter in BasketService and automatically reload the basket
         basketService.basketChanged().addListener((observable, oldValue, newValue) -> loadBasketItems());
@@ -53,7 +53,7 @@ public class BasketModel extends BaseModel
      */
     public void loadBasketItems()
     {
-        basketItems.setAll(basketService.getAll(customer.id()));
+        basketItems.setAll(basketService.getAll(user.id()));
         logger.debug("Loaded {} items into basket", basketItems.size());
     }
 
@@ -65,7 +65,7 @@ public class BasketModel extends BaseModel
      */
     public void addToBasket(@NotNull Product product)
     {
-        basketService.addOrUpdateItem(customer.id(), product.getId(), 1);
+        basketService.addOrUpdateItem(user.id(), product.getId(), 1);
     }
 
 
@@ -76,7 +76,7 @@ public class BasketModel extends BaseModel
      */
     public void removeFromBasket(@NotNull Product product)
     {
-        basketService.decreaseOrRemoveItem(customer.id(), product.getId());
+        basketService.decreaseOrRemoveItem(user.id(), product.getId());
     }
 
 
@@ -88,7 +88,7 @@ public class BasketModel extends BaseModel
      */
     public int getBasketQuantity(@NotNull Product product)
     {
-        return basketService.getQuantity(customer.id(), product.getId());
+        return basketService.getQuantity(user.id(), product.getId());
     }
 
 
@@ -110,7 +110,7 @@ public class BasketModel extends BaseModel
      */
     public double getBasketTotal()
     {
-        return basketService.getBasketTotalPrice(customer.id());
+        return basketService.getBasketTotalPrice(user.id());
     }
 
 
@@ -119,7 +119,7 @@ public class BasketModel extends BaseModel
      */
     public void clearBasket()
     {
-        basketService.clearBasket(customer.id());
+        basketService.clearBasket(user.id());
     }
 
 
@@ -128,12 +128,13 @@ public class BasketModel extends BaseModel
      */
     public void checkoutBasket()
     {
-        basketService.checkoutBasket(customer.id());
+        basketService.checkoutBasket(user.id());
     }
 
 
     /**
      * Gets the stock quantity of the specified product
+     *
      * @param product a <code>Product</code> object
      * @return the quantity in stock, as an int.
      */

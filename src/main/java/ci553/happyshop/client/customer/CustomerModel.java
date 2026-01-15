@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class CustomerModel extends BaseModel
 {
-    private final Customer currentCustomer;   // The customer logged in to the system
+    private final User currentUser;   // The user logged in to the system
 
     // Get repository instances
     private final ProductRepository productRepository = RepositoryFactory.getProductRepository();
@@ -35,10 +35,11 @@ public class CustomerModel extends BaseModel
 
     /**
      * Constructs a new CustomerModel instance that handles data from the DB.
+     * @param user the currently logged-in user
      */
-    public CustomerModel(Customer customer)
+    public CustomerModel(User user)
     {
-        this.currentCustomer = customer;
+        this.currentUser = user;
         // Observe the changeCounter in BasketService and automatically reload the product list
         basketService.basketChanged().addListener((observable, oldValue, newValue) -> loadProducts());
     }
@@ -195,7 +196,7 @@ public class CustomerModel extends BaseModel
      */
     public void addToBasket(@NotNull Product product)
     {
-        basketService.addOrUpdateItem(currentCustomer.id(), product.getId(), 1);
+        basketService.addOrUpdateItem(currentUser.id(), product.getId(), 1);
         loadProducts(); // List has changed, update card data
     }
 
@@ -207,7 +208,7 @@ public class CustomerModel extends BaseModel
      */
     public void removeFromBasket(@NotNull Product product)
     {
-        basketService.decreaseOrRemoveItem(currentCustomer.id(), product.getId());
+        basketService.decreaseOrRemoveItem(currentUser.id(), product.getId());
         loadProducts();
     }
 
@@ -220,17 +221,17 @@ public class CustomerModel extends BaseModel
      */
     public int getBasketQuantity(@NotNull Product product)
     {
-        return basketService.getQuantity(currentCustomer.id(), product.getId());
+        return basketService.getQuantity(currentUser.id(), product.getId());
     }
 
 
     /**
-     * Gets the currently logged-in <code>Customer</code>
-     * @return a <code>Customer</code> object
+     * Gets the currently logged-in <code>User</code>
+     * @return a <code>User</code> object
      */
-    public Customer getCurrentCustomer()
+    public User getCurrentUser()
     {
-        return currentCustomer;
+        return currentUser;
     }
 
 

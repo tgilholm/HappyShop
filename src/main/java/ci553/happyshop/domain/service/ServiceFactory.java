@@ -1,7 +1,7 @@
 package ci553.happyshop.domain.service;
 
 import ci553.happyshop.domain.service.impl.BasketServiceImpl;
-import ci553.happyshop.domain.service.impl.LoginServiceImpl;
+import ci553.happyshop.domain.service.impl.UserServiceImpl;
 import ci553.happyshop.domain.service.impl.ProductServiceImpl;
 
 /**
@@ -19,7 +19,7 @@ public final class ServiceFactory
     // Create singleton service instances
     private static BasketService basketService;
     private static ProductService productService;
-    private static LoginService loginService;
+    private static UserService userService;
 
 
     /**
@@ -56,12 +56,12 @@ public final class ServiceFactory
      * Checks if the login service already exists and if not, creates a new instance
      * @return the service instance
      */
-    public static LoginService getLoginService()
+    public static UserService getLoginService()
     {
-        if (loginService == null)
+        if (userService == null)
         {
-            loginService = new LoginServiceImpl();
+            userService = new UserServiceImpl();
         }
-        return loginService;
+        return userService;
     }
 }

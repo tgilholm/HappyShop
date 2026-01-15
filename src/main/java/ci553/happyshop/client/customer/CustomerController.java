@@ -209,7 +209,7 @@ public class CustomerController extends BaseController<CustomerModel>
 
         try {
             // Get the current customer from the model
-            BasketClient basketClient = new BasketClient(model.getCurrentCustomer());
+            BasketClient basketClient = new BasketClient(model.getCurrentUser());
             stage.hide();   // Hide the customer view
 
             // Create a new stage for the basket client

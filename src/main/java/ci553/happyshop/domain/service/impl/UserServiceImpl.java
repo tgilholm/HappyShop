@@ -1,12 +1,12 @@
 package ci553.happyshop.domain.service.impl;
 
-import ci553.happyshop.catalogue.Customer;
-import ci553.happyshop.domain.service.LoginService;
+import ci553.happyshop.catalogue.User;
+import ci553.happyshop.domain.service.UserService;
 import ci553.happyshop.utility.EncryptionHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class LoginServiceImpl extends LoginService
+public class UserServiceImpl extends UserService
 {
 
     /**
@@ -14,15 +14,16 @@ public class LoginServiceImpl extends LoginService
      *
      * @param username a <code>String</code> username field
      * @param password a <code>String</code> password field
-     * @return a <code>Customer</code> if the login succeeded, else null.
+     * @param accessType a <code>UserType</code> property of the requested access, backend or frontend
+     * @return a <code>User</code> if the login succeeded, else null.
      */
     @Override
-    public @Nullable Customer login(@NotNull String username, @NotNull String password)
+    public @Nullable User login(@NotNull String username, @NotNull String password, User.UserType accessType)
     {
         // Handle empty strings
         if (username.isEmpty() || password.isEmpty())
         {
-            logger.info("Failed to login customer, empty username or password");
+            notifyError("Failed to login user, empty username or password");
             return null;
         }
 
@@ -31,18 +32,29 @@ public class LoginServiceImpl extends LoginService
         password = EncryptionHandler.encryptString(password);
 
         // Pass to the repository
-        Customer customer = customerRepository.getCustomer(username, password);
+        User user = userRepository.getUser(username, password);
 
         // Handle failed logins
-        if (customer == null)
+        if (user == null)
         {
-            logger.info("Failed to login customer, incorrect username or password");
+            notifyError("Failed to login user, incorrect username or password");
             return null;
-        } else
-        {
-            logger.info("Retrieved customer");
-            return customer;
         }
+
+        User.UserType userType = user.userType();    // Extract the user's type
+
+        // Handle incorrect user types
+        /*
+        This condition prevents customers from accessing the staff area, while allowing them
+        to reach the customer area and allowing staff to access both.
+         */
+        if (accessType == User.UserType.STAFF && userType == User.UserType.CUSTOMER)
+        {
+            // Customers cannot access the staff portal
+            notifyError("Failed to login user. Customers cannot access the warehouse");
+        }
+
+        return user;
     }
 
 
@@ -51,10 +63,10 @@ public class LoginServiceImpl extends LoginService
      *
      * @param username a <code>String</code> username field
      * @param password a <code>String</code> password field
-     * @return a <code>Customer</code> if the creation succeeded, else null.
+     * @return a <code>User</code> if the creation succeeded, else null.
      */
     @Override
-    public @Nullable Customer createAccount(@NotNull String username, @NotNull String password)
+    public @Nullable User createAccount(@NotNull String username, @NotNull String password, User.UserType userType)
     {
         // Handle empty strings
         if (username.isEmpty() || password.isEmpty())
@@ -68,22 +80,22 @@ public class LoginServiceImpl extends LoginService
         password = EncryptionHandler.decryptString(password);
 
         // Check if the username already exists in the table
-        if (customerRepository.usernameExists(username))
+        if (userRepository.usernameExists(username))
         {
             logger.info("Cannot create new account, username already exists");
             return null;
         } else
         {
             logger.info("Created new account with username");
-            customerRepository.insert(new Customer(0, username, password)); // ID is generated automatically
-            Customer newCustomer = customerRepository.getCustomer(username, password);
+            userRepository.insert(new User(0, username, password, userType)); // ID is generated automatically
+            User newUser = userRepository.getUser(username, password);
 
-            if (newCustomer != null)
+            if (newUser != null)
             {
-                return newCustomer;
+                return newUser;
             } else
             {
-                logger.info("Failed to retrieve new customer");
+                logger.info("Failed to retrieve new user");
                 return null;
             }
         }

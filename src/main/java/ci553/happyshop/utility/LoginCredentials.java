@@ -1,4 +1,4 @@
-package ci553.happyshop.utility.alerts;
+package ci553.happyshop.utility;
 
 /**
  * Record class to carry the username and password of a customer

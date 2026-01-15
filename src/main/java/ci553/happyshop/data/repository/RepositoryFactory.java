@@ -18,7 +18,7 @@ public final class RepositoryFactory
     private static ProductRepository productRepository;
     private static CategoryRepository categoryRepository;
     private static BasketRepository basketRepository;
-    private static CustomerRepository customerRepository;
+    private static UserRepository userRepository;
 
 
     /**
@@ -58,14 +58,14 @@ public final class RepositoryFactory
     }
 
     /**
-     * Checks if the <code>CustomerRepository</code> already exists and if not, creates a new instance
+     * Checks if the <code>UserRepository</code> already exists and if not, creates a new instance
      * @return the repository instance
      */
-    public static CustomerRepository getCustomerRepository() {
-        if (customerRepository == null)
+    public static UserRepository getCustomerRepository() {
+        if (userRepository == null)
         {
-            customerRepository = new CustomerRepository(dbConnection);
+            userRepository = new UserRepository(dbConnection);
         }
-        return customerRepository;
+        return userRepository;
     }
 }

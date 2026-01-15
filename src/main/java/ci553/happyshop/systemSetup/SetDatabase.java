@@ -71,14 +71,15 @@ public class SetDatabase
             )
             """,
 
-            // LoginTable
+            // UserTable
             """
-            CREATE TABLE LoginTable (
+            CREATE TABLE UserTable (
                 id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
                 username VARCHAR(32) NOT NULL UNIQUE,
-                password VARCHAR(255) NOT NULL
+                password VARCHAR(255) NOT NULL,
+                type VARCHAR(16) NOT NULL
             )
-            """,
+            """, // "staff" or "customer"
 
             // BasketTable has a composite primary key of the user ID, and product ID
             // Date added is set to the current time
@@ -88,7 +89,7 @@ public class SetDatabase
                 productID BIGINT NOT NULL,
                 quantity INT NOT NULL DEFAULT 0,
                 PRIMARY KEY (customerID, productID),
-                FOREIGN KEY (customerID) REFERENCES LoginTable(id) ON DELETE CASCADE,
+                FOREIGN KEY (customerID) REFERENCES UserTable(id) ON DELETE CASCADE,
                 FOREIGN KEY (productID) REFERENCES ProductTable(id) ON DELETE CASCADE
             )
             
@@ -123,7 +124,7 @@ public class SetDatabase
 
     // Default users
     private static final String[] DEFAULT_USERS = {
-            "INSERT INTO LoginTable (username, password) VALUES ('admin', 'password')"
+            "INSERT INTO UserTable (username, password, type) VALUES ('admin', 'password', 'staff')"
     };
 
     public static void main(String[] args) throws SQLException, IOException
@@ -141,7 +142,7 @@ public class SetDatabase
     private static void clearTables()
     {
         // Drop tables in reverse to avoid foreign keys being null
-        String[] tables = {"BasketTable", "ProductTable", "LoginTable", "CategoryTable"};
+        String[] tables = {"BasketTable", "ProductTable", "UserTable", "CategoryTable"};
 
         try (Connection connection = dbConnection.getConnection();
              Statement statement = connection.createStatement())

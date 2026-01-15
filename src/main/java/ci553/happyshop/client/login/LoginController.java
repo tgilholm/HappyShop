@@ -2,9 +2,10 @@ package ci553.happyshop.client.login;
 
 
 import ci553.happyshop.base_mvm.BaseController;
-import javafx.event.ActionEvent;
+import ci553.happyshop.domain.service.ServiceFactory;
+import ci553.happyshop.domain.service.UserService;
+import ci553.happyshop.utility.alerts.AlertFactory;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 
 
 /**
@@ -13,25 +14,13 @@ import javafx.scene.control.Button;
  */
 public class LoginController extends BaseController<LoginModel>
 {
+    private final UserService userService = ServiceFactory.getLoginService();
+
+
     protected LoginController(LoginModel model)
     {
         super(model);
     }
-
-
-//	public void buttonClicked(String btnText)
-//	{
-//		switch (btnText)
-//		{
-//		case "Customer Login":
-//			// Open the customer login popup
-//			lModel.openCusLoginWindow();
-//			break;
-//		case "Warehouse Login":
-//			// Open the warehouse login popup
-//			lModel.openWarLoginWindow();
-//		}
-//	}
 
 
     /**
@@ -41,7 +30,15 @@ public class LoginController extends BaseController<LoginModel>
     @FXML
     public void initialize()
     {
-
+        // Observe the login service's error property & display the error in an Alert
+        userService.userError().addListener(((observable, oldValue, newValue) ->
+        {
+            if (newValue != null && !newValue.isEmpty())        // Prevent repeated alerts by checking for empty value
+            {
+                AlertFactory.warning("Login", "Login Failed", newValue);    // show the alert
+                userService.resetUserError();
+            }
+        }));
     }
 
 
@@ -50,7 +47,7 @@ public class LoginController extends BaseController<LoginModel>
      */
     public void customerLogin()
     {
-        model.customerLogin();
+        AlertFactory.loginPopup().ifPresent(model::customerLogin);
     }
 
 

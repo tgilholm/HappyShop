@@ -1,87 +1,58 @@
 package ci553.happyshop.client.login;
 
-import java.sql.SQLException;
-
 import ci553.happyshop.base_mvm.BaseModel;
-import ci553.happyshop.catalogue.Customer;
+import ci553.happyshop.catalogue.User;
 import ci553.happyshop.client.customer.CustomerClient;
-import ci553.happyshop.domain.service.LoginService;
+import ci553.happyshop.domain.service.UserService;
 import ci553.happyshop.domain.service.ServiceFactory;
 import ci553.happyshop.storageAccess.DatabaseRW;
 import ci553.happyshop.client.OpenWindows;
-import ci553.happyshop.utility.alerts.AlertFactory;
+import ci553.happyshop.utility.LoginCredentials;
 import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The LoginModel class provides the functionality for users and warehouse staff
  * to log into the application It checks the database to see if the user already
  * has an account, and if not, asks them to create one.
- *
- *
+ * <p>
+ * <p>
  * TODO add option to go back to login screen
  *
  */
 public class LoginModel extends BaseModel
 {
-	// Connect to the loginService
-	private final LoginService loginService = ServiceFactory.getLoginService();
+    // Connect to the userService
+    private final UserService userService = ServiceFactory.getLoginService();
 
 
-	/**
-	 * Attempts to log in a customer. Creates a loginPopup, then validates the result.
-	 * If successful, opens the "customer" side of the program
-	 */
-	public void customerLogin()
-	{
-		AlertFactory.loginPopup().ifPresent(result ->
+    /**
+     * Attempts to log in a customer. Creates a loginPopup, then validates the result.
+     * If successful, opens the "customer" side of the program
+     */
+    public void customerLogin(@NotNull LoginCredentials result)
+    {
+        String username = result.username();
+        String password = result.password();
+
+        // Pass to the userService
+        User user = userService.login(username, password, User.UserType.CUSTOMER);
+
+        if (user != null)
         {
-            String username = result.username();
-            String password = result.password();
-
-            logger.info("Username: {}, Password: {}", username, password);
-
-            // Check for empty username & password
-            if (password.isEmpty())
-            {
-                AlertFactory.warning("Login", "Login Failed", "Please enter a password");
-                logger.debug("No password entered");
-                return;
-            }
-            else if (username.isEmpty())
-            {
-                AlertFactory.warning("Login", "Login Failed", "Please enter a username");
-                logger.debug("No username entered");
-                return;
-            }
-
-            // Pass to the loginService
-            Customer customer = loginService.login(username, password);
-
-            if (customer == null)
-            {
-                AlertFactory.warning("Login", "LoginFailed", "Incorrect username or password");
-                return;
-            }
-
             // Pass to the customer window
-            CustomerClient.startCustomerClient(new Stage(), customer);
+            CustomerClient.startCustomerClient(new Stage(), user);
+        }
+    }
 
-        });
-	}
 
+    // TODO refactor to handle both popups with one method each
+    // LoginModel connects to the LoginView, which displays GUI items to the user
+    //public LoginView lView;
+    public DatabaseRW databaseRW;
+    private OpenWindows openWindows;
+    private LoginPopup cusLoginPopup, warLoginPopup;
 
-	// TODO refactor to handle both popups with one method each
-	// LoginModel connects to the LoginView, which displays GUI items to the user
-	//public LoginView lView;
-	public DatabaseRW databaseRW;
-	private OpenWindows openWindows;
-	private LoginPopup cusLoginPopup, warLoginPopup;
-
-	// Default constructor- initialises openWindows
-	public LoginModel()
-	{
-		openWindows = new OpenWindows();
-	}
 
 //	public void openCusLoginWindow()
 //	{
@@ -97,9 +68,9 @@ public class LoginModel extends BaseModel
 //		warLoginPopup.showLoginWindow();
 //	}
 
-	// Customer login method. Checks the login table and opens the customer window
-	// if correct
-	// Contact the database & check login details
+    // Customer login method. Checks the login table and opens the customer window
+    // if correct
+    // Contact the database & check login details
 //	public void cusLogin(String username, String password) throws SQLException
 //	{
 //		if (databaseRW.checkLoginDetails(username, password))

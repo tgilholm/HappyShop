@@ -1,7 +1,7 @@
 package ci553.happyshop.client.customer;
 
 import ci553.happyshop.base_mvm.BaseView;
-import ci553.happyshop.catalogue.Customer;
+import ci553.happyshop.catalogue.User;
 import ci553.happyshop.data.repository.CategoryRepository;
 import ci553.happyshop.data.repository.ProductRepository;
 import ci553.happyshop.data.repository.RepositoryFactory;
@@ -44,11 +44,11 @@ public final class CustomerClient extends Application
 	 * injects dependencies into the Model, View, and Controller
 	 * @param window the <code>Stage</code> object to run
 	 */
-	public static void startCustomerClient(Stage window, Customer customer)
+	public static void startCustomerClient(Stage window, User user)
 	{
 		logger.info("Launching CustomerClient");
 
-		CustomerModel cusModel = new CustomerModel(customer);
+		CustomerModel cusModel = new CustomerModel(user);
 		CustomerController cusController = new CustomerController(cusModel);
 		BaseView<CustomerController, GridPane> cusView = new BaseView<>(cusController, customerFXML, customerCSS, "Customer Client");
 		cusView.start(window);
