@@ -67,7 +67,10 @@ public final class ServiceFactory
         return userService;
     }
 
-
+    /**
+     * Checks if the category service already exists and if not, creates a new instance
+     * @return the service instance
+     */
     public static CategoryService getCategoryService()
     {
         if (categoryService == null)
