@@ -132,7 +132,6 @@ public class BasketServiceImpl implements BasketService
                 .map(BasketItem::getQuantity)
                 .orElseGet(() ->
                 {
-                    logger.debug("BasketItem {} {} not found ", customerID, productID);
                     return 0;
                 });
     }

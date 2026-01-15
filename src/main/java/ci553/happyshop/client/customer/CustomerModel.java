@@ -6,10 +6,15 @@ import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.domain.service.BasketService;
 import ci553.happyshop.domain.service.CategoryService;
 import ci553.happyshop.domain.service.ProductService;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 /**
@@ -29,6 +34,23 @@ public class CustomerModel extends BaseModel
     private FilteredList<ProductWithCategory> searchFilteredList;
     private FilteredList<ProductWithCategory> categoryFilteredList;
 
+    /*
+    The ExecutorService used for background DB queries.
+    This allows access to the database without slowing down the system. Note that this means
+    Platform.runLater() is used in order to update JavaFX elements on the main thread, as is required.
+
+    singleThreadExecutors run tasks sequentially, parallel to the main thread.
+     */
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor(runnable ->
+    {
+        // The executorService will re-use this thread and execute the provided runnable.
+        Thread thread = new Thread(runnable, "CustomerModel-DBLoader");
+        thread.setDaemon(true); // daemon = true so that the JVM doesn't get stuck on background threads that won't end
+        logger.debug("Starting runnable");
+        return thread;
+    });
+
+    // todo placeholder image
     //private final String imageName = "images/imageHolder.jpg"; // Image to show in product preview (Search Page)
 
 
@@ -51,8 +73,6 @@ public class CustomerModel extends BaseModel
         // Observe the changeCounter in BasketService and automatically reload the product list
         basketService.basketChanged().addListener((observable, oldValue, newValue) -> loadProducts());
     }
-
-
 
 
     // todo preview image in detail pane with placeholder image
@@ -83,25 +103,41 @@ public class CustomerModel extends BaseModel
 
 
     /**
-     * Updates the <code>productWithCategoryList</code> from the <code>productRepository</code>
+     * Asynchronously updates the <code>productWithCategoryList</code> from the <code>productRepository</code>
      */
     public void loadProducts()
     {
-        // Use setAll to update the productList
-        productWithCategoryList.setAll(productService.getAllWithCategories());
+        // Execute service in a background Thread
+        executorService.submit(() ->
+        {
+            // Retrieve the ProductWithCategory list OFF the main thread
+            List<ProductWithCategory> list = productService.getAllWithCategories();
 
-        logger.debug("Retrieved {} products with categories from ProductTable", productWithCategoryList.size());
+            logger.debug("Retrieved {} products with categories from ProductTable", list.size());
+
+            Platform.runLater(() ->
+            {
+                // Update the observable list on the JavaFX thread
+                productWithCategoryList.setAll(list);
+            });
+        });
     }
 
 
     /**
-     * Updates the <code>categoryList</code> from the <code>productRepository</code>
+     * Asynchronously updates the <code>categoryList</code> from the <code>productRepository</code>
      */
     public void loadCategories()
     {
-        categoryList.setAll(categoryService.getAll());
+        // Background thread
+        executorService.submit(() ->
+        {
+            List<Category> list = categoryService.getAll();
+            logger.debug("Retrieved {} categories from CategoryTable", list.size());
 
-        logger.debug("Retrieved {} categories from CategoryTable", categoryList.size());
+            // Update the observable list on the main thread
+            Platform.runLater(() -> categoryList.setAll(list));
+        });
     }
 
 
@@ -198,7 +234,12 @@ public class CustomerModel extends BaseModel
      */
     public void addToBasket(@NotNull Product product)
     {
-        basketService.addOrUpdateItem(currentUser.id(), product.getId(), 1);
+        executorService.submit(() ->
+        {
+            // Update the basket on the background thread
+            basketService.addOrUpdateItem(currentUser.id(), product.getId(), 1);
+        });
+
         loadProducts(); // List has changed, update card data
     }
 
@@ -210,7 +251,12 @@ public class CustomerModel extends BaseModel
      */
     public void removeFromBasket(@NotNull Product product)
     {
-        basketService.decreaseOrRemoveItem(currentUser.id(), product.getId());
+        executorService.submit(() ->
+        {
+            // Update the basket on the background thread
+            basketService.decreaseOrRemoveItem(currentUser.id(), product.getId());
+        });
+
         loadProducts();
     }
 
