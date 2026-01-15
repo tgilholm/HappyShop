@@ -3,6 +3,8 @@ package ci553.happyshop.utility.alerts;
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.utility.LoginCredentials;
+import ci553.happyshop.utility.UserType;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -86,7 +88,7 @@ public final class AlertFactory
      * @return an <code>Optional</code> <code>LoginCredentials</code> object. This contains the username and password
      * entered by the user and is only present if the user selects "login". Otherwise, it is null or "not present".
      */
-    public static @NotNull Optional<LoginCredentials> loginPopup()
+    public static @NotNull Optional<LoginCredentials> login()
     {
         // Create the alert
         BaseAlert alert = new BaseAlert(Alert.AlertType.NONE, "Login", null, null, loginCssPath);
@@ -110,7 +112,7 @@ public final class AlertFactory
 
         // Add these to HBoxes, then add to root
         content.getChildren().add(new HBox(10, lbUsername, tfUsername));     // Username row
-        content.getChildren().add(new HBox(10, lbPassword, tfPassword));     // Username row
+        content.getChildren().add(new HBox(10, lbPassword, tfPassword));     // Password row
 
         alert.setContentNode(content);  // Set the custom layout
 
@@ -118,13 +120,60 @@ public final class AlertFactory
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == login)        // If the "login" button was pressed
         {
-            return Optional.of(new LoginCredentials(tfUsername.getText(), tfPassword.getText()));
+            return Optional.of(new LoginCredentials(tfUsername.getText(), tfPassword.getText(),null));
         } else
         {
             return Optional.empty();        // If the user pressed "cancel"
         }
     }
 
+    public static Optional<LoginCredentials> createAccount() {
+        // Create the alert
+        BaseAlert alert = new BaseAlert(Alert.AlertType.NONE, "Create Account", null, null, loginCssPath);
+
+        // Add buttons
+        ButtonType create = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);   // Create the account
+        ButtonType cancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE); // Exit
+
+        alert.getButtonTypes().setAll(create, cancel);
+        VBox content = new VBox(15);
+        content.setPadding(new Insets(20));
+
+        // Account type radio buttons
+        ToggleGroup toggleGroup = new ToggleGroup();
+        RadioButton customerType = new RadioButton("Customer Account");
+        RadioButton staffType = new RadioButton("Staff Account");
+
+        // Add to toggleGroup
+        customerType.setToggleGroup(toggleGroup);
+        staffType.setToggleGroup(toggleGroup);
+
+        // Username field
+        Label lbUsername = new Label("Username");
+        TextField tfUsername = new TextField();
+
+        // Password field
+        Label lbPassword = new Label("Password");
+        TextField tfPassword = new PasswordField();
+
+        // Add views to HBoxes, then the root
+        content.getChildren().add(new HBox(10, customerType, staffType));    // Radio buttons
+        content.getChildren().add(new HBox(10, lbUsername, tfUsername));     // Username row
+        content.getChildren().add(new HBox(10, lbPassword, tfPassword));     // Password row
+
+        alert.setContentNode(content);  // Set the custom layout
+
+        // Display the alert
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == create)        // If the "create" button was pressed
+        {
+            return Optional.of(new LoginCredentials(tfUsername.getText(), tfPassword.getText(),
+                    toggleGroup.getSelectedToggle() == customerType ? UserType.CUSTOMER : UserType.STAFF));
+        } else
+        {
+            return Optional.empty();        // If the user pressed "cancel"
+        }
+    }
 
     /**
      * Builds a receipt alert. Callers should invoke showAndWait and handle the resulting <code>Optional</code> <code>ButtonType</code>.

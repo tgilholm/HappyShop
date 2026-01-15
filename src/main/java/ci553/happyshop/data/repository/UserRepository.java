@@ -4,6 +4,7 @@ package ci553.happyshop.data.repository;
 import ci553.happyshop.catalogue.User;
 import ci553.happyshop.data.database.DatabaseConnection;
 import ci553.happyshop.data.repository.types.CommonRepository;
+import ci553.happyshop.utility.UserType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Contract;
@@ -137,7 +138,7 @@ public class UserRepository implements CommonRepository<User, Long>
         return new User(resultSet.getLong(1),
                 resultSet.getString(2),
                 resultSet.getString(3),
-                Objects.equals(resultSet.getString(4).toLowerCase(), "staff") ? User.UserType.STAFF : User.UserType.CUSTOMER
+                Objects.equals(resultSet.getString(4).toLowerCase(), "staff") ? UserType.STAFF : UserType.CUSTOMER
         );  // User type is set to STAFF or CUSTOMER
     }
 

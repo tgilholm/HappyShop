@@ -5,6 +5,7 @@ import ci553.happyshop.data.repository.RepositoryFactory;
 import ci553.happyshop.data.repository.UserRepository;
 import ci553.happyshop.domain.service.UserService;
 import ci553.happyshop.utility.EncryptionHandler;
+import ci553.happyshop.utility.UserType;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -67,7 +68,7 @@ public class UserServiceImpl implements UserService
      * @return a <code>User</code> if the login succeeded, else null.
      */
     @Override
-    public @Nullable User login(@NotNull String username, @NotNull String password, User.UserType accessType)
+    public @Nullable User login(@NotNull String username, @NotNull String password, UserType accessType)
     {
         // Handle empty strings
         if (username.isEmpty() || password.isEmpty())
@@ -90,14 +91,14 @@ public class UserServiceImpl implements UserService
             return null;
         }
 
-        User.UserType userType = user.userType();    // Extract the user's type
+        UserType userType = user.userType();    // Extract the user's type
 
         // Handle incorrect user types
         /*
         This condition prevents customers from accessing the staff area, while allowing them
         to reach the customer area and allowing staff to access both.
          */
-        if (accessType == User.UserType.STAFF && userType == User.UserType.CUSTOMER)
+        if (accessType == UserType.STAFF && userType == UserType.CUSTOMER)
         {
             // Customers cannot access the staff portal
             notifyError("Failed to login user. Customers cannot access the warehouse");
@@ -115,7 +116,7 @@ public class UserServiceImpl implements UserService
      * @return a <code>User</code> if the creation succeeded, else null.
      */
     @Override
-    public @Nullable User createAccount(@NotNull String username, @NotNull String password, User.UserType userType)
+    public @Nullable User createAccount(@NotNull String username, @NotNull String password, UserType userType)
     {
         // Handle empty strings
         if (username.isEmpty() || password.isEmpty())

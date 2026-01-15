@@ -2,10 +2,14 @@ package ci553.happyshop.client.login;
 
 
 import ci553.happyshop.base_mvm.BaseController;
-import ci553.happyshop.domain.service.ServiceFactory;
-import ci553.happyshop.domain.service.UserService;
+import ci553.happyshop.catalogue.User;
+import ci553.happyshop.client.customer.CustomerClient;
+import ci553.happyshop.utility.UserType;
 import ci553.happyshop.utility.alerts.AlertFactory;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.stage.Stage;
 
 
 /**
@@ -14,7 +18,7 @@ import javafx.fxml.FXML;
  */
 public class LoginController extends BaseController<LoginModel>
 {
-    private final UserService userService = ServiceFactory.getLoginService();
+    public @FXML Label lbTitle;
 
 
     protected LoginController(LoginModel model)
@@ -30,33 +34,108 @@ public class LoginController extends BaseController<LoginModel>
     @FXML
     public void initialize()
     {
-        // Observe the login service's error property & display the error in an Alert
-        userService.userError().addListener(((observable, oldValue, newValue) ->
+        /*
+        Controllers should not directly access services, they should get them from the model.
+        This observable errorProperty is an example
+         */
+
+
+        // Observe the error property from the model & display the error in an Alert if there is a new error
+
+        model.userErrorProperty().addListener(((observable, oldValue, newValue) ->
         {
             if (newValue != null && !newValue.isEmpty())        // Prevent repeated alerts by checking for empty value
             {
-                AlertFactory.warning("Login", "Login Failed", newValue);    // show the alert
-                userService.resetUserError();
+                Platform.runLater(() ->
+                {
+                    AlertFactory.warning("Login", "Login Failed", newValue);    // show the on the FX thread
+                });
+
+                model.resetUserError(); // Reset the flag
             }
         }));
     }
 
 
     /**
-     * Delegates to the LoginModel to attempt to log in to the customer system
+     * Delegates to the model to check if the user exists. If so, launches the customer side of the program
      */
     public void customerLogin()
     {
-        AlertFactory.loginPopup().ifPresent(model::customerLogin);
+        AlertFactory.login().ifPresent(loginCredentials ->
+        {
+            User user = model.customerLogin(loginCredentials);
+
+            if (user != null)
+            {
+                // If successful, hide the login and launch the new view
+                CustomerClient.startCustomerClient(new Stage(), user);
+                hideLogin();
+            }
+        });
     }
 
 
     /**
-     * Delegates to the LoginModel to attempt to log in to the customer system
+     * Delegates to the model to check if the user exists. If so, launches the staff side of the program
      */
     public void warehouseLogin()
     {
+        AlertFactory.login().ifPresent(loginCredentials ->
+        {
+            User user = model.warehouseLogin(loginCredentials);
+
+            if (user != null)
+            {
+                // If successful, hide the login and launch the new view
+                // TODO: Open warehouse UI
+                hideLogin();
+            }
+        });
     }
 
 
+    /**
+     * Delegates to the model to create a new account. If successful, launches the corresponding
+     * area of the program
+     */
+    public void createAccount()
+    {
+        AlertFactory.login().ifPresent(loginCredentials ->
+        {
+            User user = model.createAccount(loginCredentials);
+
+            if (user != null)
+            {
+                // Launch the view of the corresponding type
+                if (user.userType() == UserType.CUSTOMER)
+                {
+                    CustomerClient.startCustomerClient(new Stage(), user);
+                } else
+                {
+                    // TODO: Open warehouse UI
+                }
+                hideLogin();
+            }
+        });
+    }
+
+
+    /**
+     * Helper method to hide the login view on a successful account login or creation
+     * Gets the current stage from one of the JavaFX elements, then hides the stage
+     */
+    private void hideLogin()
+    {
+        if (lbTitle != null && lbTitle.getScene() != null)
+        {
+            // Get the current stage
+            Stage stage = (Stage) lbTitle.getScene().getWindow();
+
+            if (stage != null)
+            {
+                stage.hide();
+            }
+        }
+    }
 }

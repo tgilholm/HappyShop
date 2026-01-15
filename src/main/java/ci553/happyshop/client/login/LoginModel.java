@@ -4,44 +4,75 @@ import ci553.happyshop.base_mvm.BaseModel;
 import ci553.happyshop.catalogue.User;
 import ci553.happyshop.client.customer.CustomerClient;
 import ci553.happyshop.domain.service.UserService;
-import ci553.happyshop.domain.service.ServiceFactory;
-import ci553.happyshop.storageAccess.DatabaseRW;
-import ci553.happyshop.client.OpenWindows;
 import ci553.happyshop.utility.LoginCredentials;
+import ci553.happyshop.utility.UserType;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * The LoginModel class provides the functionality for users and warehouse staff
- * to log into the application It checks the database to see if the user already
- * has an account, and if not, asks them to create one.
- * <p>
- * <p>
- * TODO add option to go back to login screen
- *
+ * The LoginModel class interfaces with the userService to log in or create accounts
+ * for users.
  */
 public class LoginModel extends BaseModel
 {
-    // Connect to the userService
-    private final UserService userService = ServiceFactory.getLoginService();
+    private final UserService userService;
+
+    public LoginModel(UserService userService)
+    {
+        this.userService = userService; // Connect the service with dependency injection
+    }
 
 
     /**
-     * Attempts to log in a customer. Creates a loginPopup, then validates the result.
-     * If successful, opens the "customer" side of the program
+     * Delegates to userService to get a customer login
+     * @param result the <code>LoginCredentials</code> of the user
+     * @return the <code>User</code> object if successful, else null
      */
-    public void customerLogin(@NotNull LoginCredentials result)
+    public @Nullable User customerLogin(@NotNull LoginCredentials result)
     {
-        String username = result.username();
-        String password = result.password();
+        return userService.login(result.username(), result.password(), UserType.CUSTOMER);
+    }
 
-        // Pass to the userService
-        User user = userService.login(username, password, User.UserType.CUSTOMER);
+    /**
+     * Delegates to userService to get a staff login
+     * @param result the <code>LoginCredentials</code> of the user
+     * @return the <code>User</code> object if successful, else null
+     */
+    public @Nullable User warehouseLogin(@NotNull LoginCredentials result)
+    {
+        return userService.login(result.username(), result.password(), UserType.STAFF);
+    }
 
-        if (user != null)
-        {
-            // Pass to the customer window
-            CustomerClient.startCustomerClient(new Stage(), user);
-        }
+    /**
+     * Delegates to userService to create a new user
+     * @param result the <code>LoginCredentials</code> of the user
+     * @return the <code>User</code> object if successful, else null
+     */
+    public @Nullable User createAccount(@NotNull LoginCredentials result)
+    {
+        return userService.createAccount(result.username(), result.password(), result.userType());
+    }
+
+
+
+    /**
+     * Gets the observable error property from the service
+     * @return an immutable <code>StringProperty</code>
+     */
+    public ReadOnlyStringProperty userErrorProperty()
+    {
+        return userService.userError();
+    }
+
+
+    /**
+     * Resets the <code>StringProperty</code> in the userService
+     */
+    public void resetUserError()
+    {
+        userService.resetUserError();
     }
 }

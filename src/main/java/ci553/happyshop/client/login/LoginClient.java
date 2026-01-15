@@ -1,9 +1,10 @@
 package ci553.happyshop.client.login;
 
 import ci553.happyshop.base_mvm.BaseView;
+import ci553.happyshop.domain.service.ServiceFactory;
+import ci553.happyshop.domain.service.UserService;
 import javafx.application.Application;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -34,8 +35,10 @@ public class LoginClient extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        // Link together Model, View, Controller
-        LoginModel model = new LoginModel();
+        // Inject dependency into the model
+        UserService userService = ServiceFactory.getLoginService();
+
+        LoginModel model = new LoginModel(userService);
         LoginController controller = new LoginController(model);
         BaseView<LoginController, HBox> view = new BaseView<>(controller, "/fxml/LoginView.fxml", null, "Login Client");
         view.start(primaryStage);

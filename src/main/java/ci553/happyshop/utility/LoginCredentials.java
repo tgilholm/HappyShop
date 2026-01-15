@@ -5,6 +5,6 @@ package ci553.happyshop.utility;
  * @param username a <code>String</code> username
  * @param password a <code>String</code> password
  */
-public record LoginCredentials(String username, String password)
+public record LoginCredentials(String username, String password, UserType userType)
 {
 }

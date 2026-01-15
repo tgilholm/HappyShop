@@ -1,6 +1,7 @@
 package ci553.happyshop.domain.service;
 
 import ci553.happyshop.catalogue.User;
+import ci553.happyshop.utility.UserType;
 import javafx.beans.property.ReadOnlyStringProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,7 +18,7 @@ public interface UserService
      * @param password a <code>String</code> password field
      * @return a <code>Customer</code> if the login succeeded, else null.
      */
-    @Nullable User login(@NotNull String username, @NotNull String password, User.UserType userType);
+    @Nullable User login(@NotNull String username, @NotNull String password, UserType userType);
 
     /**
      * Creates a new account with the specified username and password
@@ -26,7 +27,7 @@ public interface UserService
      * @param password a <code>String</code> password field
      * @return a <code>Customer</code> if the creation succeeded, else null.
      */
-    @Nullable User createAccount(@NotNull String username, @NotNull String password, User.UserType userType);
+    @Nullable User createAccount(@NotNull String username, @NotNull String password, UserType userType);
 
     /**
      * Exposes an immutable version of the validation error

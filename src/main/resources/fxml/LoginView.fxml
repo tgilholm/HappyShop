@@ -17,9 +17,10 @@
     </padding>
 
     <VBox spacing="10" alignment="CENTER">
-        <Label style="-fx-font-size: 30px; -fx-font-weight: bold;" text="HappyShop"/>
+        <Label style="-fx-font-size: 30px; -fx-font-weight: bold;" text="HappyShop" fx:id="lbTitle"/>
         <Button style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Customer Login" onAction="#customerLogin"/>
         <Button style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Warehouse Login" onAction="#warehouseLogin"/>
+        <Button style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Create Account" onAction="#createAccount"/>
     </VBox>
 
 </HBox>
