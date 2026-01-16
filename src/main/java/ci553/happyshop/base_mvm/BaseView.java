@@ -1,6 +1,6 @@
 package ci553.happyshop.base_mvm;
 
-import ci553.happyshop.utility.FileHandler;
+import ci553.happyshop.utility.handlers.FileHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,7 +12,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
 
 
 /**

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+
+<!-- Primarily the same as the ProductTileCell used in other classes,
+except this implementation is designed for use in the Warehouse and features
+"edit" and "delete" buttons on products-->
+<fx:root type="javafx.scene.layout.VBox"
+         xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+         prefHeight="200" prefWidth="120" spacing="5">
+
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+
+    <!-- Product icon -->
+    <!-- A stackPane provides padding around the edge to force a maximum size -->
+    <StackPane minWidth="120" maxWidth="120" minHeight="120" maxHeight="120">
+        <ImageView fx:id="ivImage" fitHeight="110" fitWidth="110" preserveRatio="true"/>
+    </StackPane>
+
+    <!-- Item description -->
+    <Label fx:id="lbName" text="Name Text" style="-fx-font-weight: bold;" wrapText="true" maxHeight="40"/>
+
+    <HBox spacing="8">
+        <!-- Item price -->
+        <Label fx:id="lbPrice" text="Price Text"/>
+
+        <!-- Item remaining stock -->
+        <Label fx:id="lbStock" text="Items remaining"/>
+    </HBox>
+
+    <!-- Display edit and delete buttons-->
+    <HBox spacing="10" alignment="CENTER">
+        <Button fx:id="btnEdit" text="Edit" />
+        <Button fx:id="btnDelete" text="Delete" />
+    </HBox>
+</fx:root>

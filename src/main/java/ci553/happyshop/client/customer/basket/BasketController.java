@@ -2,8 +2,8 @@ package ci553.happyshop.client.customer.basket;
 
 import ci553.happyshop.base_mvm.BaseController;
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
-import ci553.happyshop.utility.BasketListCell;
-import ci553.happyshop.utility.ButtonActionCallback;
+import ci553.happyshop.utility.listCell.BasketListCell;
+import ci553.happyshop.utility.listCell.ProductCardCallback;
 import ci553.happyshop.utility.alerts.AlertFactory;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
@@ -47,7 +47,7 @@ public class BasketController extends BaseController<BasketModel>
         model.loadBasketItems();
 
         // Define callback behaviour
-        ButtonActionCallback callback = new ButtonActionCallback(
+        ProductCardCallback callback = new ProductCardCallback(
                 model::addToBasket,             // add product to the basket
                 model::removeFromBasket,        // remove product from the basket
                 model::getBasketQuantity,       // get the basket quantity
@@ -80,7 +80,7 @@ public class BasketController extends BaseController<BasketModel>
     public void goBack()
     {
         Stage stage = (Stage) btnBack.getScene().getWindow();
-        model.goBack(stage);
+        stage.close();
     }
 
 

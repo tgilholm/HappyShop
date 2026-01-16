@@ -1,8 +1,8 @@
 package ci553.happyshop.data.repository;
 
 import ci553.happyshop.catalogue.Category;
-import ci553.happyshop.data.database.DatabaseConnection;
-import ci553.happyshop.data.database.DatabaseException;
+import ci553.happyshop.data.DatabaseConnection;
+import ci553.happyshop.data.DatabaseException;
 import ci553.happyshop.data.repository.types.CommonRepository;
 import ci553.happyshop.data.repository.types.ListableRepository;
 import org.jetbrains.annotations.Contract;
@@ -23,10 +23,12 @@ public class CategoryRepository implements CommonRepository<Category, Long>, Lis
 {
     private final DatabaseConnection dbConnection;
 
+
     public CategoryRepository(DatabaseConnection dbConnection)
     {
         this.dbConnection = dbConnection;
     }
+
 
     /**
      * Gets the list of all <code>Category</code> entities
@@ -57,6 +59,7 @@ public class CategoryRepository implements CommonRepository<Category, Long>, Lis
         }
     }
 
+
     /**
      * Gets a specific <code>Category</code> by its ID
      *
@@ -84,6 +87,7 @@ public class CategoryRepository implements CommonRepository<Category, Long>, Lis
         }
     }
 
+
     /**
      * Adds a new <code>Category</code> to the table
      *
@@ -106,6 +110,7 @@ public class CategoryRepository implements CommonRepository<Category, Long>, Lis
             throw new DatabaseException("Failed to insert category, id" + category.getId(), e);
         }
     }
+
 
     /**
      * Updates the details of an existing <code>Category</code> in the table
@@ -136,6 +141,7 @@ public class CategoryRepository implements CommonRepository<Category, Long>, Lis
         }
     }
 
+
     /**
      * Removes a <code>Category</code> from the table
      *
@@ -164,6 +170,32 @@ public class CategoryRepository implements CommonRepository<Category, Long>, Lis
         }
     }
 
+
+    /**
+     * Retrieves a specific Category by its name
+     * @param name the <code>String</code> name of the category
+     */
+    public @Nullable Category getByName(@NotNull String name)
+    {
+        String query = "SELECT * FROM CategoryTable WHERE name = ?";
+
+        try (Connection connection = dbConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query))
+        {
+            // Replace "?" with Long id
+            statement.setString(1, name);
+            ResultSet results = statement.executeQuery();
+
+            // Return the category or null if not found
+            return results.next() ? mapToCategory(results) : null;
+
+        } catch (SQLException e)
+        {
+            throw new DatabaseException("Failed to get category: " + name, e);
+        }
+    }
+
+
     /**
      * Helper method to set the category details on an <code>insert()</code> query
      *
@@ -177,6 +209,7 @@ public class CategoryRepository implements CommonRepository<Category, Long>, Lis
         statement.setString(1, category.getName());
         statement.setString(2, category.getDescription());
     }
+
 
     /**
      * Helper method to convert a <code>ResultSet</code> row to a <code>Category</code> object

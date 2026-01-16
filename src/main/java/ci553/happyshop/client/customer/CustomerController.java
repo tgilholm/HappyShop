@@ -5,11 +5,14 @@ import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.client.customer.basket.BasketClient;
-import ci553.happyshop.utility.ButtonActionCallback;
-import ci553.happyshop.utility.ImageHandler;
-import ci553.happyshop.utility.ProductCardPane;
-import ci553.happyshop.utility.StockDisplayHelper;
+import ci553.happyshop.client.login.LoginClient;
+import ci553.happyshop.utility.handlers.FileHandler;
+import ci553.happyshop.utility.handlers.ImageHandler;
+import ci553.happyshop.utility.handlers.StockDisplayHelper;
+import ci553.happyshop.utility.listCell.ProductCardCallback;
+import ci553.happyshop.utility.listCell.ProductCardPane;
 import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -45,7 +48,7 @@ public class CustomerController extends BaseController<CustomerModel>
     private ComboBox<String> cbCategories;
 
     @FXML
-    private Button btnAccount, btnBasket;
+    private Button btnBasket, btnBack;
 
     @FXML
     private TilePane tpProducts;
@@ -67,10 +70,10 @@ public class CustomerController extends BaseController<CustomerModel>
     public void initialize()
     {
         // Load the search icon
-        URL iconUrl = getClass().getResource("/images/search_icon.png");
-        if (iconUrl != null)
+        URL iconURL = FileHandler.parseURL("/images/search_icon.png");
+        if (iconURL != null)
         {
-            Image image = new Image(iconUrl.toExternalForm());
+            Image image = new Image(iconURL.toExternalForm());
             ivSearchIcon.setImage(image);
         } else
         {
@@ -79,10 +82,15 @@ public class CustomerController extends BaseController<CustomerModel>
 
         // Set up category combobox
         refreshComboBox();
+        cbCategories.getSelectionModel().selectFirst();
 
         model.loadProducts();            // Load product list
         model.loadCategories();          // Load category list
         bindProductList();               // Bind the product list to the view
+
+        // Update ComboBox when the categoryList changes
+        model.getCategories().addListener((ListChangeListener<Category>) change ->
+                refreshComboBox());
 
 
         // Add a listener on the comboBox valueProperty, extract the string and set the categoryFilter
@@ -99,9 +107,7 @@ public class CustomerController extends BaseController<CustomerModel>
         // Automatically refresh when the filteredList changes
         model.getSearchFilteredList().addListener((ListChangeListener<ProductWithCategory>) change -> bindProductList());
 
-        // Update ComboBox when the categoryList changes
-        model.getCategories().addListener((ListChangeListener<Category>) change ->
-                refreshComboBox());
+
 
         logger.info("Finished initializing controller");
     }
@@ -123,18 +129,17 @@ public class CustomerController extends BaseController<CustomerModel>
 
         // Add the "select category" placeholder
         cbCategories.getItems().add("Select Category");
-        cbCategories.getSelectionModel().selectFirst();
     }
 
     /**
-     * Refreshes the tilePane with the filtered product list. Defines the ButtonActionCallback
+     * Refreshes the tilePane with the filtered product list. Defines the ProductCardCallback
      */
     private void bindProductList()
     {
         tpProducts.getChildren().clear();            // Load products from the database
 
         // Provide the methods to the callback
-        ButtonActionCallback callback = new ButtonActionCallback(
+        ProductCardCallback callback = new ProductCardCallback(
                 model::addToBasket,                     // add product to the basket
                 model::removeFromBasket,                // remove product from the basket
                 model::getBasketQuantity,               // get the basket quantity
@@ -186,19 +191,13 @@ public class CustomerController extends BaseController<CustomerModel>
     /**
      * Create a new <code>ProductCardPane</code> from a <code>Product object</code>
      * @param product the <code>Product</code> object
-     * @param callback a <code>ProductCardPane.ButtonActionCallback</code>
+     * @param callback a <code>ProductCardCallback</code>
      * @return a <code>VBox</code> containing the card layout
      */
     @Contract("_, _ -> new")
-    private @NotNull VBox createProductCard(Product product, ButtonActionCallback callback)
+    private @NotNull VBox createProductCard(Product product, ProductCardCallback callback)
     {
         return new ProductCardPane(product, callback);
-    }
-
-    // Handle the "account" button input
-    public void accountClicked()
-    {
-        System.out.println("Account button clicked");
     }
 
     /**
@@ -234,5 +233,14 @@ public class CustomerController extends BaseController<CustomerModel>
         {
             logger.error("Failed to open basket", e);
         }
+    }
+
+
+    public void goBack()
+    {
+        Stage stage = (Stage) btnBack.getScene().getWindow();
+        stage.close();
+
+        LoginClient.startLoginClient(new Stage());
     }
 }

@@ -4,6 +4,7 @@ package ci553.happyshop.client.login;
 import ci553.happyshop.base_mvm.BaseController;
 import ci553.happyshop.catalogue.User;
 import ci553.happyshop.client.customer.CustomerClient;
+import ci553.happyshop.client.warehouse.WarehouseClient;
 import ci553.happyshop.utility.enums.UserType;
 import ci553.happyshop.utility.alerts.AlertFactory;
 import javafx.application.Platform;
@@ -48,7 +49,7 @@ public class LoginController extends BaseController<LoginModel>
             {
                 Platform.runLater(() ->
                 {
-                    AlertFactory.warning("Login", "Login Failed", newValue);    // show the on the FX thread
+                    AlertFactory.warning("Login", "Login Failed", newValue);    // show on the FX thread
                 });
 
                 model.resetUserError(); // Reset the flag
@@ -88,7 +89,7 @@ public class LoginController extends BaseController<LoginModel>
             if (user != null)
             {
                 // If successful, hide the login and launch the new view
-                // TODO: Open warehouse UI
+                WarehouseClient.startWarehouseClient(new Stage());
                 hideLogin();
             }
         });
@@ -113,7 +114,7 @@ public class LoginController extends BaseController<LoginModel>
                     CustomerClient.startCustomerClient(new Stage(), user);
                 } else
                 {
-                    // TODO: Open warehouse UI
+                    WarehouseClient.startWarehouseClient(new Stage());
                 }
                 hideLogin();
             }

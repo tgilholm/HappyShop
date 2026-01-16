@@ -2,7 +2,7 @@ package ci553.happyshop.utility.alerts;
 
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
 import ci553.happyshop.catalogue.Product;
-import ci553.happyshop.utility.LoginCredentials;
+import ci553.happyshop.catalogue.LoginCredentials;
 import ci553.happyshop.utility.enums.UserType;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;

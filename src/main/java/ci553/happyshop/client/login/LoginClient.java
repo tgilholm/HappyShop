@@ -1,8 +1,8 @@
 package ci553.happyshop.client.login;
 
 import ci553.happyshop.base_mvm.BaseView;
-import ci553.happyshop.domain.service.ServiceFactory;
-import ci553.happyshop.domain.service.UserService;
+import ci553.happyshop.service.ServiceFactory;
+import ci553.happyshop.service.UserService;
 import javafx.application.Application;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -16,6 +16,19 @@ public class LoginClient extends Application
     {
         launch(args);
     }
+
+
+    public static void startLoginClient(Stage primaryStage)
+    {
+        // Inject dependency into the model
+        UserService userService = ServiceFactory.getLoginService();
+
+        LoginModel model = new LoginModel(userService);
+        LoginController controller = new LoginController(model);
+        BaseView<LoginController, HBox> view = new BaseView<>(controller, "/fxml/LoginView.fxml", null, "Login Client");
+        view.start(primaryStage);
+    }
+
 
     /**
      * The main entry point for all JavaFX applications.
@@ -35,12 +48,6 @@ public class LoginClient extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        // Inject dependency into the model
-        UserService userService = ServiceFactory.getLoginService();
-
-        LoginModel model = new LoginModel(userService);
-        LoginController controller = new LoginController(model);
-        BaseView<LoginController, HBox> view = new BaseView<>(controller, "/fxml/LoginView.fxml", null, "Login Client");
-        view.start(primaryStage);
+        startLoginClient(primaryStage);
     }
 }

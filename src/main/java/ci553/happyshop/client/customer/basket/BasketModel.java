@@ -1,21 +1,17 @@
 package ci553.happyshop.client.customer.basket;
 
 import ci553.happyshop.base_mvm.BaseModel;
-import ci553.happyshop.catalogue.BasketItem;
 import ci553.happyshop.catalogue.DTO.BasketItemWithDetails;
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.catalogue.User;
-import ci553.happyshop.domain.service.BasketService;
-import ci553.happyshop.domain.service.ProductService;
+import ci553.happyshop.service.BasketService;
+import ci553.happyshop.service.ProductService;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Model for the Basket MVC. Connects to the basketService to get basket details.
@@ -26,16 +22,6 @@ public class BasketModel extends BaseModel
     private final ProductService productService;
     private final User user;        // The ID of the user accessing their basket
     private final ObservableList<BasketItemWithDetails> basketItems = FXCollections.observableArrayList();
-
-    // Get an executorService for background DB queries
-    private final ExecutorService executorService = Executors.newSingleThreadExecutor(runnable ->
-    {
-        // The executorService will re-use this thread and execute the provided runnable.
-        Thread thread = new Thread(runnable, "BasketModel-DBLoader");
-        thread.setDaemon(true); // daemon = true so that the JVM doesn't get stuck on background threads that won't end
-        logger.debug("Starting runnable");
-        return thread;
-    });
 
 
     /**
@@ -131,18 +117,6 @@ public class BasketModel extends BaseModel
     {
         return basketService.getQuantity(user.id(), product.getId());
     }
-
-
-    /**
-     * Hides the view
-     *
-     * @param stage the <code>Stage</code> to hide
-     */
-    public void goBack(@NotNull Stage stage)
-    {
-        stage.close();
-    }
-
 
     /**
      * Delegates to basketService to get the quantity of the entire basket

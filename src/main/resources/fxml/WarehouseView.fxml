@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<GridPane xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml" hgap="10" vgap="10"
+          fx:controller="ci553.happyshop.client.warehouse.WarehouseController"
+          styleClass="warehouseRoot"
+          prefHeight="600" prefWidth="1200">
+
+    <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+    </padding>
+
+    <!-- Column Constraints -->
+    <columnConstraints>
+        <ColumnConstraints percentWidth="60" minWidth="720"/>
+        <ColumnConstraints percentWidth="40" minWidth="480"/>
+    </columnConstraints>
+
+    <!-- Row Constraints -->
+    <rowConstraints>
+        <RowConstraints vgrow="NEVER"/>  <!-- Title row has fixed height -->
+        <RowConstraints vgrow="NEVER"/>  <!-- Search bar row has fixed height -->
+        <RowConstraints vgrow="ALWAYS"/> <!-- Content row grows to fill space -->
+    </rowConstraints>
+
+    <!-- COLUMN 0 -->
+    <!-- Title -->
+    <HBox spacing="10" styleClass="titleText" GridPane.columnIndex="0" GridPane.rowIndex="0">
+        <Label text="Warehouse"/>
+    </HBox>
+
+    <!-- Search bar with search icon, text field and ComboBox -->
+    <HBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="1">
+        <ImageView fx:id="ivSearchIcon" fitHeight="32"
+                   fitWidth="32" preserveRatio="true"/>
+
+        <!-- The search bar itself -->
+        <TextField fx:id="tfSearchBar"
+                   promptText="Search for an item by name or ID" prefWidth="400"/>
+
+        <!-- The category selection ComboBox -->
+        <ComboBox fx:id="cbCategories" prefWidth="200"/>
+    </HBox>
+
+    <!-- The search results container-->
+    <!-- TilePane is used as a two-column list -->
+    <ScrollPane GridPane.columnIndex="0" GridPane.rowIndex="2" fitToWidth="true">
+        <TilePane fx:id="tpProducts" hgap="10" vgap="5"
+                  prefTileWidth="200" prefTileHeight="225"/>
+    </ScrollPane>
+
+    <!-- COLUMN 1 -->
+    <!-- Selected item layout -->
+    <!-- Back button-->
+    <HBox alignment="TOP_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="0">
+        <Button text="Go Back" fx:id="btnBack"
+                onAction="#goBack">
+        </Button>
+    </HBox>
+
+    <!-- ComboBox displaying "Add" or "Edit" -->
+    <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <ComboBox fx:id="cbSelectMode" minWidth="480"/>
+    </HBox>
+
+    <!-- "Detail Box" -->
+    <!-- Displays editable product information -->
+    <!-- Re-used for both adding products and editing them -->
+    <VBox GridPane.columnIndex="1" GridPane.rowIndex="2" style="-fx-background-color: white; -fx-padding: 10;"
+          spacing="30">
+
+        <!-- Product Image in fixed StackPane -->
+        <StackPane style="-fx-border-color: lightgray; -fx-border-width: 1;">
+            <ImageView fx:id="ivDetailImage"
+                       fitHeight="200"
+                       fitWidth="200"
+                       preserveRatio="true"/>
+        </StackPane>
+        <VBox spacing="10">
+            <HBox spacing="10">
+                <!-- Product ID -->
+                <Label fx:id="lbDetailID" text="ID"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold"/>
+            </HBox>
+
+
+            <!-- HBox row for each field -->
+            <HBox spacing="10">
+                <!-- Product Name -->
+                <Label text="Name:"
+                       style="-fx-font-size: 12px; -fx-font-weight: bold"
+                       wrapText="true"/>
+
+                <TextField fx:id="tfName" style="-fx-font-size: 12px; "/>
+            </HBox>
+
+            <HBox spacing="10">
+                <!-- Product Category -->
+                <Label text="Category:"
+                       style="-fx-font-size: 12px; -fx-font-weight: bold"
+                       wrapText="true"/>
+
+                <ComboBox fx:id="cbChangeCategory" minWidth="150"/>
+            </HBox>
+
+            <HBox spacing="10">
+                <!-- Product Price -->
+                <Label text="Price: "
+                       style="-fx-font-size: 12px; -fx-font-weight: bold"
+                       wrapText="true"/>
+
+                <TextField fx:id="tfPrice" style="-fx-font-size: 12px; "/>
+            </HBox>
+
+            <HBox spacing="10">
+                <!-- Number in stock -->
+                <Label text="Number in stock: "
+                       style="-fx-font-size: 12px; -fx-font-weight: bold"/>
+
+                <TextField fx:id="tfStockQty" style="-fx-font-size: 12px; "/>
+            </HBox>
+        </VBox>
+
+        <HBox alignment="CENTER" spacing="20">
+            <Button onAction="#saveChanges" text="Save Changes"/>
+        </HBox>
+    </VBox>
+
+
+</GridPane>

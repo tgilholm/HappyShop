@@ -1,9 +1,14 @@
 /*  Style the FXML elements  */
 
 /* Set default style- children will inherit or override this */
-.root{
+.customerRoot{
 	-fx-padding: 16px;
 	-fx-background-color: lightgreen;
+}
+
+.warehouseRoot{
+	-fx-padding: 8px;
+	-fx-background-color: lightpink;
 }
 
 .searchResult {

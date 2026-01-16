@@ -1,15 +1,6 @@
 package ci553.happyshop.client;
 
-import ci553.happyshop.client.emergency.EmergencyExit;
-import ci553.happyshop.client.orderTracker.OrderTracker;
-import ci553.happyshop.client.picker.PickerController;
-import ci553.happyshop.client.picker.PickerModel;
-import ci553.happyshop.client.picker.PickerView;
-import ci553.happyshop.client.login.*;
 
-import ci553.happyshop.client.warehouse.*;
-import ci553.happyshop.orderManagement.OrderHub;
-import ci553.happyshop.utility.EncryptionHandler;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -110,17 +101,7 @@ public class Main extends Application
      * <p>
      * Also registers the PickerModel with the OrderHub to receive order notifications.
      */
-    private void startPickerClient()
-    {
-        PickerModel pickerModel = new PickerModel();
-        PickerView pickerView = new PickerView();
-        PickerController pickerController = new PickerController();
-        pickerView.pickerController = pickerController;
-        pickerController.pickerModel = pickerModel;
-        pickerModel.pickerView = pickerView;
-        pickerModel.registerWithOrderHub();
-        pickerView.start(new Stage());
-    }
+
 
 
 //    // Link together the model, view and controller objects for the login window & start the interface
@@ -154,35 +135,13 @@ public class Main extends Application
 
 
     // OrderTracker GUI
-    // This client does not follow the MVC pattern, as it only registers with the OrderHub
-    // to receive order status notifications. All logic is handled internally within the OrderTracker.
-    // Initialises the orderMap<orderId, orderState> for OrderHub during system startup
-    private void initializeOrderMap()
-    {
-        OrderHub orderHub = OrderHub.getOrderHub();
-        orderHub.initializeOrderMap();
-        // RemoveProductNotifier removeProductNotifier = new RemoveProductNotifier();
-        // removeProductNotifier.cusView = cusView;
-        // cusModel.removeProductNotifier = removeProductNotifier;
-    }
 
 
-    // The OrderTracker GUI - for customer to track their order's state(Ordered,
-    // Progressing, Collected)
-    // This client is simple and does not follow the MVC pattern, as it only
-    // registers with the OrderHub
-    // to receive order status notifications. All logic is handled internally within
-    // the OrderTracker.
-    private void startOrderTracker()
-    {
-        OrderTracker orderTracker = new OrderTracker();
-        orderTracker.registerWithOrderHub();
-    }
 
 
     // Create dependent views that need window info
-    HistoryWindow historyWindow = new HistoryWindow();
-    AlertSimulator alertSimulator = new AlertSimulator();
+//    HistoryWindow historyWindow = new HistoryWindow();
+//    AlertSimulator alertSimulator = new AlertSimulator();
 
 
     /**
@@ -196,37 +155,30 @@ public class Main extends Application
      * position of the Warehouse window and are triggered by the Model when needed.
      * These components are linked after launching the Warehouse interface.
      */
-    private void startWarehouseClient()
-    {
-        WarehouseView view = new WarehouseView();
-        WarehouseController controller = new WarehouseController();
-        WarehouseModel model = new WarehouseModel();
-        //DatabaseRW databaseRW = DatabaseRWFactory.createDatabaseRW();
+//    private void startWarehouseClient()
+//    {
+//        WarehouseView view = new WarehouseView();
+//        WarehouseController controller = new WarehouseController();
+//        WarehouseModel model = new WarehouseModel();
+//        //DatabaseRW databaseRW = DatabaseRWFactory.createDatabaseRW();
+//
+//        // Link controller, model, and view and start view
+//        view.controller = controller;
+//        controller.model = model;
+//        model.view = view;
+//        //model.databaseRW = databaseRW;
+//        view.start(new Stage());
+//
+//        // create dependent views that need window info
+//        HistoryWindow historyWindow = new HistoryWindow();
+//        AlertSimulator alertSimulator = new AlertSimulator();
+//
+//        // Link after start
+//        model.historyWindow = historyWindow;
+//        model.alertSimulator = alertSimulator;
+//        historyWindow.warehouseView = view;
+//        alertSimulator.warehouseView = view;
+//    }
 
-        // Link controller, model, and view and start view
-        view.controller = controller;
-        controller.model = model;
-        model.view = view;
-        //model.databaseRW = databaseRW;
-        view.start(new Stage());
-
-        // create dependent views that need window info
-        HistoryWindow historyWindow = new HistoryWindow();
-        AlertSimulator alertSimulator = new AlertSimulator();
-
-        // Link after start
-        model.historyWindow = historyWindow;
-        model.alertSimulator = alertSimulator;
-        historyWindow.warehouseView = view;
-        alertSimulator.warehouseView = view;
-    }
-
-
-    // starts the EmergencyExit GUI, - used to close the entire application
-    // immediatelly
-    private void startEmergencyExit()
-    {
-        EmergencyExit.getEmergencyExit();
-    }
 
 }
