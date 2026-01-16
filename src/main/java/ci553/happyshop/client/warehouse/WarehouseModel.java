@@ -8,6 +8,8 @@ import ci553.happyshop.service.CategoryService;
 import ci553.happyshop.service.ProductService;
 import ci553.happyshop.utility.StorageLocation;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -17,7 +19,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 
 
 /**
@@ -68,6 +69,24 @@ public class WarehouseModel extends BaseModel
     public ObservableList<Category> getCategories()
     {
         return categoryList;
+    }
+
+
+    /**
+     * Get the observable error property from the service
+     * @return an immutable <code>StringProperty</code>
+     */
+    public ReadOnlyStringProperty validationErrorProperty()
+    {
+        return productService.userError();
+    }
+
+    /**
+     * Resets the <code>StringProperty</code> in the productService
+     */
+    public void resetUserError()
+    {
+        productService.resetUserError();
     }
 
 
@@ -198,29 +217,48 @@ public class WarehouseModel extends BaseModel
 
     /**
      * Delegates to the productService to delete a product from the database
+     *
      * @param product the <code>Product</code> to delete
      */
     public void deleteItem(Product product)
     {
         productService.deleteProduct(product);
     }
+
+
+    /**
+     * Passes the temporary values to the ProductService
+     *
+     * @param id               the id of the product being updated, as a <code>long</code>
+     * @param newName          the new name for the product, as a <code>String</code>
+     * @param newImageName     the new name of the product's image, as a <code>String</code>
+     * @param newPrice         the new price for the product, as a <code>String</code>
+     * @param newStockQuantity the new stock quantity, as an <code>int</code>
+     * @param newCategory      the name of a category, as a <code>String</code>
+     */
+    public void saveChanges(long id, String newName, String newImageName, String newPrice, int newStockQuantity,
+            String newCategory)
+    {
+        // Pass to the productService to be validated
+        productService.updateProduct(id, newName, newImageName, newPrice, newStockQuantity, newCategory);
+    }
 }
-////private Product theSelectedPro; // the product selected from the ListView before the user edits or deletes
-////private String theNewProId;
+/// /private Product theSelectedPro; // the product selected from the ListView before the user edits or deletes
+/// /private String theNewProId;
 //
 //
-////information used to update editProduct child in WarehouseView
-////	String displayIdEdit = "";
-////	String displayPriceEdit = "";
-////	String displayStockEdit = "";
-////	String displayDescriptionEdit = "";
-////	String displayImageUrlEdit = "images/WarehouseImageHolder.jpg";
+/// /information used to update editProduct child in WarehouseView
+/// /	String displayIdEdit = "";
+/// /	String displayPriceEdit = "";
+/// /	String displayStockEdit = "";
+/// /	String displayDescriptionEdit = "";
+/// /	String displayImageUrlEdit = "images/WarehouseImageHolder.jpg";
 //
 //public HistoryWindow historyWindow;
 //public AlertSimulator alertSimulator;
 //private String displayInputErrorMsg = ""; //error message showing in the alertSimulator
 //private ArrayList<String> displayManageHistory = new ArrayList<>();// Manage Product history
-////shows in the HistoryWindow
+/// /shows in the HistoryWindow
 //
 //private enum ManageProductType
 //{

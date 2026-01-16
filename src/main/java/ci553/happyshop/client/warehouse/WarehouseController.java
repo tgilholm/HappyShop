@@ -11,6 +11,7 @@ import ci553.happyshop.utility.handlers.StockDisplayHelper;
 import ci553.happyshop.utility.handlers.FileHandler;
 import ci553.happyshop.utility.listCell.WarehouseCardCallback;
 import ci553.happyshop.utility.listCell.WarehouseCardPane;
+import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -39,6 +40,14 @@ public class WarehouseController extends BaseController<WarehouseModel>
     public @FXML Label lbDetailID, lbStockQty;
     public @FXML ComboBox<String> cbChangeCategory;
     public @FXML Button btnBack;
+
+    // Temporary (before saveChanges is invoked) values
+    private long modifiedProductID;     // The id of the product to be modified
+    private String newImageName;   // The location of the product's image
+    private int newStockQuantity;
+    private String newPrice;
+    private String newName;
+    private String newCategory;
 
 
     public WarehouseController(WarehouseModel model)
@@ -89,11 +98,38 @@ public class WarehouseController extends BaseController<WarehouseModel>
         tfSearchBar.textProperty().addListener((observable, oldValue, newValue) ->
                 model.setSearchFilter(newValue));
 
+        // Add listeners on the detail pane to automatically update temporary values
+        // These are only saved when the saveChanges button is pressed
+        tfPrice.textProperty().addListener((observable, oldValue, newValue) ->
+                newPrice = newValue
+        );
+
+        tfName.textProperty().addListener((observable, oldValue, newValue) ->
+                newName = newValue);
+
         // Automatically refresh when the filteredList changes
         model.getSearchFilteredList().addListener((ListChangeListener<ProductWithCategory>) change -> bindProductList());
 
 
+        // Observe the validation error property from the model
+        model.validationErrorProperty().addListener(((observable, oldValue, newValue) ->
+        {
+            if (newValue != null && !newValue.isEmpty())        // Prevent repeated alerts by checking for empty value
+            {
+                Platform.runLater(() ->
+                {
+                    AlertFactory.warning("Warehouse", "Update Failed", newValue);    // show on the FX thread
+                });
+
+                model.resetUserError(); // Reset the flag
+            }
+        }));
+
         logger.info("Finished initializing controller");
+
+        // todo image picker, update image location before saveChanges
+        // todo load comboBox with categories (add about 10 more)
+        // todo listen to comboBox selection, pass to model
     }
 
 
@@ -169,17 +205,20 @@ public class WarehouseController extends BaseController<WarehouseModel>
      */
     private void updateDetailPane(@NotNull ProductWithCategory productWithCategory)
     {
+        // Set the modifiedProductID field
+        modifiedProductID = productWithCategory.product().getId();
+
         ivDetailImage.setImage(ImageHandler.getImageFromProduct(productWithCategory.product()));
         tfName.setText(productWithCategory.product().getName());
         lbDetailID.setText("ID: " + productWithCategory.product().getId());
-        tfPrice.setText(String.format("£%.2f", productWithCategory.product().getUnitPrice()));
+        tfPrice.setText(String.valueOf(productWithCategory.product().getUnitPrice()));
+        lbStockQty.setText(String.valueOf(productWithCategory.product().getStockQuantity()));
 
         // Set the category name
         // todo set category in combobox
         //cbChangeCategory.setText(productWithCategory.category().getName());
 
-        // Use the dynamic stock colour method from StockDisplayHelper
-        StockDisplayHelper.updateStockLabel(lbStockQty, productWithCategory.product().getStockQuantity());
+
     }
 
 
@@ -214,7 +253,7 @@ public class WarehouseController extends BaseController<WarehouseModel>
      */
     public void addStock()
     {
-
+        newStockQuantity += 1;
     }
 
 
@@ -223,16 +262,30 @@ public class WarehouseController extends BaseController<WarehouseModel>
      */
     public void removeStock()
     {
-
+        newStockQuantity -= 1;
     }
 
 
     /**
-     * Delegates to the model to update product details
+     * Delegates to the model to update product details. Passes the new data with the
+     * id of the product to be updated
      */
     public void saveChanges()
     {
+        // Display an alert to confirm changes first
+        AlertFactory.confirmation("Warehouse", "Confirm changes?", "Do you want to save your changes")
+                .ifPresent(result ->
+                {
+                    if (!result.getButtonData().isCancelButton())
+                    {
+                        logger.debug("Attempting to save new product data");
+                        model.saveChanges(modifiedProductID, newImageName, newName, newPrice, newStockQuantity, newCategory);
+                    } else
+                    {
 
+                        logger.debug("User cancelled edit");
+                    }
+                });
     }
 
 

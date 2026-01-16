@@ -49,7 +49,7 @@ public class LoginController extends BaseController<LoginModel>
             {
                 Platform.runLater(() ->
                 {
-                    AlertFactory.warning("Login", "Login Failed", newValue);    // show the on the FX thread
+                    AlertFactory.warning("Login", "Login Failed", newValue);    // show on the FX thread
                 });
 
                 model.resetUserError(); // Reset the flag
