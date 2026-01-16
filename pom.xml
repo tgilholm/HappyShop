@@ -27,6 +27,7 @@
     </dependencyManagement>
 
     <dependencies>
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -38,6 +39,13 @@
             <version>21.0.7</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+            <version>21.0.7</version>
+            <classifier>win</classifier>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
@@ -77,6 +85,13 @@
         </dependency>
 
 
+        <!-- For mocking statics -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <version>5.2.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -109,6 +124,20 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <!-- Needed for testing -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <!-- run tests on classpath to avoid module access restrictions -->
+                    <useModulePath>false</useModulePath>
+                    <!-- this makes mockito work -->
+                    <argLine>-Dnet.bytebuddy.experimental=true -Djava.awt.headless=false</argLine>
+
+                </configuration>
             </plugin>
         </plugins>
     </build>

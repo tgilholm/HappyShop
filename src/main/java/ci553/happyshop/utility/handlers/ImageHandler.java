@@ -6,6 +6,8 @@ import javafx.scene.image.Image;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.net.URL;
 
 public final class ImageHandler
@@ -44,7 +46,7 @@ public final class ImageHandler
      * @param stringUrl the location of the image
      * @return an <code>Image</code>
      */
-    public static @NotNull Image loadFromString(String stringUrl)
+    public static @Nullable Image loadFromString(String stringUrl)
     {
 
         URL url = FileHandler.parseURL(stringUrl);
@@ -76,6 +78,19 @@ public final class ImageHandler
         {
             logger.warn("Could not find image at: {}", stringUrl);
         }
-        return new Image("");
+        try
+        {
+            URL placeholderURL = FileHandler.parseURL("/images/imageHolder.jpg");
+
+            if (placeholderURL != null)
+            {
+                return new Image(placeholderURL.toExternalForm());
+            }
+        } catch (NullPointerException x)
+        {
+            logger.warn("Failed to load placeholder, returning null");
+
+        }
+        return null;
     }
 }
