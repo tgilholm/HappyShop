@@ -196,14 +196,13 @@ public class WarehouseModel extends BaseModel
     }
 
 
-    public void editItem(Product product)
-    {
-
-    }
-
-
+    /**
+     * Delegates to the productService to delete a product from the database
+     * @param product the <code>Product</code> to delete
+     */
     public void deleteItem(Product product)
     {
+        productService.deleteProduct(product);
     }
 }
 ////private Product theSelectedPro; // the product selected from the ListView before the user edits or deletes

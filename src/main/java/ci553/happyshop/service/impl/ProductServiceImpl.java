@@ -10,6 +10,7 @@ import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -66,8 +67,21 @@ public class ProductServiceImpl implements ProductService
         }
     }
 
+    @Override
     public List<ProductWithCategory> getAllWithCategories()
     {
         return productRepository.getAllWithCategories();
+    }
+
+
+    /**
+     * Deletes a product via the Repository
+     *
+     * @param product the <code>Product</code> to delete
+     */
+    @Override
+    public void deleteProduct(@NotNull Product product)
+    {
+        productRepository.delete(product.getId());
     }
 }

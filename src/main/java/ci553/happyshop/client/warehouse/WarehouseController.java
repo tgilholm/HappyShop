@@ -5,6 +5,7 @@ import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.client.login.LoginClient;
+import ci553.happyshop.utility.alerts.AlertFactory;
 import ci553.happyshop.utility.handlers.ImageHandler;
 import ci553.happyshop.utility.handlers.StockDisplayHelper;
 import ci553.happyshop.utility.handlers.FileHandler;
@@ -127,8 +128,9 @@ public class WarehouseController extends BaseController<WarehouseModel>
         // Provide callback behaviour
         WarehouseCardCallback callback = new WarehouseCardCallback(
                 this::updateDetailPane,
-                model::deleteItem
+                this::confirmDelete
         );
+
 
         // Add each product as a WarehouseCardPane
         for (ProductWithCategory productWithCategory : model.getSearchFilteredList())
@@ -138,6 +140,25 @@ public class WarehouseController extends BaseController<WarehouseModel>
             // Add to the TilePane
             tpProducts.getChildren().add(productCard);
         }
+    }
+
+
+    /**
+     * Creates an Alert to confirm deletion before delegating to the model to carry out deletion
+     *
+     * @param product the <code>Product</code> to delete
+     */
+    private void confirmDelete(@NotNull Product product)
+    {
+        AlertFactory.confirmation("Warehouse", "Confirm Deletion?", "Are you sure you want to delete product: " + product.getName())
+                .ifPresent(result ->
+                        {
+                            if (!result.getButtonData().isCancelButton()) // Cancel delete otherwise
+                            {
+                                model.deleteItem(product);
+                            }
+                        }
+                );
     }
 
 
@@ -188,16 +209,27 @@ public class WarehouseController extends BaseController<WarehouseModel>
     }
 
 
+    /**
+     * Increments the temporary stock of a product
+     */
     public void addStock()
     {
+
     }
 
 
+    /**
+     * Decrements the temporary stock of a product
+     */
     public void removeStock()
     {
+
     }
 
 
+    /**
+     * Delegates to the model to update product details
+     */
     public void saveChanges()
     {
 

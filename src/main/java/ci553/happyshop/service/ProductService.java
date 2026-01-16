@@ -1,6 +1,7 @@
 package ci553.happyshop.service;
 
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
+import ci553.happyshop.catalogue.Product;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 
 import java.util.List;
@@ -30,4 +31,9 @@ public interface ProductService
      */
     List<ProductWithCategory> getAllWithCategories();
 
+    /**
+     * Deletes a product via the Repository
+     * @param product the <code>Product</code> to delete
+     */
+    void deleteProduct(Product product);
 }
