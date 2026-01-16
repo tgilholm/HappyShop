@@ -1,6 +1,5 @@
-package ci553.happyshop.utility;
+package ci553.happyshop.utility.handlers;
 
-import ci553.happyshop.utility.handlers.EncryptionHandler;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;

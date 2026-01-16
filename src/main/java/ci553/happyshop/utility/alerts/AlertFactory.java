@@ -185,10 +185,10 @@ public final class AlertFactory
     {
         // Create the alert - NONE type is used for custom layout
         BaseAlert alert = new BaseAlert(Alert.AlertType.NONE, "Receipt", null, null, receiptCssPath);
-        ButtonType save = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE); // For saving to file
+        ButtonType okay = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE); // For saving to file
         ButtonType close = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE); // To close the alert
 
-        alert.getButtonTypes().setAll(save, close); // Replace any existing buttons with the new ones
+        alert.getButtonTypes().setAll(okay, close); // Replace any existing buttons with the new ones
 
         // FXML is not used here
         VBox content = new VBox(15);

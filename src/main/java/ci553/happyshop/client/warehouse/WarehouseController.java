@@ -7,7 +7,6 @@ import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.client.login.LoginClient;
 import ci553.happyshop.utility.alerts.AlertFactory;
 import ci553.happyshop.utility.handlers.ImageHandler;
-import ci553.happyshop.utility.handlers.FileHandler;
 import ci553.happyshop.utility.listCell.WarehouseCardCallback;
 import ci553.happyshop.utility.listCell.WarehouseCardPane;
 import javafx.application.Platform;
@@ -17,15 +16,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import java.net.URL;
 
 public class WarehouseController extends BaseController<WarehouseModel>
 {
@@ -36,8 +32,8 @@ public class WarehouseController extends BaseController<WarehouseModel>
     public @FXML ImageView ivDetailImage;
     public @FXML ComboBox<String> cbSelectMode;
     public @FXML Label lbDetailID, lbStockQty;
-    public @FXML ComboBox<String> cbChangeCategory;
     public @FXML Button btnBack;
+    public @FXML Label lbChangeCategory;
 
     // Temporary (before saveChanges is invoked) values
     private long modifiedProductID;     // The id of the product to be modified
@@ -61,16 +57,7 @@ public class WarehouseController extends BaseController<WarehouseModel>
     @FXML
     public void initialize()
     {
-        // Load the search icon
-        URL iconURL = FileHandler.parseURL("/images/search_icon.png");
-        if (iconURL != null)
-        {
-            Image image = new Image(iconURL.toExternalForm());
-            ivSearchIcon.setImage(image);
-        } else
-        {
-            logger.warn("Image not found: /images/search_icon.png");
-        }
+        ivSearchIcon.setImage(ImageHandler.loadFromString("/images/search_icon.png"));
 
         // Set up category combobox
         refreshComboBox();
@@ -130,10 +117,6 @@ public class WarehouseController extends BaseController<WarehouseModel>
         }));
 
         logger.info("Finished initializing controller");
-
-        // todo image picker, update image location before saveChanges
-        // todo load comboBox with categories (add about 10 more)
-        // todo listen to comboBox selection, pass to model
     }
 
 
@@ -228,12 +211,7 @@ public class WarehouseController extends BaseController<WarehouseModel>
         lbDetailID.setText("ID: " + product.getId());
         tfPrice.setText(String.valueOf(product.getUnitPrice()));
         tfStockQty.setText(String.valueOf(product.getStockQuantity()));
-
-        // Set the category name
-        // todo set category in combobox
-        //cbChangeCategory.setText(productWithCategory.category().getName());
-
-
+        lbChangeCategory.setText(productWithCategory.category().getName());
     }
 
 

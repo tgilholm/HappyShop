@@ -9,22 +9,24 @@ import javafx.application.Application;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * The BasketClient links together the MVC for the customer basket using dependency injection
+ * The "start" method can then be used to launch the basket.
+ * <p>
+ * Note that the basket requires a logged in <code>User</code>
+ */
 public class BasketClient extends Application
 {
     private final User user;
 
     private static final String basketFXML = "/fxml/BasketView.fxml";
-    //private static final String basketCSS = "/css/styles.css";
+
 
     public BasketClient(User user)
     {
         this.user = user;
     }
 
-    public static void main(String[] args)
-    {
-        launch(args);
-    }
 
     /**
      * The main entry point for all JavaFX applications.

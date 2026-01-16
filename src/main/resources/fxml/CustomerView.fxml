@@ -49,7 +49,7 @@
                    promptText="Search for an item by name or ID" prefWidth="400"/>
 
         <!-- The category selection ComboBox -->
-        <ComboBox fx:id="cbCategories" prefWidth="200"/>
+        <ComboBox fx:id="cbCategories" prefWidth="200" promptText="Select a Category"/>
     </HBox>
 
     <!-- The search results container-->

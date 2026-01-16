@@ -19,7 +19,7 @@ public final class FileHandler
      * Attempts to parse a <code>String</code> into a <code>URL</code> object
      *
      * @param stringURL the location of a file
-     * @return t
+     * @return the URL representation of that file
      */
     @Nullable
     public static URL parseURL(String stringURL)

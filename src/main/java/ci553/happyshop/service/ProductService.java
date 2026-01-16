@@ -1,6 +1,5 @@
 package ci553.happyshop.service;
 
-import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.catalogue.Product;
 import javafx.beans.property.ReadOnlyIntegerProperty;

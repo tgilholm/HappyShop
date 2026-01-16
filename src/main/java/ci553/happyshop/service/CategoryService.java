@@ -4,6 +4,9 @@ import ci553.happyshop.catalogue.Category;
 
 import java.util.List;
 
+/**
+ * Defines methods for interacting with the category repository
+ */
 public interface CategoryService
 {
 

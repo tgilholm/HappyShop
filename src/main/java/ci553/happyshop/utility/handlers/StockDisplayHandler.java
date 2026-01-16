@@ -2,7 +2,10 @@ package ci553.happyshop.utility.handlers;
 
 import javafx.scene.control.Label;
 
-public final class StockDisplayHelper
+/**
+ * Final utility class to handle stock-related UI queries
+ */
+public final class StockDisplayHandler
 {
     /**
      * Sets the text colour of a <code>label</code> to red, orange, or green depending on <code>stockQuantity</code>

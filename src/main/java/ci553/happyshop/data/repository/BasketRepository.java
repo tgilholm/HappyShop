@@ -16,14 +16,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Interfaces with the basket table. Implements common and listable repository
+ */
 public class BasketRepository implements CommonRepository<BasketItem, BasketItemID>, ListableRepository<BasketItem>
 {
     private final DatabaseConnection dbConnection;
+
 
     public BasketRepository(DatabaseConnection dbConnection)
     {
         this.dbConnection = dbConnection;
     }
+
 
     /**
      * Retrieves all <code>BasketItem</code> objects
@@ -59,6 +64,7 @@ public class BasketRepository implements CommonRepository<BasketItem, BasketItem
         }
     }
 
+
     /**
      * Creates a new BasketItem
      *
@@ -85,6 +91,7 @@ public class BasketRepository implements CommonRepository<BasketItem, BasketItem
             throw new DatabaseException("Failed to add new item to BasketTable");
         }
     }
+
 
     /**
      * Retrieves a BasketItem by its ID
@@ -124,6 +131,7 @@ public class BasketRepository implements CommonRepository<BasketItem, BasketItem
         }
     }
 
+
     /**
      * Updates an existing BasketItem
      *
@@ -159,6 +167,7 @@ public class BasketRepository implements CommonRepository<BasketItem, BasketItem
         }
     }
 
+
     /**
      * Deletes a BasketItem by its ID
      *
@@ -188,6 +197,7 @@ public class BasketRepository implements CommonRepository<BasketItem, BasketItem
             throw new DatabaseException("Failed to delete basket item with id: " + id, e);
         }
     }
+
 
     /**
      * Deletes all BasketItems connected to a customer

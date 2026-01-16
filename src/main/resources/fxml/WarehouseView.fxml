@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -103,7 +101,7 @@
                        style="-fx-font-size: 12px; -fx-font-weight: bold"
                        wrapText="true"/>
 
-                <ComboBox fx:id="cbChangeCategory" minWidth="150"/>
+                <Label fx:id="lbChangeCategory" style="-fx-font-size: 12px;"/>
             </HBox>
 
             <HBox spacing="10">

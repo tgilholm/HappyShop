@@ -10,10 +10,10 @@ public class Product implements Comparable<Product>
 {
     private final long id;      // Only ID is final (unchangeable)
     private String name;        // Name, price, qty, etc. can be changed
-    private String imageName;
-    private double unitPrice;
+    private final String imageName;
+    private final double unitPrice;
     private int stockQuantity;
-    private long categoryID;
+    private final long categoryID;
 
 
     /**
@@ -86,23 +86,6 @@ public class Product implements Comparable<Product>
     }
 
 
-    public void setImageName(String imageName)
-    {
-        this.imageName = imageName;
-    }
-
-
-    public void setCategoryID(long categoryID)
-    {
-        this.categoryID = categoryID;
-    }
-
-
-    public void setUnitPrice(double unitPrice)
-    {
-        this.unitPrice = unitPrice;
-    }
-
 
     /**
      * Compares this <code>Product</code> object with another
@@ -125,7 +108,6 @@ public class Product implements Comparable<Product>
 
 
     @Override
-
     public String toString()
     {
         return String.format("Id: %s, £%.2f/uint, stock: %d \n%s", id, unitPrice, stockQuantity,

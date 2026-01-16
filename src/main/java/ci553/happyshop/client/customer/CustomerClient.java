@@ -13,12 +13,14 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
-/**
- * A stand-alone Customer Client that can be run independently without launching the full system.
- * Designed for early-stage testing, though full functionality may require other clients to be active.
- */
 
-public final class CustomerClient extends Application
+/**
+ * The CustomerClient links together the MVC for the customer screen using dependency injection
+ * The "start" method can then be used to launch the view.
+ * <p>
+ * Note that the customer view requires a logged in <code>User</code>
+ */
+public class CustomerClient extends Application
 {
     private static final Logger logger = LogManager.getLogger();
     private static final String customerFXML = "/fxml/CustomerView.fxml";

@@ -70,6 +70,7 @@ public class WarehouseModel extends BaseModel
 
     /**
      * Get the observable error property from the service
+     *
      * @return an immutable <code>StringProperty</code>
      */
     public ReadOnlyStringProperty validationErrorProperty()
@@ -77,10 +78,12 @@ public class WarehouseModel extends BaseModel
         return productService.userError();
     }
 
+
     public ReadOnlyIntegerProperty productsChangedProperty()
     {
         return productService.productsChanged();
     }
+
 
     /**
      * Resets the <code>StringProperty</code> in the productService

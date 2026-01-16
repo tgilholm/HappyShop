@@ -3,16 +3,21 @@ package ci553.happyshop.utility.handlers;
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.utility.StorageLocation;
 import javafx.scene.image.Image;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.net.URL;
 
 public final class ImageHandler
 {
+    private static final Logger logger = LogManager.getLogger();
+
+
+    /**
+     * Gets the location of the product image from a product
+     * @param product the <code>Product</code> to get the image from
+     * @return the path to the product image
+     */
     private static String getImageURI(@NotNull Product product)
     {
         return StorageLocation.imageFolderPath
@@ -23,61 +28,54 @@ public final class ImageHandler
     }
 
 
+    /**
+     * Gets the image associated with a product
+     * @param product the <code>Product</code> to get the image from
+     * @return the <code>Image</code>
+     */
     public static @NotNull Image getImageFromProduct(Product product)
     {
         return new Image(getImageURI(product));
     }
 
     /**
-     * Deletes an image file from the specified folder.
-     *
-     * @param folder The directory where the image is stored.
-     * @param fileName The name of the file to be deleted.
-     * @throws IOException If an I/O error occurs during the file deletion.
+     * Loads an <code>Image</code> from its file location. Never returns null-falls back to a
+     * placeholder image if the loading failed.
+     * @param stringUrl the location of the image
+     * @return an <code>Image</code>
      */
-    public static void deleteImageFile(String folder, String fileName) throws IOException
+    public static @NotNull Image loadFromString(String stringUrl)
     {
-        Path locationFolder = Paths.get(folder); // Folder where the image is stored
-        Path iPath = locationFolder.resolve(fileName); // Full path to the image file
 
-        if (Files.exists(iPath))
-        { // Check if the file exists
-            Files.delete(iPath); // Permanently delete the file
-            System.out.println("Deleted: " + iPath);
+        URL url = FileHandler.parseURL(stringUrl);
+        if (url != null)
+        {
+            try
+            {
+                return new Image(url.toExternalForm());
+
+
+            } catch (Exception e)
+            {
+                logger.warn("Failed to load image, falling back to placeholder", e);
+
+                try
+                {
+                    URL placeholderURL = FileHandler.parseURL("/images/imageHolder.jpg");
+
+                    if (placeholderURL != null)
+                    {
+                        return new Image(placeholderURL.toExternalForm());
+                    }
+                } catch (NullPointerException x)
+                {
+                    logger.warn("Failed to load placeholder, returning empty image");
+                }
+            }
         } else
         {
-            System.out.println("File not found: " + iPath);
+            logger.warn("Could not find image at: {}", stringUrl);
         }
-    }
-
-    /**
-     * Copies an image file from the source URI to a specified destination folder with a new name.
-     * The new name is the product ID (fileNameWithoutExtension) with the original file extension.
-     *
-     * @param sourceUri The URI of the source image file.
-     * @param destinationFolder The destination folder where the image will be copied.
-     * @param fileNameWithoutExtension The name to assign to the copied image file (without extension).
-     * @return The name of the copied image file (with extension).
-     */
-    public static String copyFileToDestination(String sourceUri, String destinationFolder,
-            String fileNameWithoutExtension) throws IOException
-    {
-        // Get the source file path and file name
-        Path sourcePath = Paths.get(sourceUri);  // Source image uri (e.g., "C:/Users/shan/Desktop/mark.jpg")
-        String sourceFileName = sourcePath.getFileName().toString();  // e.g., "mark.jpg"
-
-        // Extract file extension from the source file
-        String fileExtension = sourceFileName.substring(sourceFileName.lastIndexOf('.'));  // e.g., ".jpg"
-
-        // Prepare the destination file path
-        Path destinationFolderPath = Paths.get(destinationFolder);  // Destination folder path
-
-        String fileNameWithExtension = fileNameWithoutExtension + fileExtension;
-        Path destinationPath = destinationFolderPath.resolve(fileNameWithExtension);  // Combine the product ID (fileNameWithoutExtension) with the extension
-
-        // Copy the file to the destination folder with the specified name
-        Files.copy(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
-        System.out.println("File copied successfully to: " + destinationPath);
-        return fileNameWithExtension;
+        return new Image("");
     }
 }

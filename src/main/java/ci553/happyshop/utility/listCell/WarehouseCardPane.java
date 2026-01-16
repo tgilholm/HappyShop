@@ -1,11 +1,10 @@
 package ci553.happyshop.utility.listCell;
 
 
-import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.utility.handlers.ImageHandler;
-import ci553.happyshop.utility.handlers.StockDisplayHelper;
+import ci553.happyshop.utility.handlers.StockDisplayHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -57,7 +56,7 @@ public class WarehouseCardPane extends CardPane
 
         // The colour of lbStock changes depending on the quantity remaining
         int stockRemaining = product.getStockQuantity();
-        StockDisplayHelper.updateStockLabel(lbStock, stockRemaining);
+        StockDisplayHandler.updateStockLabel(lbStock, stockRemaining);
 
         // Add action to buttons
         btnDelete.setOnAction(x ->
