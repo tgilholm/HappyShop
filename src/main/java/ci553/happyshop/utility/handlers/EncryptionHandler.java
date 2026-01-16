@@ -118,7 +118,7 @@ public final class EncryptionHandler
      * This is equal to "a".
      *
      * @param plaintext the byte array on which to perform the operation
-     * @param cipher
+     * @param cipher a byte array to perform a bitwise XOR with the plaintext
      * @return a byte array, on which each of the bytes has been XOR'ed with the cipher
      */
     @Contract(pure = true)

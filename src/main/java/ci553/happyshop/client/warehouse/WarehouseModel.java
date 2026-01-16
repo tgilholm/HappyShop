@@ -201,9 +201,11 @@ public class WarehouseModel extends BaseModel
     public void setCategoryFilter(String categoryFilter)
     {
         // Get the list before filtering-avoids null lists
-        getSearchFilteredList().setPredicate(productWithCategory ->
+        getCategoryFilteredList().setPredicate(productWithCategory ->
         {
-            if (categoryFilter == null)
+            if (categoryFilter == null
+                    || categoryFilter.trim().isEmpty()
+                    || categoryFilter.trim().equalsIgnoreCase("Select Category")) // ignore the "default category"
             {
                 return true;
             } else

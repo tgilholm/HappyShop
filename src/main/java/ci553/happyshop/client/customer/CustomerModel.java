@@ -188,9 +188,11 @@ public class CustomerModel extends BaseModel
     public void setCategoryFilter(String categoryFilter)
     {
         // Get the list before filtering-avoids null lists
-        getSearchFilteredList().setPredicate(productWithCategory ->
+        getCategoryFilteredList().setPredicate(productWithCategory ->
         {
-            if (categoryFilter == null)
+            if (categoryFilter == null
+                    || categoryFilter.trim().isEmpty()
+                    || categoryFilter.trim().equalsIgnoreCase("Select Category")) // ignore the "default category"
             {
                 return true;
             } else
@@ -263,6 +265,7 @@ public class CustomerModel extends BaseModel
 
     /**
      * Gets the stock quantity of a given product
+     *
      * @param product the <code>Product</code> from which to get the quantity
      * @return the int stock quantity of the specified product
      */
