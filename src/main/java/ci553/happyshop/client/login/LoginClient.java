@@ -17,6 +17,19 @@ public class LoginClient extends Application
         launch(args);
     }
 
+
+    public static void startLoginClient(Stage primaryStage)
+    {
+        // Inject dependency into the model
+        UserService userService = ServiceFactory.getLoginService();
+
+        LoginModel model = new LoginModel(userService);
+        LoginController controller = new LoginController(model);
+        BaseView<LoginController, HBox> view = new BaseView<>(controller, "/fxml/LoginView.fxml", null, "Login Client");
+        view.start(primaryStage);
+    }
+
+
     /**
      * The main entry point for all JavaFX applications.
      * The start method is called after the init method has returned,
@@ -35,12 +48,6 @@ public class LoginClient extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        // Inject dependency into the model
-        UserService userService = ServiceFactory.getLoginService();
-
-        LoginModel model = new LoginModel(userService);
-        LoginController controller = new LoginController(model);
-        BaseView<LoginController, HBox> view = new BaseView<>(controller, "/fxml/LoginView.fxml", null, "Login Client");
-        view.start(primaryStage);
+        startLoginClient(primaryStage);
     }
 }

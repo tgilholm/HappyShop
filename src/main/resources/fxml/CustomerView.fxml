@@ -61,10 +61,10 @@
 
     <!-- COLUMN 1 -->
     <!-- Selected item layout -->
-    <!-- Account and Cart Buttons-->
+    <!-- Go Back and Basket Buttons-->
     <HBox alignment="TOP_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="0">
-        <Button fx:id="btnAccount" text="Account"
-                onAction="#accountClicked">
+        <Button fx:id="btnBack" text="Go Back"
+                onAction="#goBack">
         </Button>
 
         <Button text="Basket" fx:id="btnBasket"

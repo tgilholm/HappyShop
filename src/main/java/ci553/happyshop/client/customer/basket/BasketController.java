@@ -80,7 +80,7 @@ public class BasketController extends BaseController<BasketModel>
     public void goBack()
     {
         Stage stage = (Stage) btnBack.getScene().getWindow();
-        model.goBack(stage);
+        stage.close();
     }
 
 

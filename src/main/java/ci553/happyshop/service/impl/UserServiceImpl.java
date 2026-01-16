@@ -102,6 +102,7 @@ public class UserServiceImpl implements UserService
         {
             // Customers cannot access the staff portal
             notifyError("Failed to login user. Customers cannot access the warehouse");
+            return null;
         }
 
         return user;

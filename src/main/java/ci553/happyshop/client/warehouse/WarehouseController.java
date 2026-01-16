@@ -4,6 +4,7 @@ import ci553.happyshop.base_mvm.BaseController;
 import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.catalogue.Product;
+import ci553.happyshop.client.login.LoginClient;
 import ci553.happyshop.utility.handlers.ImageHandler;
 import ci553.happyshop.utility.handlers.StockDisplayHelper;
 import ci553.happyshop.utility.handlers.FileHandler;
@@ -12,6 +13,7 @@ import ci553.happyshop.utility.listCell.WarehouseCardPane;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -19,6 +21,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,6 +37,7 @@ public class WarehouseController extends BaseController<WarehouseModel>
     public @FXML ComboBox<String> cbSelectMode;
     public @FXML Label lbDetailID, lbStockQty;
     public @FXML ComboBox<String> cbChangeCategory;
+    public @FXML Button btnBack;
 
 
     public WarehouseController(WarehouseModel model)
@@ -111,6 +115,7 @@ public class WarehouseController extends BaseController<WarehouseModel>
 
     }
 
+
     /**
      * Refreshes the tilePane with the filtered product list. Defines the WarehouseCardCallback
      */
@@ -135,8 +140,10 @@ public class WarehouseController extends BaseController<WarehouseModel>
         }
     }
 
+
     /**
      * Updates the detailPane on the View with the details from a <code>ProductWithCategory</code> object
+     *
      * @param productWithCategory the <code>ProductWithCategory</code> object to load data from
      */
     private void updateDetailPane(@NotNull ProductWithCategory productWithCategory)
@@ -154,10 +161,12 @@ public class WarehouseController extends BaseController<WarehouseModel>
         StockDisplayHelper.updateStockLabel(lbStockQty, productWithCategory.product().getStockQuantity());
     }
 
+
     /**
      * Create a new <code>WarehouseCardPane</code> from a <code>Product object</code>
+     *
      * @param productWithCategory the <code>productWithCategory</code> object
-     * @param callback a <code>WarehouseCardCallback</code>
+     * @param callback            a <code>WarehouseCardCallback</code>
      * @return a <code>VBox</code> containing the card layout
      */
     @Contract("_, _ -> new")
@@ -167,22 +176,29 @@ public class WarehouseController extends BaseController<WarehouseModel>
     }
 
 
-    public void goBack(ActionEvent actionEvent)
+    /**
+     * Closes the warehouse and re-opens the Login screen
+     */
+    public void goBack()
+    {
+        Stage stage = (Stage) btnBack.getScene().getWindow();
+        stage.close();
+
+        LoginClient.startLoginClient(new Stage());
+    }
+
+
+    public void addStock()
     {
     }
 
 
-    public void addStock(ActionEvent actionEvent)
+    public void removeStock()
     {
     }
 
 
-    public void removeStock(ActionEvent actionEvent)
-    {
-    }
-
-
-    public void saveChanges(ActionEvent actionEvent)
+    public void saveChanges()
     {
 
     }

@@ -5,12 +5,14 @@ import ci553.happyshop.catalogue.Category;
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.client.customer.basket.BasketClient;
+import ci553.happyshop.client.login.LoginClient;
 import ci553.happyshop.utility.handlers.FileHandler;
 import ci553.happyshop.utility.handlers.ImageHandler;
 import ci553.happyshop.utility.handlers.StockDisplayHelper;
 import ci553.happyshop.utility.listCell.ProductCardCallback;
 import ci553.happyshop.utility.listCell.ProductCardPane;
 import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -46,7 +48,7 @@ public class CustomerController extends BaseController<CustomerModel>
     private ComboBox<String> cbCategories;
 
     @FXML
-    private Button btnAccount, btnBasket;
+    private Button btnBasket, btnBack;
 
     @FXML
     private TilePane tpProducts;
@@ -198,12 +200,6 @@ public class CustomerController extends BaseController<CustomerModel>
         return new ProductCardPane(product, callback);
     }
 
-    // Handle the "account" button input
-    public void accountClicked()
-    {
-        System.out.println("Account button clicked");
-    }
-
     /**
      * Runs the <code>start</code> method in <code>BasketClient</code>, hides this view
      */
@@ -237,5 +233,14 @@ public class CustomerController extends BaseController<CustomerModel>
         {
             logger.error("Failed to open basket", e);
         }
+    }
+
+
+    public void goBack()
+    {
+        Stage stage = (Stage) btnBack.getScene().getWindow();
+        stage.close();
+
+        LoginClient.startLoginClient(new Stage());
     }
 }

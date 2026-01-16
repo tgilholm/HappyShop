@@ -61,7 +61,7 @@
     <!-- Selected item layout -->
     <!-- Back button-->
     <HBox alignment="TOP_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="0">
-        <Button text="Go Back"
+        <Button text="Go Back" fx:id="btnBack"
                 onAction="#goBack">
         </Button>
     </HBox>

@@ -9,7 +9,6 @@ import ci553.happyshop.service.ProductService;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -118,18 +117,6 @@ public class BasketModel extends BaseModel
     {
         return basketService.getQuantity(user.id(), product.getId());
     }
-
-
-    /**
-     * Hides the view
-     *
-     * @param stage the <code>Stage</code> to hide
-     */
-    public void goBack(@NotNull Stage stage)
-    {
-        stage.close();
-    }
-
 
     /**
      * Delegates to basketService to get the quantity of the entire basket
