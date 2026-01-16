@@ -66,11 +66,6 @@
         </Button>
     </HBox>
 
-    <!-- ComboBox displaying "Add" or "Edit" -->
-    <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
-        <ComboBox fx:id="cbSelectMode" minWidth="480"/>
-    </HBox>
-
     <!-- "Detail Box" -->
     <!-- Displays editable product information -->
     <!-- Re-used for both adding products and editing them -->
@@ -87,7 +82,7 @@
         <VBox spacing="10">
             <HBox spacing="10">
                 <!-- Product ID -->
-                <Label fx:id="lbDetailID" text="ID"
+                <Label fx:id="lbDetailID" text="Select a product to edit details"
                        style="-fx-font-size: 16px; -fx-font-weight: bold"/>
             </HBox>
 

@@ -126,7 +126,12 @@ public class ProductServiceImpl implements ProductService
     @Override
     public void deleteProduct(@NotNull Product product)
     {
+        logger.info("Deleting product {}", product.getId());
+
         productRepository.delete(product.getId());
+
+        // Trigger observers
+        notifyChanged();
     }
 
 
@@ -211,6 +216,7 @@ public class ProductServiceImpl implements ProductService
             return;
         }
 
+        logger.info("Updating product: {}", id);
 
         // Pass new data to the repository
         Product newProduct = new Product(id, newName, newImageName, doubleNewPrice, intStockQuantity, category.getId());
