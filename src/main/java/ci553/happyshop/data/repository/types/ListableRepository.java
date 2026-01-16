@@ -10,6 +10,7 @@ public interface ListableRepository<Type>
 {
     /**
      * Retrieve all entities of the type <code>Type</code>
+     *
      * @return List of all entities
      */
     List<Type> getAll();

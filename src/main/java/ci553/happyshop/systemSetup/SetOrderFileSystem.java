@@ -1,6 +1,7 @@
 package ci553.happyshop.systemSetup;
 
 import ci553.happyshop.utility.StorageLocation;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -31,8 +32,8 @@ import java.util.concurrent.locks.ReentrantLock;
 public class SetOrderFileSystem
 {
 	private static final Lock lock = new ReentrantLock();    // Create a global lock
-	private static Path orderCounterPath = StorageLocation.orderCounterPath;
-	private static Path[] foldersPaths =
+	private static final Path orderCounterPath = StorageLocation.orderCounterPath;
+	private static final Path[] foldersPaths =
 	{ StorageLocation.ordersPath, StorageLocation.orderedPath, StorageLocation.progressingPath,
 			StorageLocation.collectedPath };
 
@@ -72,7 +73,7 @@ public class SetOrderFileSystem
 	}
 
 	// Create all necessary folders for storing orderCounter file, order files and images if they do not exist
-	private static void createFolders(Path[] paths) throws IOException
+	private static void createFolders(Path @NotNull [] paths) throws IOException
 	{
 		for (Path path : paths)
 		{

@@ -15,7 +15,6 @@ import org.apache.logging.log4j.Logger;
  * A standalone Warehouse client that can be run independently without launching the full system.
  * It is fully functional on its own.
  */
-
 public class WarehouseClient extends Application
 {
     private static final Logger logger = LogManager.getLogger();
@@ -30,13 +29,11 @@ public class WarehouseClient extends Application
 
 
     /**
-     * Initializes the Warehouse client's Model, View, and Controller, and links them together for communication.
-     * It also creates the DatabaseRW instance via the DatabaseRWFactory and injects it into the Model.
-     * Once the components are linked, the warehouse interface (view) is started.
-     * <p>
-     * Also creates the dependent HistoryWindow and AlertSimulator,
-     * which track the position of the Warehouse window and are triggered by the Model when needed.
-     * These components are linked after launching the Warehouse interface.
+     * Starts the warehouse
+     * @param window the primary stage for this application, onto which
+     * the application scene can be set.
+     * Applications may create other stages, if needed, but they will not be
+     * primary stages.
      */
     @Override
     public void start(Stage window)
@@ -44,7 +41,9 @@ public class WarehouseClient extends Application
         startWarehouseClient(window);
     }
 
-
+    /**
+     * Injects dependencies into MVC and launches view
+     */
     public static void startWarehouseClient(Stage window)
     {
         logger.info("Launching WarehouseClient");
@@ -59,14 +58,5 @@ public class WarehouseClient extends Application
         BaseView<WarehouseController, GridPane> view = new BaseView<>(controller, warehouseFXML, warehouseCSS, "Warehouse");
         view.start(window);
 
-
-        //HistoryWindow historyWindow = new HistoryWindow();
-        //AlertSimulator alertSimulator = new AlertSimulator();
-
-        // Link after start warehouse interface
-//        model.historyWindow = historyWindow;
-//        model.alertSimulator = alertSimulator;
-//        historyWindow.warehouseView = view;
-//        alertSimulator.warehouseView = view;
     }
 }

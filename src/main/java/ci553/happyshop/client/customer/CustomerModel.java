@@ -32,7 +32,6 @@ public class CustomerModel extends BaseModel
     private FilteredList<ProductWithCategory> searchFilteredList;
     private FilteredList<ProductWithCategory> categoryFilteredList;
 
-    //private final String imageName = "images/imageHolder.jpg"; // Image to show in product preview (Search Page)
 
 
     /**

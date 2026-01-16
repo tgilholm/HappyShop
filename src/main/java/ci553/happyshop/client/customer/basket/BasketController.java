@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 import java.util.Optional;
 
 /**
- * Controller for the basket MVC. Connects to the model & binds data to FXML view elements
+ * Controller for the basket MVC. Connects to the model and binds data to FXML view elements
  */
 public class BasketController extends BaseController<BasketModel>
 {
@@ -60,6 +60,9 @@ public class BasketController extends BaseController<BasketModel>
 
         // Add a listener to automatically recalculate the "grand total" when the list changes
         model.getBasketItems().addListener((ListChangeListener<BasketItemWithDetails>) change -> updateTotal());
+
+        // Observe the changeCounter in BasketService and automatically reload the basket
+        model.basketChanged().addListener((observable, oldValue, newValue) -> model.loadBasketItems());
 
         updateTotal();
     }
@@ -114,6 +117,7 @@ public class BasketController extends BaseController<BasketModel>
 
                 // Tell the model to purchase all basket items and clear the basket
                 model.checkoutBasket();
+                goBack();
             }
         });
 
@@ -141,6 +145,7 @@ public class BasketController extends BaseController<BasketModel>
             {
                 logger.info("Resetting basket");
                 model.clearBasket();
+                goBack();
             }
         });
     }

@@ -28,8 +28,6 @@ import java.sql.*;
  * working image folder (images/). 5. Copies all image files from the backup
  * folder (images_resetDB/) into the working image folder.
  */
-
-
 public class SetDatabase
 {
     private static final Logger logger = LogManager.getLogger();

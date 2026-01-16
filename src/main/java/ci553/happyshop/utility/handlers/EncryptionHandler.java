@@ -6,6 +6,9 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+/**
+ * Final class defining encryption and decryption methods
+ */
 @SuppressWarnings("SameParameterValue")
 public final class EncryptionHandler
 {

@@ -7,6 +7,7 @@ import ci553.happyshop.catalogue.User;
 import ci553.happyshop.service.BasketService;
 import ci553.happyshop.service.ProductService;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.jetbrains.annotations.NotNull;
@@ -34,9 +35,6 @@ public class BasketModel extends BaseModel
         this.basketService = basketService;
         this.productService = productService;
         this.user = user;
-
-        // Observe the changeCounter in BasketService and automatically reload the basket
-        basketService.basketChanged().addListener((observable, oldValue, newValue) -> loadBasketItems());
     }
 
 
@@ -72,7 +70,6 @@ public class BasketModel extends BaseModel
             {
                 logger.debug("Basket is empty");
             }
-
         });
     }
 
@@ -164,5 +161,15 @@ public class BasketModel extends BaseModel
     public int getStockQuantity(@NotNull Product product)
     {
         return productService.getStockQuantity(product.getId());
+    }
+
+
+    /**
+     * Exposes the basketChanged property from the service to the Controller
+     * @return an immutable <code>IntegerProperty</code>
+     */
+    public ReadOnlyIntegerProperty basketChanged()
+    {
+        return basketService.basketChanged();
     }
 }

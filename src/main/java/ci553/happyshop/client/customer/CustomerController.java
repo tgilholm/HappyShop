@@ -6,19 +6,16 @@ import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.client.customer.basket.BasketClient;
 import ci553.happyshop.client.login.LoginClient;
-import ci553.happyshop.utility.handlers.FileHandler;
 import ci553.happyshop.utility.handlers.ImageHandler;
-import ci553.happyshop.utility.handlers.StockDisplayHelper;
+import ci553.happyshop.utility.handlers.StockDisplayHandler;
 import ci553.happyshop.utility.listCell.ProductCardCallback;
 import ci553.happyshop.utility.listCell.ProductCardPane;
 import javafx.collections.ListChangeListener;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
@@ -26,15 +23,12 @@ import javafx.stage.Stage;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.net.URL;
-
 /**
  * Controller class for the customer client.
  * Initializes FXML elements and binds the Model to the View
  */
 public class CustomerController extends BaseController<CustomerModel>
 {
-
     @FXML
     public TextField tfSearchBar;
 
@@ -53,10 +47,12 @@ public class CustomerController extends BaseController<CustomerModel>
     @FXML
     private TilePane tpProducts;
 
+
     public CustomerController(CustomerModel model)
     {
         super(model);
     }
+
 
     /**
      * Initializes the controller after the root element is finished processing.<br>
@@ -69,16 +65,7 @@ public class CustomerController extends BaseController<CustomerModel>
     @FXML
     public void initialize()
     {
-        // Load the search icon
-        URL iconURL = FileHandler.parseURL("/images/search_icon.png");
-        if (iconURL != null)
-        {
-            Image image = new Image(iconURL.toExternalForm());
-            ivSearchIcon.setImage(image);
-        } else
-        {
-            logger.warn("Image not found: /images/search_icon.png");
-        }
+        ivSearchIcon.setImage(ImageHandler.loadFromString("/images/search_icon.png"));
 
         // Set up category combobox
         refreshComboBox();
@@ -108,7 +95,6 @@ public class CustomerController extends BaseController<CustomerModel>
         model.getSearchFilteredList().addListener((ListChangeListener<ProductWithCategory>) change -> bindProductList());
 
 
-
         logger.info("Finished initializing controller");
     }
 
@@ -130,6 +116,7 @@ public class CustomerController extends BaseController<CustomerModel>
         // Add the "select category" placeholder
         cbCategories.getItems().add("Select Category");
     }
+
 
     /**
      * Refreshes the tilePane with the filtered product list. Defines the ProductCardCallback
@@ -172,6 +159,7 @@ public class CustomerController extends BaseController<CustomerModel>
 
     /**
      * Updates the detailPane on the View with the details from a <code>ProductWithCategory</code> object
+     *
      * @param productWithCategory the <code>ProductWithCategory</code> object to load data from
      */
     private void updateDetailPane(@NotNull ProductWithCategory productWithCategory)
@@ -184,13 +172,15 @@ public class CustomerController extends BaseController<CustomerModel>
         // Set the category name
         lbDetailCategoryName.setText(productWithCategory.category().getName());
 
-        // Use the dynamic stock colour method from StockDisplayHelper
-        StockDisplayHelper.updateStockLabel(lbStockQty, productWithCategory.product().getStockQuantity());
+        // Use the dynamic stock colour method from StockDisplayHandler
+        StockDisplayHandler.updateStockLabel(lbStockQty, productWithCategory.product().getStockQuantity());
     }
+
 
     /**
      * Create a new <code>ProductCardPane</code> from a <code>Product object</code>
-     * @param product the <code>Product</code> object
+     *
+     * @param product  the <code>Product</code> object
      * @param callback a <code>ProductCardCallback</code>
      * @return a <code>VBox</code> containing the card layout
      */
@@ -200,6 +190,7 @@ public class CustomerController extends BaseController<CustomerModel>
         return new ProductCardPane(product, callback);
     }
 
+
     /**
      * Runs the <code>start</code> method in <code>BasketClient</code>, hides this view
      */
@@ -208,7 +199,8 @@ public class CustomerController extends BaseController<CustomerModel>
         // Get the current stage
         Stage stage = (Stage) btnBasket.getScene().getWindow();
 
-        try {
+        try
+        {
             // Get the current customer from the model
             BasketClient basketClient = new BasketClient(model.getCurrentUser());
             stage.hide();   // Hide the customer view
@@ -236,6 +228,9 @@ public class CustomerController extends BaseController<CustomerModel>
     }
 
 
+    /**
+     * Closes this stage and returns to the LoginClient
+     */
     public void goBack()
     {
         Stage stage = (Stage) btnBack.getScene().getWindow();

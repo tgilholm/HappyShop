@@ -113,6 +113,9 @@ public class BasketListCell extends ListCell<BasketItemWithDetails>
 
             // Hide the "remove" button if there are none in the basket
             btnRemove.setDisable(callback.getBasketQuantity(product) == 0);
+
+            // Hide the "add" button if the max quantity has been reached
+            btnAdd.setDisable(callback.getBasketQuantity(product) >= callback.getStockQuantity(product));
         }
     }
 

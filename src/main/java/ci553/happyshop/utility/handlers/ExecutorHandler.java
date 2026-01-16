@@ -8,6 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Final utility class defining concurrency methods
+ */
 public final class ExecutorHandler
 {
     private static final Logger logger = LogManager.getLogger();
