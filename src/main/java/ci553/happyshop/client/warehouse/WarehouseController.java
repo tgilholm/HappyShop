@@ -6,7 +6,6 @@ import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.utility.handlers.ImageHandler;
 import ci553.happyshop.utility.handlers.StockDisplayHelper;
-import ci553.happyshop.utility.listCell.ProductCardCallback;
 import ci553.happyshop.utility.handlers.FileHandler;
 import ci553.happyshop.utility.listCell.WarehouseCardCallback;
 import ci553.happyshop.utility.listCell.WarehouseCardPane;
@@ -122,14 +121,14 @@ public class WarehouseController extends BaseController<WarehouseModel>
 
         // Provide callback behaviour
         WarehouseCardCallback callback = new WarehouseCardCallback(
-                model::editItem,
+                this::updateDetailPane,
                 model::deleteItem
         );
 
         // Add each product as a WarehouseCardPane
         for (ProductWithCategory productWithCategory : model.getSearchFilteredList())
         {
-            VBox productCard = createProductCard(productWithCategory.product(), callback);
+            VBox productCard = createProductCard(productWithCategory, callback);
 
             // Add to the TilePane
             tpProducts.getChildren().add(productCard);
@@ -157,14 +156,14 @@ public class WarehouseController extends BaseController<WarehouseModel>
 
     /**
      * Create a new <code>WarehouseCardPane</code> from a <code>Product object</code>
-     * @param product the <code>Product</code> object
+     * @param productWithCategory the <code>productWithCategory</code> object
      * @param callback a <code>WarehouseCardCallback</code>
      * @return a <code>VBox</code> containing the card layout
      */
     @Contract("_, _ -> new")
-    private @NotNull VBox createProductCard(Product product, WarehouseCardCallback callback)
+    private @NotNull VBox createProductCard(ProductWithCategory productWithCategory, WarehouseCardCallback callback)
     {
-        return new WarehouseCardPane(product, callback);
+        return new WarehouseCardPane(productWithCategory, callback);
     }
 
 

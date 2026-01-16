@@ -198,6 +198,7 @@ public class WarehouseModel extends BaseModel
 
     public void editItem(Product product)
     {
+
     }
 
 

@@ -1,5 +1,6 @@
 package ci553.happyshop.utility.listCell;
 
+import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.catalogue.Product;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,7 +17,7 @@ public class WarehouseCardCallback
 {
     private final Logger logger = LogManager.getLogger();
 
-    private final Consumer<Product> onEdit;     // Edits a specific Product
+    private final Consumer<ProductWithCategory> onEdit;     // Edits a specific Product
     private final Consumer<Product> onDelete;   // Deletes a specific Product
 
 
@@ -26,7 +27,7 @@ public class WarehouseCardCallback
      * @param onEdit    a <code>Consumer</code> method determining "edit item" behaviour for a specified <code>Product</code>
      * @param onDelete a <code>Consumer</code> method determining "delete item" behaviour for a specified <code>Product</code>
      */
-    public WarehouseCardCallback(Consumer<Product> onEdit, Consumer<Product> onDelete)
+    public WarehouseCardCallback(Consumer<ProductWithCategory> onEdit, Consumer<Product> onDelete)
     {
         this.onEdit = onEdit;
         this.onDelete = onDelete;
@@ -35,12 +36,12 @@ public class WarehouseCardCallback
     /**
      * Executes the <code>onEdit</code> <code>Consumer</code> on a specified <code>Product</code>
      *
-     * @param product the <code>Product</code> object to add
+     * @param productWithCategory the <code>ProductWithCategory</code> object to edit
      */
-    public void onEditItem(@NotNull Product product)
+    public void onEditItem(@NotNull ProductWithCategory productWithCategory)
     {
-        logger.debug("Adding {} to basket", product);
-        onEdit.accept(product);  // "accepts" or carries out the method
+        logger.debug("Editing {}", productWithCategory.product());
+        onEdit.accept(productWithCategory);  // "accepts" or carries out the method
     }
 
 
@@ -51,7 +52,7 @@ public class WarehouseCardCallback
      */
     void onDeleteItem(@NotNull Product product)
     {
-        logger.debug("Removing {} from basket", product);
+        logger.debug("Deleting {}", product);
         onDelete.accept(product);
     }
 }

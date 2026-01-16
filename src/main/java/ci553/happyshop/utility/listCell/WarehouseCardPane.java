@@ -1,6 +1,8 @@
 package ci553.happyshop.utility.listCell;
 
 
+import ci553.happyshop.catalogue.Category;
+import ci553.happyshop.catalogue.DTO.ProductWithCategory;
 import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.utility.handlers.ImageHandler;
 import ci553.happyshop.utility.handlers.StockDisplayHelper;
@@ -28,21 +30,24 @@ public class WarehouseCardPane extends CardPane
     /**
      * Calls the parent constructor to initialize the layout
      */
-    public WarehouseCardPane(Product product, WarehouseCardCallback callback)
+    public WarehouseCardPane(ProductWithCategory productWithCategory, WarehouseCardCallback callback)
     {
         super("/fxml/WarehouseTileCell.fxml");
 
         // Initialise the product data
-        updateProduct(product, callback);
+        updateProduct(productWithCategory, callback);
     }
 
     /**
      * Updates the layout of the WarehouseCardPane when the product data changes
-     * @param product the <code>Product</code> from which data is extracted
+     * @param productWithCategory the <code>ProductWithCategory</code> from which data is extracted
      * @param callback the callback behaviour for the buttons
      */
-    public void updateProduct(@NotNull Product product, @NotNull WarehouseCardCallback callback)
+    public void updateProduct(@NotNull ProductWithCategory productWithCategory, @NotNull WarehouseCardCallback callback)
     {
+        // Extract product
+        Product product = productWithCategory.product();
+
         // Set text fields
         lbName.setText(product.getName());
         lbPrice.setText(String.format("£%.2f", product.getUnitPrice()));
@@ -64,7 +69,7 @@ public class WarehouseCardPane extends CardPane
         btnEdit.setOnAction(x ->
         {
             // Edit the item via the callback implementation
-            callback.onEditItem(product);
+            callback.onEditItem(productWithCategory);
         });
     }
 }

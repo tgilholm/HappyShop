@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService
         // Handle empty strings
         if (username.isEmpty() || password.isEmpty())
         {
-            logger.info("Failed to create account, empty username or password");
+            notifyError("Failed to create account, empty username or password");
             return null;
         }
 
@@ -132,7 +132,7 @@ public class UserServiceImpl implements UserService
         // Check if the username already exists in the table
         if (userRepository.usernameExists(username))
         {
-            logger.info("Cannot create new account, username already exists");
+            notifyError("Cannot create new account, username already exists");
             return null;
         } else
         {
