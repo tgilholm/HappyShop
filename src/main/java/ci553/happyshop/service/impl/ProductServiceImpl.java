@@ -138,11 +138,12 @@ public class ProductServiceImpl implements ProductService
      * @param newName          the new name for the product, as a <code>String</code>
      * @param newImageName     the new name of the product's image, as a <code>String</code>
      * @param newPrice         the new price for the product, as a <code>String</code>
-     * @param newStockQuantity the new stock quantity, as an <code>int</code>
+     * @param newStockQuantity the new stock quantity, as a <code>String</code>
      * @param newCategory      the name of a category, as a <code>String</code>
+     *
      */
     @Override
-    public void updateProduct(long id, String newName, String newImageName, String newPrice, int newStockQuantity,
+    public void updateProduct(long id, String newName, String newImageName, String newPrice, String newStockQuantity,
             String newCategory)
     {
         // Check that the product exists
@@ -163,14 +164,29 @@ public class ProductServiceImpl implements ProductService
             notifyError("Cannot update product- product cannot have empty price");
             return;
         }
+        if (newStockQuantity == null || newStockQuantity.isEmpty())
+        {
+            notifyError("Cannot update product- product cannot have empty quantity");
+            return;
+        }
         if (newImageName == null || newImageName.isEmpty())
         {
             //todo pass placeholder image location
         }
 
+        // Parse stock quantity to int
+        int intStockQuantity = 0;
+        try
+        {
+            intStockQuantity = Integer.parseInt(newStockQuantity);
+        } catch (NumberFormatException e)
+        {
+            notifyError("Cannot update product- cannot parse new stock quantity to a number");
+            return;
+        }
 
         // Check for negative stock quantity
-        if (newStockQuantity < 0)
+        if (intStockQuantity < 0)
         {
             notifyError("Cannot update product- product cannot have negative quantity");
             return;
@@ -197,8 +213,10 @@ public class ProductServiceImpl implements ProductService
 
 
         // Pass new data to the repository
-        Product newProduct = new Product(id, newName, newImageName, doubleNewPrice, newStockQuantity, category.getId());
+        Product newProduct = new Product(id, newName, newImageName, doubleNewPrice, intStockQuantity, category.getId());
         productRepository.update(newProduct);
+
+        notifyChanged();    // Indicate to observers that the product list has updated
     }
 
 

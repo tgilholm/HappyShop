@@ -7,13 +7,11 @@ import ci553.happyshop.catalogue.Product;
 import ci553.happyshop.client.login.LoginClient;
 import ci553.happyshop.utility.alerts.AlertFactory;
 import ci553.happyshop.utility.handlers.ImageHandler;
-import ci553.happyshop.utility.handlers.StockDisplayHelper;
 import ci553.happyshop.utility.handlers.FileHandler;
 import ci553.happyshop.utility.listCell.WarehouseCardCallback;
 import ci553.happyshop.utility.listCell.WarehouseCardPane;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -32,7 +30,7 @@ import java.net.URL;
 public class WarehouseController extends BaseController<WarehouseModel>
 {
     public @FXML ImageView ivSearchIcon;
-    public @FXML TextField tfSearchBar, tfName, tfPrice;
+    public @FXML TextField tfSearchBar, tfName, tfPrice, tfStockQty;
     public @FXML ComboBox<String> cbCategories;
     public @FXML TilePane tpProducts;
     public @FXML ImageView ivDetailImage;
@@ -44,7 +42,7 @@ public class WarehouseController extends BaseController<WarehouseModel>
     // Temporary (before saveChanges is invoked) values
     private long modifiedProductID;     // The id of the product to be modified
     private String newImageName;   // The location of the product's image
-    private int newStockQuantity;
+    private String newStockQuantity;
     private String newPrice;
     private String newName;
     private String newCategory;
@@ -106,6 +104,12 @@ public class WarehouseController extends BaseController<WarehouseModel>
 
         tfName.textProperty().addListener((observable, oldValue, newValue) ->
                 newName = newValue);
+
+        tfStockQty.textProperty().addListener(((observable, oldValue, newValue) ->
+                newStockQuantity = newValue));
+
+        // Update the model list when the product service updates
+        model.productsChangedProperty().addListener((observable, oldValue, newValue) -> model.loadProducts());
 
         // Automatically refresh when the filteredList changes
         model.getSearchFilteredList().addListener((ListChangeListener<ProductWithCategory>) change -> bindProductList());
@@ -205,14 +209,25 @@ public class WarehouseController extends BaseController<WarehouseModel>
      */
     private void updateDetailPane(@NotNull ProductWithCategory productWithCategory)
     {
-        // Set the modifiedProductID field
-        modifiedProductID = productWithCategory.product().getId();
+        // Extract product & category
+        Product product = productWithCategory.product();
+        Category category = productWithCategory.category();
 
-        ivDetailImage.setImage(ImageHandler.getImageFromProduct(productWithCategory.product()));
-        tfName.setText(productWithCategory.product().getName());
-        lbDetailID.setText("ID: " + productWithCategory.product().getId());
-        tfPrice.setText(String.valueOf(productWithCategory.product().getUnitPrice()));
-        lbStockQty.setText(String.valueOf(productWithCategory.product().getStockQuantity()));
+        logger.debug("Product image name: {}", product.getImageName());
+
+        // Set temporary data from product details
+        modifiedProductID = product.getId();
+        newName = product.getName();
+        newImageName = product.getImageName();
+        newPrice = String.valueOf(product.getUnitPrice());
+        newStockQuantity = String.valueOf(product.getStockQuantity());
+        newCategory = category.getName();
+
+        ivDetailImage.setImage(ImageHandler.getImageFromProduct(product));
+        tfName.setText(product.getName());
+        lbDetailID.setText("ID: " + product.getId());
+        tfPrice.setText(String.valueOf(product.getUnitPrice()));
+        tfStockQty.setText(String.valueOf(product.getStockQuantity()));
 
         // Set the category name
         // todo set category in combobox
@@ -249,24 +264,6 @@ public class WarehouseController extends BaseController<WarehouseModel>
 
 
     /**
-     * Increments the temporary stock of a product
-     */
-    public void addStock()
-    {
-        newStockQuantity += 1;
-    }
-
-
-    /**
-     * Decrements the temporary stock of a product
-     */
-    public void removeStock()
-    {
-        newStockQuantity -= 1;
-    }
-
-
-    /**
      * Delegates to the model to update product details. Passes the new data with the
      * id of the product to be updated
      */
@@ -279,7 +276,7 @@ public class WarehouseController extends BaseController<WarehouseModel>
                     if (!result.getButtonData().isCancelButton())
                     {
                         logger.debug("Attempting to save new product data");
-                        model.saveChanges(modifiedProductID, newImageName, newName, newPrice, newStockQuantity, newCategory);
+                        model.saveChanges(modifiedProductID, newName, newImageName, newPrice, newStockQuantity, newCategory);
                     } else
                     {
 
@@ -287,35 +284,4 @@ public class WarehouseController extends BaseController<WarehouseModel>
                     }
                 });
     }
-
-
-//	void process(String action) throws SQLException, IOException
-//	{
-//		switch (action)
-//		{
-//		case "🔍":
-//			model.doSearch();
-//			break;
-//		case "Edit":
-//			//model.doEdit();
-//			break;
-//		case "Delete":
-//			//model.doDelete();
-//			break;
-//		case "➕":
-//			model.doChangeStockBy("add");
-//			break;
-//		case "➖":
-//			model.doChangeStockBy("sub");
-//			break;
-//		case "Submit":
-//			//model.doSummit();
-//			break;
-//		case "Cancel":  // clear the editChild
-//			model.doCancel();
-//			break;
-//		}
-//	}
-
-
 }

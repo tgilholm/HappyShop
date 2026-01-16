@@ -125,11 +125,7 @@
                 <Label text="Number in stock: "
                        style="-fx-font-size: 12px; -fx-font-weight: bold"/>
 
-                <HBox spacing="5" alignment="CENTER_RIGHT">
-                    <Button text="-" minWidth="30" maxWidth="30" onAction="#removeStock"/>
-                    <Label fx:id="lbStockQty" text="0" minWidth="25" alignment="CENTER"/>
-                    <Button text="+" minWidth="30" maxWidth="30" onAction="#addStock"/>
-                </HBox>
+                <TextField fx:id="tfStockQty" style="-fx-font-size: 12px; "/>
             </HBox>
         </VBox>
 

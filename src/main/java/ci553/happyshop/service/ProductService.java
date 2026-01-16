@@ -61,9 +61,9 @@ public interface ProductService
      * @param newName          the new name for the product, as a <code>String</code>
      * @param newImageName     the new name of the product's image, as a <code>String</code>
      * @param newPrice         the new price for the product, as a <code>String</code>
-     * @param newStockQuantity the new stock quantity, as an <code>int</code>
+     * @param newStockQuantity the new stock quantity, as a <code>String</code>
      * @param newCategory      the name of a category, as a <code>String</code>
      */
-    void updateProduct(long id, String newName, String newImageName, String newPrice, int newStockQuantity,
+    void updateProduct(long id, String newName, String newImageName, String newPrice, String newStockQuantity,
             String newCategory);
 }
